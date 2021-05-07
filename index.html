@@ -907,18 +907,29 @@
     <script src="js/validator.min.js"></script> <!-- Validator.js - Bootstrap plugin that validates forms -->
     <script src="js/scripts.js"></script> <!-- Custom scripts -->
     <div id="webchat"></div>
-<script src="https://cdn.jsdelivr.net/npm/rasa-webchat@0.11.12/lib/index.min.js"></script>
-<script>
-  WebChat.default.init({
-    selector: "#webchat",
-    initPayload: "/session_start",
-    customData: {"language": "en"}, // arbitrary custom data. Stay minimal as this will be added to the socket
-    socketUrl: "https://demo.weai.it",
-    socketPath: "/socket.io/",
-    title: "Demo Chat",
-    subtitle: "Test your YOUAI assistant",
-    params: {"storage": "session"} // can be set to "local"  or "session". details in storage section.
-  })
-</script>
+    <script>!(function () {
+      let e = document.createElement("script"),
+        t = document.head || document.getElementsByTagName("head")[0];
+      (e.src =
+        "https://cdn.jsdelivr.net/npm/rasa-webchat@1.0.1/lib/index.js"),
+        (e.async = !0),
+        (e.onload = () => {
+          window.WebChat.default(
+            {
+              selector: "#webchat",
+              initPayload: "ciao",
+              customData: {"language": "en"}, // arbitrary custom data. Stay minimal as this will be added to the socket
+              socketUrl: "https://demo.weai.it",
+              socketPath: "/socket.io/",
+              title: "Demo Chat",
+              subtitle: "Test your YOUAI assistant",
+              params: {"storage": "session"} // can be set to "local"  or "session". details in storage section.
+            },
+            null
+          );
+        }),
+        t.insertBefore(e, t.firstChild);
+    })();
+  </script>
 </body>
 </html>
