@@ -10,6 +10,10 @@
   background-color: #147cb6
 }
 
+.rw-conversation-container .rw-reply {
+  background-color: #147cb6
+}
+
 .rw-conversation-container .rw-send .rw-send-icon-ready {
   fill: #147cb6
 }
