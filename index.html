@@ -1,46 +1,20 @@
 <!DOCTYPE html>
 <html class="ltr" dir="ltr" lang="it-IT">
-<head>
-	<title>Home - Comune di Milano</title>
-	<style>
-	* {
-		margin: 0;
-		padding: 0;
-	}
-	.imgbox {
-		display: grid;
-		height: 100%;
-	}
-	.center-fit {
-		max-width: 100%;
-		max-height: 100vh;
-		margin: auto;
-	}
-	</style>
-</head>
-<body>
-	<div class="imgbox">
-		<img class="center-fit" src='homepage_screenshot.png'>
-	</div>
-	<!-- https://github.com/botfront/rasa-webchat -->
-  <div id="webchat"></div>
-  <script src="https://cdn.jsdelivr.net/npm/rasa-webchat@1.0.1/lib/index.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="webchat_style.css">
-  <script>
-    window.WebChat.default({
-      selector: "#webchat",
-      initPayload: "/welcome",
-      customData: {"language": "en"}, // arbitrary custom data. Stay minimal as this will be added to the socket
-      socketUrl: "https://demo.weai.it",
-      socketPath: "/socket.io/",
-      title: "Comune di Milano",
-      subtitle: "Infoline 020202",
-      inputTextFieldHint: "Scrivi la tua richiesta...",
-      params: {"storage": "session"} // can be set to "local"  or "session". details in storage section.
-    })
-  </script>
+  <head>
+    <title>Home - Comune di Milano</title>
+  </head>
+  <body>
+    <div class="imgbox">
+      <img class="center-fit" src="homepage_screenshot.png" />
+    </div>
+    <!-- https://github.com/botfront/rasa-webchat -->
+    <div id="webchat"></div>
+    <script src="https://cdn.jsdelivr.net/npm/rasa-webchat@1.0.1/lib/index.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="webchat_style.css" />
+    <link rel="stylesheet" type="text/css" href="./css/custom.css" />
+    <script></script>
 
-  <!--
+    <!--
 	<div id="webchat"></div>
 	<script>!(function () {
 		let e = document.createElement("script"),
@@ -67,5 +41,6 @@
 	})();
 </script>
 -->
-</body>
+  </body>
+  <script src="./js/main.js"></script>
 </html>
