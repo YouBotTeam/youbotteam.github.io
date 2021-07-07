@@ -2,12 +2,13 @@ var mainContainer;
 var containerCustom;
 var customPopupClassList;
 var conversationContainer;
+var showPopup = true;
 
 document.addEventListener("DOMContentLoaded", () => {
   // Rasa Web Chat
   window.WebChat.default({
     selector: "#webchat",
-    initPayload: "/welcome",
+    initPayload: ["/welcome"],
     customData: { language: "en" }, // arbitrary custom data. Stay minimal as this will be added to the socket
     socketUrl: "https://demo.weai.it",
     socketPath: "/socket.io/",
@@ -19,15 +20,15 @@ document.addEventListener("DOMContentLoaded", () => {
     params: { storage: "session" }, // can be set to "local"  or "session". details in storage section.
   });
 
+  getHintComplete();
+
   // Operazioni di editing web chat
   setTimeout(() => {
     mainContainer = document.getElementsByClassName("rw-widget-container")[0];
-    // setWidthCustom(mainContainer.classList);
     webChatOperation();
 
     const mutationObserver = new MutationObserver((mutationsList) => {
-      var mutationsListClassList = mutationsList[0].target.classList;
-      setWidthCustom(mutationsListClassList);
+      // var mutationsListClassList = mutationsList[0].target.classList;
       webChatOperation();
     });
 
@@ -35,28 +36,66 @@ document.addEventListener("DOMContentLoaded", () => {
   }, 500);
 });
 
-function setWidthCustom(domClassList) {
-  if (!domClassList.contains("rw-chat-open")) {
-    // mainContainer.classList.add("w-half");
-  } else {
-    // mainContainer.classList.remove("w-half");
-  }
-}
-
 function webChatOperation() {
-  createCustomPopup("Clicca sul bottone per inziare la chat");
   if (mainContainer.classList.contains("rw-chat-open")) {
+    localStorage.setItem("position", "open");
     clickOnImage();
     buttonMenu();
     // removeAvatarOnMsg();
-    customPopupClassList.add("display-none");
-    // Custom container
     conversationContainer = document.getElementsByClassName(
       "rw-conversation-container"
     )[0];
+    if (document.querySelector(".container-custom")) {
+      removeConversationContainer();
+    }
+    const inputConversation =
+      document.getElementsByClassName("rw-new-message")[0];
+    inputConversation.addEventListener("input", (event) => {
+      document
+        .getElementsByClassName("rw-send")[0]
+        .addEventListener("click", () => {
+          inputConversationMthd(event.target.value);
+        });
+    });
+    document
+      .getElementsByClassName("rw-close rw-default")[0]
+      .addEventListener("click", () => {
+        localStorage.setItem("position", "close");
+      });
+    document
+      .getElementsByClassName("rw-close-launcher rw-default")[0]
+      .addEventListener("click", () => {
+        localStorage.setItem("position", "close");
+      });
+    // TODO: implementare logica per Enter button
+    // inputConversation.addEventListener("keyup", (event) => {
+    //   if (event.key === "Enter") {
+    //     inputConversationMthd(inputConversation.value);
+    //   }
+    // });
   } else {
-    customPopupClassList.add("fade-in");
-    customPopupClassList.remove("display-none");
+    localStorage.setItem("position", "close");
+    if (localStorage.getItem("interaction")) {
+      openFeedbackSection();
+    }
+    localStorage.removeItem("interaction");
+  }
+  if (localStorage.getItem("position") === "close") {
+    if (showPopup) {
+      createCustomPopup("Clicca sul bottone per inziare la chat");
+      customPopupClassList.add("fade-in");
+      customPopupClassList.remove("display-none");
+      showPopup = false;
+    }
+  } else {
+    customPopupClassList?.add("display-none");
+  }
+}
+
+function inputConversationMthd(value) {
+  if (value.trim()) {
+    console.log(value);
+    localStorage.setItem("interaction", true);
   }
 }
 
@@ -89,12 +128,12 @@ function buttonMenu() {
     );
 
     document.getElementById("reset-chat").addEventListener("click", () => {
-      // TODO: aggiungere la chiamata a servizio
-      console.log("/reset");
+      // TODO: trovare un modo per resettare la chat
+      const chatSession = sessionStorage.getItem("chat_session");
+      console.log(chatSession);
     });
 
     document.getElementById("pillole").addEventListener("click", () => {
-      console.log("/pillole");
       showOrHideChatContainer(false);
       showOrHideHeaderContainer(false);
       containerCustom = document.createElement("div");
@@ -108,15 +147,23 @@ function buttonMenu() {
 }
 
 function openFeedbackSection() {
-  showOrHideChatContainer(false);
-  showOrHideHeaderContainer(false);
+  createConversationContainer();
   containerCustom = document.createElement("div");
   containerCustom.classList.add("rw-messages-container", "container-custom");
   feedbackSection();
 }
 
+function createConversationContainer() {
+  conversationContainer = document.createElement("div");
+  conversationContainer.classList.add(
+    "rw-conversation-container",
+    "custom-container"
+  );
+  mainContainer.insertAdjacentElement("afterbegin", conversationContainer);
+}
+
 function clickOnImage() {
-  document.getElementsByClassName("image")[0].addEventListener(
+  document.getElementsByClassName("image")[0]?.addEventListener(
     "click",
     (ev) => {
       window.open(ev.srcElement.currentSrc, "_blank");
@@ -141,8 +188,8 @@ function removeAvatarOnMsg() {
 }
 
 function feedbackSection() {
-  if (!document.querySelector(".container-custom")) {
-    createCustomHeader("Lascia un feedback");
+  if (!document.querySelector("#container-custom")) {
+    localStorage.setItem("position", "feedback");
     conversationContainer.appendChild(containerCustom);
     containerCustom.innerHTML = `
       <div id="container-custom">
@@ -156,18 +203,22 @@ function feedbackSection() {
         <div class="container-textarea">
             <textarea id="textareabox" placeholder="Lascia un feedback..."></textarea>
         </div>
+        <p id="error-feedback"></p>
         <div class="container-button">
           <input type="button" value="Invia" id="inviaFeedback" />
         </div>
       </div>`;
+    createCustomHeader("Lascia un feedback");
     handleStarFeedback();
     document.getElementById("inviaFeedback").addEventListener("click", () => {
       let textArea = document.getElementById("textareabox");
       let textAreaValue = textArea.value.trim();
       if (!textAreaValue) {
-        textArea.classList.add("textarea-error");
+        // textArea.classList.add("textarea-error");
+        // document.getElementById("error-feedback").innerText =
+        //   "Errore: scrivere una descrizione.";
       } else {
-        textArea.classList.remove("textarea-error");
+        // textArea.classList.remove("textarea-error");
         const listOfStar = [
           ...document
             .getElementsByClassName("class-rating")[0]
@@ -178,7 +229,7 @@ function feedbackSection() {
         ).length;
         // TODO: allegare la chiamata per il salvataggio del feedback
         console.log({ textAreaValue, starSelected });
-        backToFirstView();
+        removeConversationContainer();
       }
     });
   }
@@ -225,32 +276,75 @@ function starAddChecked(listOfStar) {
 function pilloleSection() {
   if (!conversationContainer.querySelector(".container-pillole")) {
     if (!document.querySelector(".container-custom")) {
+      localStorage.setItem("position", "pillole");
       createCustomHeader("Pillole");
       conversationContainer.appendChild(containerCustom);
       containerCustom.innerHTML = `<div id="container-custom"></div>`;
       const pillole = [
         {
-          title: "Prima pillola",
-          content: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.`,
+          title: "Active Business",
+          content: "Pillola polizza Active Business",
+          multimedia: [
+            {
+              type: "icon",
+              link: "https://cattolica.weai.it/static/bot-images/icon_business.PNG",
+            },
+            {
+              type: "video",
+              link: "https://www.youtube-nocookie.com/embed/F2_aSibJ1P8",
+            },
+          ],
         },
         {
-          title: "Seconda pillola",
-          content: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.`,
+          title: "Active Casa & Persona",
+          content: "Pillola polizza Active Casa & Persona",
+          multimedia: [
+            {
+              type: "icon",
+              link: "https://cattolica.weai.it/static/bot-images/icon_home.PNG",
+            },
+            {
+              type: "video",
+              link: "https://www.youtube-nocookie.com/embed/4drzqU3pSso",
+            },
+          ],
         },
         {
-          title: "Terza pillola",
-          content: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.`,
+          title: "TCM",
+          content: "Pillola polizza TCM",
+          multimedia: [
+            {
+              type: "icon",
+              link: "https://cattolica.weai.it/static/bot-images/icon_tcm.PNG",
+            },
+            {
+              type: "video",
+              link: "https://www.youtube-nocookie.com/embed/YZFqTN9VVlQ",
+            },
+          ],
         },
       ];
+
       const domPillole = document.createElement("ul");
       pillole.forEach((pillola) => {
         const contentLi = document.createElement("div");
         contentLi.classList.add("container-collapse");
         contentLi.innerHTML = `
-                                <button type="button" class="collapsible">${pillola.title}</button>
+                                <button type="button" class="collapsible"><img class="pillole-icon" src="${
+                                  pillola.multimedia.find(
+                                    (multi) => multi.type === "icon"
+                                  ).link
+                                }"/><h1 class="pillole-title">${
+          pillola.title
+        }</h1></button>
                                 <div class="content">
                                     <p>${pillola.content}</p>
-                                </div>`;
+                                    <iframe src="${
+                                      pillola.multimedia.find(
+                                        (multi) => multi.type === "video"
+                                      ).link
+                                    }" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    `;
         const li = document.createElement("li");
         li.appendChild(contentLi);
         domPillole.appendChild(li);
@@ -284,8 +378,46 @@ function createCustomHeader(title) {
     `
   );
   document.getElementById("close-icon").addEventListener("click", () => {
-    backToFirstView();
+    if (localStorage.getItem("position") === "pillole") {
+      backToFirstView();
+      localStorage.setItem("position", "open");
+    } else {
+      removeConversationContainer();
+      localStorage.setItem("position", "close");
+    }
   });
+}
+
+function getHintComplete() {
+  // const http = new XMLHttpRequest();
+  // http.open("POST", "https://weai.it/service/recommend/chatbotname", true);
+  // http.setRequestHeader(
+  //   "Authorization",
+  //   "Basic dXRlbnRlOjQ0YzJkYmUyYzI0NzE5YWFlNjRlZDQyOTg5YzllM2YxZTUwNDQ3NGQwZjQ4NzFiYzI2YmFiNjY5NWY5NWQ5MTI="
+  // );
+  // http.setRequestHeader("Content-Type", "application/json");
+  // http.onreadystatechange = () => {
+  //   console.log(this.readyState);
+  //   if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+  //     // Request finished. Do processing here.
+  //   }
+  // };
+  // const body = { text: "la colonna iniz. agenzia" };
+  // http.send(body);
+  const rawResponse = fetch("https://weai.it/service/recommend/cattolica", {
+    method: "POST",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json",
+      Authorization: `Basic dXRlbnRlOjQ0YzJkYmUyYzI0NzE5YWFlNjRlZDQyOTg5YzllM2YxZTUwNDQ3NGQwZjQ4NzFiYzI2YmFiNjY5NWY5NWQ5MTI=`,
+      // ${window.btoa("utente:44c2dbe2c24719aae64ed42989c9e3f1e504474d0f4871bc26bab6695f95d912")}
+    },
+    body: JSON.stringify({ text: "la colonna iniz. agenzia" }),
+  });
+  const content = rawResponse.then((res) => {
+    console.log(res);
+  });
+  console.log(content);
 }
 
 function showOrHideChatContainer(show) {
@@ -330,6 +462,12 @@ function backToFirstView() {
   removeCustomHeader();
   showOrHideChatContainer(true);
   showOrHideHeaderContainer(true);
+}
+
+function removeConversationContainer() {
+  mainContainer.removeChild(
+    document.getElementsByClassName("custom-container")[0]
+  );
 }
 
 // // Avatar title
