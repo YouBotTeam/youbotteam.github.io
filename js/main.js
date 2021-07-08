@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function createAutocomplete() {
-    if (!document.querySelector('.container-input .autocomplete')) {
+    if (!document.querySelector('.autocomplete')) {
         const containerForm = document.createElement("div");
         containerForm.classList.add("autocomplete", "container-input");
 
@@ -585,11 +585,11 @@ function createListToComplete(context, currentFocus, arr) {
             b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
             b.innerHTML += arr[i].substr(val.length);
             /*insert a input field that will hold the current array item's value:*/
-            b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+            b.innerHTML += "<input type='hidden' id='input-autocomplete' value='" + arr[i] + "'>";
             /*execute a function when someone clicks on the item value (DIV element):*/
             b.addEventListener("click", function (e) {
                 /*insert the value for the autocomplete text field:*/
-                autocompleteElement.value = context.getElementsByTagName("input")[0].value;
+                autocompleteElement.value = this.getElementsByTagName("input")[0].value;
                 /*close the list of autocompleted values,
                     (or any other open lists of autocompleted values:*/
                 closeAllLists();
@@ -824,3 +824,22 @@ var countries = [
     "Zambia",
     "Zimbabwe",
 ];
+
+
+// {
+//     "errorCode": 0,
+//     "errorMessage": "Success",
+//     "login": "utente",
+//     "matches": {
+//         "[a cosa serve](info-action) la colonna iniz. d'agenzia 1?": 92,
+//         "[a cosa serve](info-action) la colonna iniz. d'agenzia?": 92,
+//         "[come trovo](place-action) la colonna iniz. d'agenzia 2?": 92,
+//         "[cosa sai dirmi](info-action) sulla colonna iniz. d'agenzia 2?": 92,
+//         "[delucidazioni](info-action) sulla colonna iniz. d'agenzia 2?": 92,
+//         "[descrivimi](info-action) la colonna iniz. d'agenzia": 92,
+//         "[descrivimi](info-action) la colonna iniz. d'agenzia 1": 92,
+//         "[dove si trova](place-action) la colonna iniz. d'agenzia 1?": 92,
+//         "[dove si trova](place-action) la colonna iniz. d'agenzia?": 92,
+//         "vorrei una [descrizione](info-action) sulla colonna iniz. d'agenzia 2": 92
+//     }
+// }

@@ -14,7 +14,7 @@
 }
 
 .rw-widget-container {
-  width: 35%;
+  width: 40%;
 }
 
 .rw-widget-container .rw-full-screen .rw-chat-open {
@@ -339,8 +339,7 @@ input[type="submit"] {
 .autocomplete-items div {
   padding: 10px;
   cursor: pointer;
-  background-color: #fff;
-  border-bottom: 1px solid #d4d4d4;
+  background: #f4f7f9;
 }
 
 /*when hovering an item:*/
