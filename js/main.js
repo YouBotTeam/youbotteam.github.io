@@ -177,7 +177,6 @@ function clickOnImage() {
     image.addEventListener(
       "click",
       (ev) => {
-        console.log("clickimage");
         window.open(ev.srcElement.currentSrc, "_blank");
       },
       false
