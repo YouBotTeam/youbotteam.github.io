@@ -27,6 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => {
     mainContainer = document.getElementsByClassName("rw-widget-container")[0];
     webChatOperation();
+
     const mutationObserver = new MutationObserver((mutationsList) => {
       // var mutationsListClassList = mutationsList[0].target.classList;
       webChatOperation();
@@ -57,7 +58,6 @@ function createAutocomplete() {
 
 function webChatOperation() {
   if (mainContainer.classList.contains("rw-chat-open")) {
-    localStorage.setItem("position", "open");
     createAutocomplete();
     autocomplete();
     clickOnImage();
@@ -78,16 +78,7 @@ function webChatOperation() {
           inputConversationMthd(event.target.value);
         });
     });
-    document
-      .getElementsByClassName("rw-close rw-default")[0]
-      .addEventListener("click", () => {
-        localStorage.setItem("position", "close");
-      });
-    document
-      .getElementsByClassName("rw-close-launcher rw-default")[0]
-      .addEventListener("click", () => {
-        localStorage.setItem("position", "close");
-      });
+    customPopupClassList?.add("display-none");
     // TODO: implementare logica per Enter button
     // inputConversation.addEventListener("keyup", (event) => {
     //   if (event.key === "Enter") {
@@ -95,21 +86,16 @@ function webChatOperation() {
     //   }
     // });
   } else {
-    localStorage.setItem("position", "close");
     if (localStorage.getItem("interaction")) {
       openFeedbackSection();
     }
     localStorage.removeItem("interaction");
-  }
-  if (localStorage.getItem("position") === "close") {
     if (showPopup) {
       createCustomPopup("Clicca sul bottone per inziare la chat");
       customPopupClassList.add("fade-in");
       customPopupClassList.remove("display-none");
       showPopup = false;
     }
-  } else {
-    customPopupClassList?.add("display-none");
   }
 }
 
@@ -242,8 +228,7 @@ function feedbackSection() {
       const starSelected = listOfStar.filter((star) =>
         star.classList.contains("checked")
       ).length;
-      console.log(starSelected)
-      if (!textAreaValue || !starSelected) {
+      if (!textAreaValue && !starSelected) {
         removeConversationContainer();
         // textArea.classList.add("textarea-error");
         // document.getElementById("error-feedback").innerText =
@@ -360,7 +345,11 @@ function pilloleSection() {
                                 }"/><h1 class="pillole-title">${
           pillola.title
         }</h1></button>
-                                <div class="content">
+                                <div class="content" style="${
+                                  mainContainer.classList.contains("rw-full-screen")
+                                    ? "height: 30rem;"
+                                    : ""
+                                }">
                                     <p>${pillola.content}</p>
                                     <iframe src="${
                                       pillola.multimedia.find(
@@ -524,10 +513,13 @@ function autocomplete() {
 }
 
 function closeAllLists(elmnt) {
-  var x = document.getElementsByClassName("autocomplete-items");
-  for (var i = 0; i < x.length; i++) {
-    if (elmnt != x[i] && elmnt != autocompleteElement) {
-      x[i].parentNode.removeChild(x[i]);
+  var automCompleteItemsList =
+    document.getElementsByClassName("autocomplete-items");
+  for (var i = 0; i < automCompleteItemsList.length; i++) {
+    if (elmnt != automCompleteItemsList[i] && elmnt != autocompleteElement) {
+      automCompleteItemsList[i].parentNode.removeChild(
+        automCompleteItemsList[i]
+      );
     }
   }
 }
