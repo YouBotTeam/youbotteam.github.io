@@ -1,6 +1,8 @@
 var typingTimer;
 var mainContainer;
+var chatContainer;
 var lastSearch = "";
+var inputChat = "";
 var containerCustom;
 var showPopup = true;
 var autocompleteElement;
@@ -66,12 +68,16 @@ function webChatOperation() {
     conversationContainer = document.getElementsByClassName(
       "rw-conversation-container"
     )[0];
+    chatContainer = conversationContainer.getElementsByClassName(
+      "rw-messages-container"
+    )[0];
     if (document.querySelector(".container-custom")) {
       removeConversationContainer();
     }
     const inputConversation =
       document.getElementsByClassName("rw-new-message")[0];
     inputConversation.addEventListener("input", (event) => {
+      inputChat = event.srcElement.value;
       document
         .getElementsByClassName("rw-send")[0]
         .addEventListener("click", () => {
@@ -81,17 +87,16 @@ function webChatOperation() {
     customPopupClassList?.add("display-none");
     // TODO: implementare logica per Enter button
     inputConversation.addEventListener("keyup", (event) => {
-      console.log(event);
-      console.log(this);
-      //   if (event.key === "Enter") {
-      //     inputConversationMthd(inputConversation.value);
-      //   }
+      if (event.key === "Enter" && inputChat) {
+        inputConversationMthd(inputChat);
+      }
     });
   } else {
     if (localStorage.getItem("interaction")) {
       openFeedbackSection();
     }
     localStorage.removeItem("interaction");
+    // Check
     if (showPopup) {
       createCustomPopup("Clicca sul bottone per inziare la chat");
       customPopupClassList.add("fade-in");
@@ -103,7 +108,6 @@ function webChatOperation() {
 
 function inputConversationMthd(value) {
   if (value.trim()) {
-    console.log(value);
     localStorage.setItem("interaction", true);
   }
 }
@@ -133,13 +137,13 @@ function buttonMenu() {
             <a id="pillole">Pillole</a>
           </div>
         </div>`
-      // <a id="feedback">Feedback</a>
     );
 
     document.getElementById("reset-chat").addEventListener("click", () => {
-      // TODO: trovare un modo per resettare la chat
-      const chatSession = sessionStorage.getItem("chat_session");
-      console.log(chatSession);
+      /* Lato FE la chat si puo svuotare ma al refresh della 
+      pagina viene ricaricato lo storico del web-socket
+      */
+      // clearHistoryChat();
     });
 
     document.getElementById("pillole").addEventListener("click", () => {
@@ -568,4 +572,8 @@ function createListToComplete(context, list) {
     });
     a.appendChild(b);
   }
+}
+
+function clearHistoriesChat() {
+  chatContainer.innerHTML = "";
 }
