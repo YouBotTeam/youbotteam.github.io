@@ -57,7 +57,7 @@ function createAutocomplete() {
 }
 
 function webChatOperation() {
-  if (mainContainer.classList.contains("rw-chat-open")) {
+  if (mainContainer?.classList.contains("rw-chat-open")) {
     createAutocomplete();
     autocomplete();
     clickOnImage();
@@ -80,11 +80,13 @@ function webChatOperation() {
     });
     customPopupClassList?.add("display-none");
     // TODO: implementare logica per Enter button
-    // inputConversation.addEventListener("keyup", (event) => {
-    //   if (event.key === "Enter") {
-    //     inputConversationMthd(inputConversation.value);
-    //   }
-    // });
+    inputConversation.addEventListener("keyup", (event) => {
+      console.log(event);
+      console.log(this);
+      //   if (event.key === "Enter") {
+      //     inputConversationMthd(inputConversation.value);
+      //   }
+    });
   } else {
     if (localStorage.getItem("interaction")) {
       openFeedbackSection();
@@ -170,13 +172,17 @@ function createConversationContainer() {
 }
 
 function clickOnImage() {
-  document.getElementsByClassName("image")[0]?.addEventListener(
-    "click",
-    (ev) => {
-      window.open(ev.srcElement.currentSrc, "_blank");
-    },
-    false
-  );
+  const listOfImageTag = document.querySelectorAll("img.rw-image-frame");
+  listOfImageTag.forEach((image) => {
+    image.addEventListener(
+      "click",
+      (ev) => {
+        console.log("clickimage");
+        window.open(ev.srcElement.currentSrc, "_blank");
+      },
+      false
+    );
+  });
 }
 
 function removeAvatarOnMsg() {
@@ -346,7 +352,9 @@ function pilloleSection() {
           pillola.title
         }</h1></button>
                                 <div class="content" style="${
-                                  mainContainer.classList.contains("rw-full-screen")
+                                  mainContainer.classList.contains(
+                                    "rw-full-screen"
+                                  )
                                     ? "height: 30rem;"
                                     : ""
                                 }">
