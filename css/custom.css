@@ -2,7 +2,7 @@
   --primary-color: #135afe;
   --white-color: #ffffff;
   --content-color: #f1f1f1;
-  --white-dark-color: #ddd;
+  --white-dark-color: #dddddd;
   --error-color: #ff0000;
   --star-checked-color: #ffa500;
 }
@@ -15,6 +15,10 @@
 
 .rw-widget-container {
   width: 40%;
+}
+
+.rw-new-message {
+  height: 100%;
 }
 
 .rw-widget-container .rw-full-screen .rw-chat-open {
@@ -326,10 +330,8 @@ input[type="submit"] {
   z-index: 99;
   position: absolute;
   top: 0;
-  overflow-y: scroll;
-  height: 10rem;
+  overflow-y: auto;
   width: 100%;
-  margin-top: -11rem;
   /*position the autocomplete items to be the same width as the container:*/
   /* top: 100%; */
   left: 0;
