@@ -9,26 +9,12 @@ var customPopupClassList;
 var conversationContainer;
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Rasa Web Chat
-  window.WebChat.default({
-    selector: "#webchat",
-    initPayload: ["/welcome"],
-    customData: { language: "en" }, // arbitrary custom data. Stay minimal as this will be added to the socket
-    socketUrl: "https://demo.weai.it",
-    socketPath: "/socket.io/",
-    showFullScreenButton: true,
-    title: "Comune di Milano",
-    profileAvatar: "./images/favicon.png",
-    subtitle: "Infoline 020202",
-    inputTextFieldHint: "Scrivi la tua richiesta...",
-    params: { storage: "session" }, // can be set to "local"  or "session". details in storage section.
-  });
-
   // Operazioni di editing web chat
   setTimeout(() => {
     localStorage.setItem("position", "popup");
     mainContainer = document.getElementsByClassName("rw-widget-container")[0];
     webChatOperation();
+    sessionStorage.clear();
 
     const mutationObserver = new MutationObserver((mutationsList) => {
       // var mutationsListClassList = mutationsList[0].target.classList;
@@ -114,7 +100,7 @@ function inputConversationMthd(value) {
 
 function createCustomPopup(contentPopup) {
   if (!document.querySelector(".popup-custom")) {
-    mainContainer.insertAdjacentHTML(
+    mainContainer?.insertAdjacentHTML(
       "beforeend",
       `<div class="popup-custom ">${contentPopup}</div>`
     );
