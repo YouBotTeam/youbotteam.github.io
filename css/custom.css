@@ -87,6 +87,11 @@ ul {
 
 .pillole-title {
   padding: 0.1rem;
+  font-weight: normal;
+}
+
+.rotate-arrow {
+  transform: rotate(180deg);
 }
 
 iframe {
@@ -95,13 +100,15 @@ iframe {
 }
 
 .collapsible {
-  background-color: var(--primary-color);
-  color: var(--white-color);
+  background: none;
   cursor: pointer;
   padding: 1rem;
   display: flex;
   flex-direction: row;
   align-items: center;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  border-radius: 0.5rem;
+  justify-content: space-between;
   width: 100%;
   border: none;
   text-align: left;
@@ -109,11 +116,19 @@ iframe {
   font-size: 1rem;
 }
 
+.collapsibile-icon-img {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+}
+
 .content {
   padding: 0.5rem;
   display: none;
   overflow: hidden;
-  background-color: var(--content-color);
+  margin-bottom: .5rem;
+  /* background-color: var(--content-color); */
 }
 
 /* collapsible */
@@ -205,6 +220,7 @@ input[type="button"] {
 
 #dropdown-content {
   display: none;
+  border-radius: 0.5rem;
   position: absolute;
   right: 0;
   background-color: var(--content-color);
@@ -223,6 +239,7 @@ input[type="button"] {
 
 #dropdown-content a:hover {
   background-color: var(--white-dark-color);
+  border-radius: 0.5rem;
 }
 
 .dropdown:hover #dropdown-content {

@@ -27,6 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Operazioni di editing web chat
   setTimeout(() => {
+    localStorage.setItem("position", "popup");
     mainContainer = document.getElementsByClassName("rw-widget-container")[0];
     webChatOperation();
 
@@ -85,7 +86,6 @@ function webChatOperation() {
         });
     });
     customPopupClassList?.add("display-none");
-    // TODO: implementare logica per Enter button
     inputConversation.addEventListener("keyup", (event) => {
       if (event.key === "Enter" && inputChat) {
         inputConversationMthd(inputChat);
@@ -96,13 +96,13 @@ function webChatOperation() {
       openFeedbackSection();
     }
     localStorage.removeItem("interaction");
-    // Check
-    if (showPopup) {
+    if (showPopup && localStorage.getItem("position") === "popup") {
       createCustomPopup("Clicca sul bottone per inziare la chat");
       customPopupClassList.add("fade-in");
       customPopupClassList.remove("display-none");
       showPopup = false;
     }
+    localStorage.setItem("position", "close");
   }
 }
 
@@ -204,7 +204,11 @@ function removeAvatarOnMsg() {
 }
 
 function feedbackSection() {
+  const containsFullScreen = mainContainer.classList.contains("rw-full-screen");
   if (!document.querySelector("#container-custom")) {
+    if (containsFullScreen) {
+      mainContainer.classList.remove("rw-full-screen");
+    }
     localStorage.setItem("position", "feedback");
     conversationContainer.appendChild(containerCustom);
     containerCustom.innerHTML = `
@@ -347,13 +351,21 @@ function pilloleSection() {
         const contentLi = document.createElement("div");
         contentLi.classList.add("container-collapse");
         contentLi.innerHTML = `
-                                <button type="button" class="collapsible"><img class="pillole-icon" src="${
-                                  pillola.multimedia.find(
-                                    (multi) => multi.type === "icon"
-                                  ).link
-                                }"/><h1 class="pillole-title">${
-          pillola.title
-        }</h1></button>
+                                <button type="button" class="collapsible">
+                                  <div class="collapsibile-icon-img">
+                                    <img class="pillole-icon" src="${
+                                      pillola.multimedia.find(
+                                        (multi) => multi.type === "icon"
+                                      ).link
+                                    }"/>
+                                    <h1 class="pillole-title">${
+                                      pillola.title
+                                    }</h1>
+                                  </div>
+                                  <div>
+                                    <img src="./images/chevron-down.svg" class="arrow-down"/>
+                                  </div>
+                                </button>
                                 <div class="content" style="${
                                   mainContainer.classList.contains(
                                     "rw-full-screen"
@@ -375,6 +387,13 @@ function pilloleSection() {
       [...domPillole.getElementsByTagName("button")].forEach((button) => {
         button.addEventListener("click", function () {
           this.classList.toggle("active");
+          const arrow =
+            button.getElementsByClassName("arrow-down")[0].classList;
+          if (!arrow.contains("rotate-arrow")) {
+            arrow.add("rotate-arrow");
+          } else {
+            arrow.remove("rotate-arrow");
+          }
           var content = this.nextElementSibling;
           if (content.style.display === "block") {
             content.style.display = "none";
