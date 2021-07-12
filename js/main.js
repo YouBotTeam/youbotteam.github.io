@@ -1,8 +1,7 @@
-var typingTimer;
 var mainContainer;
 var chatContainer;
-var lastSearch = "";
 var inputChat = "";
+var lastSearch = "";
 var containerCustom;
 var showPopup = true;
 var autocompleteElement;
@@ -65,6 +64,7 @@ function webChatOperation() {
     autocomplete();
     clickOnImage();
     buttonMenu();
+    // TODO: capire se da rimuovere nel caso mettere un mutationObserver sul change
     // removeAvatarOnMsg();
     conversationContainer = document.getElementsByClassName(
       "rw-conversation-container"
@@ -191,15 +191,10 @@ function clickOnImage() {
 function removeAvatarOnMsg() {
   const messages = document.getElementById("rw-messages");
   const msgReponse = messages.getElementsByClassName("rw-from-response");
-  // const messagesList = messages.getElementsByClassName("rw-message");
   for (var message of msgReponse) {
-    message.classList.remove("rw-with-avatar");
-    if (!message.querySelector(".rw-avatar")) {
-      const img = message.getElementsByTagName("img");
-      if (img.length) {
-        message.removeChild(img[0]);
-      }
-    }
+    const child = message.getElementsByClassName("rw-message")[0];
+    child.classList.remove("rw-with-avatar");
+    child.removeChild(message.getElementsByTagName("img")[0]);
   }
 }
 
@@ -521,6 +516,7 @@ function autocomplete() {
     // createListToComplete(this, currentFocus, *****);
   });
 
+  let typingTimer = null;
   autocompleteElement.addEventListener("input", function (e) {
     let input = e.target.value;
     input = input.trimStart();
@@ -534,7 +530,7 @@ function autocomplete() {
           })
           .catch((error) => console.log(`Error: ${error}`));
       }
-    }, 1500);
+    }, 1000);
   });
 
   document.addEventListener("click", (e) => {
