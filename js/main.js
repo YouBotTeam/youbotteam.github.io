@@ -247,17 +247,9 @@ function feedbackSection() {
       const starSelected = listOfStar.filter((star) =>
         star.classList.contains("checked")
       ).length;
-      if (!textAreaValue && !starSelected) {
-        removeConversationContainer();
-        // textArea.classList.add("textarea-error");
-        // document.getElementById("error-feedback").innerText =
-        //   "Errore: scrivere una descrizione.";
-      } else {
-        // textArea.classList.remove("textarea-error");
-        // TODO: allegare la chiamata per il salvataggio del feedback
-        console.log({ textAreaValue, starSelected });
-        removeConversationContainer();
-      }
+      // TODO: allegare la chiamata per il salvataggio del feedback
+      console.log({ textAreaValue, starSelected });
+      removeConversationContainer();
     });
   }
 }
@@ -571,7 +563,7 @@ function closeAllLists(elmnt) {
 function createListToComplete(context, list) {
   var divWrapper,
     child,
-    val = context.value;
+    val = context?.value;
   closeAllLists();
   if (!val) {
     return false;
