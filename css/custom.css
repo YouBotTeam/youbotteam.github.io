@@ -14,7 +14,7 @@
 }
 
 .rw-widget-container {
-  width:33%;
+  width:50%;
 }
 
 .rw-new-message {
@@ -277,7 +277,7 @@ input[type="button"] {
   border-top: 10px solid var(--primary-color);
   border-bottom: 10px solid transparent;
   right: -19px;
-  top: 35%;
+  top: 36%;
 }
 
 /* Popup custom */

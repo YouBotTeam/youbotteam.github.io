@@ -6,23 +6,24 @@ var containerCustom;
 var showPopup = true;
 var autocompleteElement;
 var customPopupClassList;
+var commanderResponse = null;
 var conversationContainer;
 
-document.addEventListener("DOMContentLoaded", () => {
-  // Operazioni di editing web chat
-  setTimeout(() => {
-    localStorage.setItem("position", "popup");
-    mainContainer = document.getElementsByClassName("rw-widget-container")[0];
-    webChatOperation();
-    sessionStorage.clear();
-
-    const mutationObserver = new MutationObserver((mutationsList) => {
-      // var mutationsListClassList = mutationsList[0].target.classList;
+document.addEventListener("readystatechange", () => {
+  if (document.readyState === "interactive") {
+    setTimeout(() => {
+      sessionStorage.clear();
+      localStorage.setItem("position", "popup");
+      mainContainer = document.getElementsByClassName("rw-widget-container")[0];
       webChatOperation();
-    });
 
-    mutationObserver.observe(mainContainer, { attributes: true });
-  }, 500);
+      const mutationObserver = new MutationObserver(() => {
+        webChatOperation();
+      });
+
+      mutationObserver.observe(mainContainer, { attributes: true });
+    }, 700);
+  }
 });
 
 function createAutocomplete() {
@@ -91,6 +92,18 @@ function webChatOperation() {
     }
     localStorage.setItem("position", "close");
   }
+
+  if (
+    localStorage.getItem("hint") &&
+    (mainContainer.classList.contains("rw-full-screen") ||
+      mainContainer?.classList.contains("rw-chat-open")) &&
+    autocompleteElement.value &&
+    lastSearch &&
+    commanderResponse &&
+    autocompleteElement.value === lastSearch
+  ) {
+    createListToComplete(autocompleteElement, commanderResponse);
+  }
 }
 
 function inputConversationMthd(value) {
@@ -101,10 +114,12 @@ function inputConversationMthd(value) {
 
 function createCustomPopup(contentPopup) {
   if (!document.querySelector(".popup-custom")) {
-    mainContainer?.insertAdjacentHTML(
-      "beforeend",
-      `<div class="popup-custom ">${contentPopup}</div>`
-    );
+    document
+      .getElementsByClassName("rw-widget-container")[0]
+      .insertAdjacentHTML(
+        "beforeend",
+        `<div class="popup-custom">${contentPopup}</div>`
+      );
     customPopupClassList =
       document.getElementsByClassName("popup-custom")[0].classList;
   }
@@ -505,11 +520,6 @@ function removeConversationContainer() {
 
 function autocomplete() {
   autocompleteElement = document.getElementById("autocomplete");
-  autocompleteElement.addEventListener("click", function (event) {
-    // TODO implementare logica di mantenimento dell'hint
-    // createListToComplete(this, currentFocus, *****);
-  });
-
   let typingTimer = null;
   autocompleteElement.addEventListener("input", function (e) {
     let input = e.target.value;
@@ -518,8 +528,10 @@ function autocomplete() {
     typingTimer = setTimeout(() => {
       if (input.length > 5 && [...input].find((char) => char === " ")) {
         lastSearch = input;
+        localStorage.setItem("hint", true);
         getHintComplete(input)
           .then((response) => {
+            commanderResponse = response.matches;
             createListToComplete(this, response.matches);
           })
           .catch((error) => console.log(`Error: ${error}`));
@@ -527,7 +539,15 @@ function autocomplete() {
     }, 1000);
   });
 
+  autocompleteElement.addEventListener("keyup", (event) => {
+    if (event.code === "Enter") {
+      closeAllLists();
+      localStorage.setItem("hint", false);
+    }
+  });
+
   document.addEventListener("click", (e) => {
+    // localStorage.setItem("hint", false);
     closeAllLists(e.target);
   });
 }
@@ -545,42 +565,44 @@ function closeAllLists(elmnt) {
 }
 
 function createListToComplete(context, list) {
-  var a,
-    b,
+  var divWrapper,
+    child,
     val = context.value;
   closeAllLists();
   if (!val) {
     return false;
   }
-  currentFocus = -1;
-  a = document.createElement("div");
-  a.setAttribute("id", context.id + "autocomplete-list");
-  a.setAttribute("class", "autocomplete-items");
+  divWrapper = document.createElement("div");
+  divWrapper.setAttribute("id", `${context.id}autocomplete-list`);
+  divWrapper.setAttribute("class", "autocomplete-items");
   switch (list.length) {
     case 1:
-      a.style.marginTop = "-3.4rem";
+      divWrapper.style.marginTop = "-3.4rem";
       break;
     case 2:
-      a.style.marginTop = "-5.9rem";
+      divWrapper.style.marginTop = "-5.9rem";
       break;
     case 3:
-      a.style.marginTop = "-8.4rem";
+      divWrapper.style.marginTop = "-8.4rem";
       break;
     default:
-      a.style.marginTop = "-10.9rem";
-      a.style.height = "10rem";
+      divWrapper.style.marginTop = "-10.9rem";
+      divWrapper.style.height = "10rem";
       break;
   }
-  context.parentNode.appendChild(a);
   for (item in list) {
-    b = document.createElement("div");
-    b.innerText += list[item];
-    b.addEventListener("click", function (e) {
+    child = document.createElement("div");
+    child.innerText += list[item];
+    child.addEventListener("click", function (e) {
       autocompleteElement.value = this.innerText;
+      localStorage.setItem("hint", false);
       closeAllLists();
     });
-    a.appendChild(b);
+    divWrapper.appendChild(child);
   }
+  setTimeout(() => {
+    context.parentNode.appendChild(divWrapper);
+  });
 }
 
 function clearHistoriesChat() {
