@@ -94,13 +94,15 @@ function webChatOperation() {
   }
 
   if (
-    localStorage.getItem("hint") &&
-    (mainContainer.classList.contains("rw-full-screen") ||
-      mainContainer?.classList.contains("rw-chat-open")) &&
-    autocompleteElement.value &&
-    lastSearch &&
-    commanderResponse &&
-    autocompleteElement.value === lastSearch
+    !(
+      localStorage.getItem("hint") &&
+      (mainContainer.classList.contains("rw-full-screen") ||
+        mainContainer?.classList.contains("rw-chat-open")) &&
+      autocompleteElement.value &&
+      lastSearch &&
+      commanderResponse &&
+      autocompleteElement.value === lastSearch
+    )
   ) {
     createListToComplete(autocompleteElement, commanderResponse);
   }
@@ -546,10 +548,12 @@ function autocomplete() {
     }
   });
 
-  document.addEventListener("click", (e) => {
-    // localStorage.setItem("hint", false);
-    closeAllLists(e.target);
-  });
+  document
+    .getElementsByClassName("rw-messages-container")[0]
+    .addEventListener("click", (e) => {
+      localStorage.setItem("hint", false);
+      closeAllLists(e.target);
+    });
 }
 
 function closeAllLists(elmnt) {
