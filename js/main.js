@@ -48,7 +48,6 @@ function webChatOperation() {
   if (mainContainer?.classList.contains("rw-chat-open")) {
     createAutocomplete();
     autocomplete();
-    clickOnImage();
     buttonMenu();
     // TODO: capire se da rimuovere nel caso mettere un mutationObserver sul change
     // removeAvatarOnMsg();
@@ -61,6 +60,8 @@ function webChatOperation() {
     if (document.querySelector(".container-custom")) {
       removeConversationContainer();
     }
+    mutationObserverChatContainer();
+    clickOnImage();
     const inputConversation =
       document.getElementsByClassName("rw-new-message")[0];
     inputConversation.addEventListener("input", (event) => {
@@ -159,6 +160,13 @@ function createConversationContainer() {
     "custom-container"
   );
   mainContainer.insertAdjacentElement("afterbegin", conversationContainer);
+}
+
+function mutationObserverChatContainer() {
+  const mutationObserverChat = new MutationObserver(() => {
+    clickOnImage();
+  });
+  mutationObserverChat.observe(chatContainer, { childList: true });
 }
 
 function clickOnImage() {
