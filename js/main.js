@@ -524,6 +524,7 @@ function removeConversationContainer() {
 
 function autocomplete() {
   autocompleteElement = document.getElementById("autocomplete");
+  autocompleteElement.focus();
   let typingTimer = null;
   autocompleteElement.addEventListener("input", function (e) {
     let input = e.target.value;
