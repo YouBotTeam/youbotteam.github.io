@@ -78,6 +78,16 @@ function webChatOperation() {
         inputConversationMthd(inputChat);
       }
     });
+    const listImage = [...document.getElementsByClassName("rw-image-details")];
+    listImage.forEach((image) => {
+      const imageStyle = image.children[0].style;
+      imageStyle.width = mainContainer?.classList.contains("rw-full-screen")
+        ? "30rem"
+        : "";
+      imageStyle.height = mainContainer?.classList.contains("rw-full-screen")
+        ? "20rem"
+        : "";
+    });
   } else {
     if (localStorage.getItem("interaction")) {
       openFeedbackSection();
