@@ -1,3 +1,4 @@
+var i = 0;
 var mainContainer;
 var chatContainer;
 var inputChat = "";
@@ -438,21 +439,21 @@ function createCustomHeader(title) {
 }
 
 async function getHintComplete(text) {
-  var myHeaders = new Headers();
-  myHeaders.append(
+  var headers = new Headers();
+  headers.append(
     "Authorization",
     "Basic dXRlbnRlOjQ0YzJkYmUyYzI0NzE5YWFlNjRlZDQyOTg5YzllM2YxZTUwNDQ3NGQwZjQ4NzFiYzI2YmFiNjY5NWY5NWQ5MTI="
   );
-  myHeaders.append("Content-Type", "application/json");
+  headers.append("Content-Type", "application/json");
 
-  var raw = JSON.stringify({
+  var body = JSON.stringify({
     text,
   });
 
   var requestOptions = {
     method: "POST",
-    headers: myHeaders,
-    body: raw,
+    headers,
+    body,
     redirect: "follow",
   };
 
@@ -534,6 +535,7 @@ function autocomplete() {
     }
     typingTimer = setTimeout(() => {
       if (input.length > 5 && [...input].find((char) => char === " ")) {
+        console.log(`call ${i++}`);
         lastSearch = input;
         localStorage.setItem("hint", true);
         getHintComplete(input)
@@ -592,7 +594,7 @@ function createListToComplete(context, list) {
       divWrapper.style.marginTop = "-5.9rem";
       break;
     case 3:
-      divWrapper.style.marginTop = "-8.4rem";
+      divWrapper.style.marginTop = "-8.37rem";
       break;
     default:
       divWrapper.style.marginTop = "-10.9rem";
