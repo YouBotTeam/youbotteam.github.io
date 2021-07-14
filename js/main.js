@@ -11,10 +11,9 @@ var conversationContainer;
 
 document.addEventListener("readystatechange", () => {
   if (document.readyState === "interactive") {
-    setTimeout(() => {
-      sessionStorage.clear();
-      localStorage.setItem("position", "popup");
+    checkElement(".rw-widget-container").then(() => {
       mainContainer = document.getElementsByClassName("rw-widget-container")[0];
+      // sessionStorage.clear();
       webChatOperation();
 
       const mutationObserver = new MutationObserver(() => {
@@ -22,7 +21,7 @@ document.addEventListener("readystatechange", () => {
       });
 
       mutationObserver.observe(mainContainer, { attributes: true });
-    }, 700);
+    });
   }
 });
 
@@ -519,6 +518,10 @@ function autocomplete() {
     let input = e.target.value;
     input = input.trimStart();
     clearTimeout(typingTimer);
+    if (commanderResponse && lastSearch !== input) {
+      closeAllLists();
+      localStorage.setItem("hint", false);
+    }
     typingTimer = setTimeout(() => {
       if (input.length > 5 && [...input].find((char) => char === " ")) {
         lastSearch = input;
@@ -604,3 +607,10 @@ function createListToComplete(context, list) {
 function clearHistoriesChat() {
   chatContainer.innerHTML = "";
 }
+
+const checkElement = async (selector) => {
+  while (document.querySelector(selector) === null) {
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+  }
+  return document.querySelector(selector);
+};
