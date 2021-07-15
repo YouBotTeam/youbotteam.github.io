@@ -19,8 +19,8 @@ ChatCustomization.configuration = (config) => {
 
 document.addEventListener("readystatechange", () => {
   if (document.readyState === "interactive") {
-    console.log(configuration);
-    if (configuration?.clearCacheOnRefresh) {
+    customStyleOfPage();
+    if (configuration.clearCacheOnRefresh) {
       sessionStorage.clear();
     }
     checkElement(".rw-widget-container").then(() => {
@@ -35,6 +35,38 @@ document.addEventListener("readystatechange", () => {
     });
   }
 });
+
+function customStyleOfPage() {
+  const { colorCustom } = configuration;
+  if (colorCustom) {
+    const { primary, messageUser, sendButton, messageBot } = colorCustom;
+    const styleOfDocument = document.documentElement.style;
+    if (primary) {
+      styleOfDocument.setProperty("--primary-color", primary);
+    }
+    if (messageUser) {
+      const { backgroundColor, textColor } = messageUser;
+      if (backgroundColor) {
+        styleOfDocument.setProperty("--msg-user-bg-color", backgroundColor);
+      }
+      if (textColor) {
+        styleOfDocument.setProperty("--msg-user-text-color", textColor);
+      }
+    }
+    if (messageBot) {
+      const { backgroundColor, textColor } = messageBot;
+      if (backgroundColor) {
+        styleOfDocument.setProperty("--msg-bot-bg-color", backgroundColor);
+      }
+      if (textColor) {
+        styleOfDocument.setProperty("--msg-bot-text-color", textColor);
+      }
+    }
+    if (sendButton) {
+      styleOfDocument.setProperty("--button-send-color", sendButton);
+    }
+  }
+}
 
 function createAutocomplete() {
   if (!document.querySelector(".autocomplete")) {
@@ -166,7 +198,9 @@ function buttonMenu() {
       `
         <div class="dropdown">
           <button class="button-menu">
-            <img class="rw-default icon-button-menu" src="./images/three-dots-vertical.svg"/>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ffffff" class="bi bi-three-dots-vertical rw-default icon-button-menu" viewBox="0 0 16 16">
+              <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+            </svg>
           </button>
           <div id="dropdown-content">
             <a id="reset-chat">Reset chat</a>
@@ -395,7 +429,9 @@ function pilloleSection() {
                                     }</h1>
                                   </div>
                                   <div>
-                                    <img src="./images/chevron-down.svg" class="arrow-down"/>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#000" class="bi bi-chevron-down arrow-down" viewBox="0 0 16 16">
+                                      <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+                                    </svg>
                                   </div>
                                 </button>
                                 <div class="content" style="${
@@ -446,7 +482,9 @@ function createCustomHeader(title) {
     <div class="rw-header custom-header">
       <h4 class="rw-title">${title}</h4>
       <div class="container-close">
-        <img id="close-icon" src="./images/x-lg.svg" />
+        <svg xmlns="http://www.w3.org/2000/svg" id="close-icon" width="16" height="16" fill="#ffffff" class="bi bi-x-lg" viewBox="0 0 16 16">
+          <path d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z"/>
+        </svg>
       </div>
     </div>
     `

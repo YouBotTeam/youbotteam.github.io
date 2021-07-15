@@ -1,5 +1,8 @@
 :root {
   --primary-color: #135afe;
+  --msg-user-bg-color: #135afe;
+  --msg-bot-bg-color: #f4f7f9;
+  --button-send-color: #135afe;
   --white-color: #ffffff;
   --content-color: #f1f1f1;
   --white-dark-color: #dddddd;
@@ -14,7 +17,29 @@
 }
 
 .rw-widget-container {
-  width:50%;
+  width: 50%;
+}
+
+.rw-conversation-container .rw-header {
+  background-color: var(--primary-color) !important;
+}
+
+.rw-conversation-container .rw-response {
+  background-color: var(--msg-bot-bg-color) !important;
+  color: var(--msg-bot-text-color) !important;
+}
+
+.rw-conversation-container .rw-client {
+  background-color: var(--msg-user-bg-color) !important;
+  color: var(--msg-user-text-color) !important;
+}
+
+.rw-conversation-container .rw-send .rw-send-icon-ready {
+  fill: var(--button-send-color) !important;
+}
+
+.rw-launcher {
+  background-color: var(--primary-color) !important;
 }
 
 .rw-new-message {
@@ -127,7 +152,7 @@ iframe {
   padding: 0.5rem;
   display: none;
   overflow: hidden;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
   /* background-color: var(--content-color); */
 }
 
@@ -199,7 +224,7 @@ input[type="button"] {
   color: var(--white-color);
   width: 50%;
   border-radius: 1rem;
-  background-color: var(--primary-color);
+  background-color: var(--primary-color) !important;
   border: 0;
 }
 
@@ -254,7 +279,7 @@ input[type="button"] {
   float: right;
   left: 25px;
   width: 70%;
-  background: var(--primary-color);
+  background: var(--primary-color) !important;
   position: absolute;
   color: var(--white-color);
   z-index: 999;
@@ -272,9 +297,9 @@ input[type="button"] {
   width: 0px;
   height: 0px;
   position: absolute;
-  border-left: 10px solid var(--primary-color);
+  border-left: 10px solid var(--primary-color) !important;
   border-right: 10px solid transparent;
-  border-top: 10px solid var(--primary-color);
+  border-top: 10px solid var(--primary-color) !important;
   border-bottom: 10px solid transparent;
   right: -19px;
   top: 36%;
