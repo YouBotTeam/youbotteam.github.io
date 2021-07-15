@@ -54,6 +54,35 @@
   width: var(--width-button) !important;
 }
 
+/*  */
+
+.feedback {
+  width: 100%;
+  cursor: pointer;
+  text-align: center;
+  height: 1rem;
+  /* padding: 1rem; */
+  color: white;
+  background: #ffa500;
+  /* border-top: 1px solid; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feedback > p {
+  font-size: 11px;
+}
+
+.rw-send {
+  padding-right: 0.5rem;
+}
+
+.rw-conversation-container .rw-sender {
+  padding: 0;
+  flex-direction: column-reverse;
+}
+/*  */
 .rw-new-message {
   height: 100%;
 }
@@ -348,6 +377,7 @@ input[type="button"] {
 
 .autocomplete {
   position: relative;
+  padding: 1rem;
   /* display: inline-block; */
 }
 

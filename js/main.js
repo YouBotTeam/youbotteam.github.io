@@ -91,8 +91,13 @@ function createAutocomplete() {
 
     const form = document.getElementsByClassName("rw-sender")[0];
     form.setAttribute("autocomplete", "off");
-
     form.appendChild(containerForm);
+    //
+    form.insertAdjacentHTML(
+      "afterbegin",
+      `<div class="feedback"><p>Lascia un feedback</p></div>`
+    );
+    //
   }
 }
 
@@ -158,8 +163,7 @@ function webChatOperation() {
       !localStorage.getItem("interaction")
     ) {
       createCustomPopup(
-        popupSection?.popupText ||
-          "Clicca sul bottone per inziare la chat"
+        popupSection?.popupText || "Clicca sul bottone per inziare la chat"
       );
       customPopupClassList.add("fade-in");
       customPopupClassList.remove("display-none");
@@ -379,13 +383,14 @@ function pilloleSection() {
       createCustomHeader("Pillole");
       conversationContainer.appendChild(containerCustom);
       containerCustom.innerHTML = `<div id="container-custom"></div>`;
-      getPillole().then((response) => {
-        const { value } = response;
-        const domPillole = document.createElement("ul");
-        value.forEach((pillola) => {
-          const contentLi = document.createElement("div");
-          contentLi.classList.add("container-collapse");
-          contentLi.innerHTML = `
+      getPillole()
+        .then((response) => {
+          const { value } = response;
+          const domPillole = document.createElement("ul");
+          value.forEach((pillola) => {
+            const contentLi = document.createElement("div");
+            contentLi.classList.add("container-collapse");
+            contentLi.innerHTML = `
                                 <button type="button" class="collapsible">
                                   <div class="collapsibile-icon-img">
                                     <img class="pillole-icon" src="${
@@ -417,30 +422,31 @@ function pilloleSection() {
                                       ).link
                                     }" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                                     `;
-          const li = document.createElement("li");
-          li.appendChild(contentLi);
-          domPillole.appendChild(li);
-        });
-        [...domPillole.getElementsByTagName("button")].forEach((button) => {
-          button.addEventListener("click", function () {
-            this.classList.toggle("active");
-            const arrow =
-              button.getElementsByClassName("arrow-down")[0].classList;
-            if (!arrow.contains("rotate-arrow")) {
-              arrow.add("rotate-arrow");
-            } else {
-              arrow.remove("rotate-arrow");
-            }
-            var content = this.nextElementSibling;
-            if (content.style.display === "block") {
-              content.style.display = "none";
-            } else {
-              content.style.display = "block";
-            }
+            const li = document.createElement("li");
+            li.appendChild(contentLi);
+            domPillole.appendChild(li);
           });
-        });
-        document.getElementById("container-custom").appendChild(domPillole);
-      }).catch(err=> console.log(`Erorr: ${err}`));
+          [...domPillole.getElementsByTagName("button")].forEach((button) => {
+            button.addEventListener("click", function () {
+              this.classList.toggle("active");
+              const arrow =
+                button.getElementsByClassName("arrow-down")[0].classList;
+              if (!arrow.contains("rotate-arrow")) {
+                arrow.add("rotate-arrow");
+              } else {
+                arrow.remove("rotate-arrow");
+              }
+              var content = this.nextElementSibling;
+              if (content.style.display === "block") {
+                content.style.display = "none";
+              } else {
+                content.style.display = "block";
+              }
+            });
+          });
+          document.getElementById("container-custom").appendChild(domPillole);
+        })
+        .catch((err) => console.log(`Erorr: ${err}`));
     }
   }
 }
