@@ -25,6 +25,14 @@
   justify-content: center;
 }
 
+.rw-launcher .rw-tooltip-body {
+  right: calc(var(--width-button) + 30px);
+}
+
+.rw-launcher .rw-tooltip-body {
+  margin-right: -1rem;
+}
+
 .rw-conversation-container .rw-header {
   background-color: var(--primary-color) !important;
 }
@@ -298,10 +306,6 @@ input[type="button"] {
 }
 
 /* Dropdown */
-
-.rw-launcher .rw-tooltip-body {
-  right: calc(var(--width-button) + 30px);
-}
 
 /* Popup custom */
 
