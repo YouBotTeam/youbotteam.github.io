@@ -37,10 +37,10 @@ document.addEventListener("readystatechange", () => {
 });
 
 function setCustomStyleOfPage() {
-  const { colorCustom } = configuration;
+  const { colorCustom, mainButtonDimension } = configuration;
+  const styleOfDocument = document.documentElement.style;
   if (colorCustom) {
     const { primary, messageUser, sendButton, messageBot } = colorCustom;
-    const styleOfDocument = document.documentElement.style;
     if (primary) {
       styleOfDocument.setProperty("--primary-color", primary);
     }
@@ -64,6 +64,15 @@ function setCustomStyleOfPage() {
     }
     if (sendButton) {
       styleOfDocument.setProperty("--button-send-color", sendButton);
+    }
+  }
+  if (mainButtonDimension) {
+    const { width, height } = mainButtonDimension;
+    if (width) {
+      styleOfDocument.setProperty("--width-button", width);
+    }
+    if (height) {
+      styleOfDocument.setProperty("--height-button", height);
     }
   }
 }

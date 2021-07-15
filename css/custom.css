@@ -3,6 +3,8 @@
   --msg-user-bg-color: #135afe;
   --msg-bot-bg-color: #f4f7f9;
   --button-send-color: #135afe;
+  --width-button: 60px;
+  --height-button: 60px;
   --white-color: #ffffff;
   --content-color: #f1f1f1;
   --white-dark-color: #dddddd;
@@ -18,6 +20,9 @@
 
 .rw-widget-container {
   width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .rw-conversation-container .rw-header {
@@ -40,6 +45,8 @@
 
 .rw-launcher {
   background-color: var(--primary-color) !important;
+  height: var(--height-button) !important;
+  width: var(--width-button) !important;
 }
 
 .rw-new-message {
