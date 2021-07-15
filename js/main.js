@@ -440,7 +440,7 @@ function pilloleSection() {
           });
         });
         document.getElementById("container-custom").appendChild(domPillole);
-      });
+      }).catch(err=> console.log(`Erorr: ${err}`));
     }
   }
 }
