@@ -54,26 +54,6 @@
   width: var(--width-button) !important;
 }
 
-/*  */
-
-.feedback {
-  width: 100%;
-  cursor: pointer;
-  text-align: center;
-  height: 1rem;
-  /* padding: 1rem; */
-  color: white;
-  background: #ffa500;
-  /* border-top: 1px solid; */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.feedback > p {
-  font-size: 11px;
-}
-
 .rw-send {
   padding-right: 0.5rem;
 }
@@ -82,7 +62,7 @@
   padding: 0;
   flex-direction: column-reverse;
 }
-/*  */
+
 .rw-new-message {
   height: 100%;
 }
@@ -237,6 +217,11 @@ textarea {
 
 #error-feedback {
   margin-left: 1rem;
+}
+
+#textareabox {
+  border-radius: 10px;
+  outline: none;
 }
 
 /* Star rating */
@@ -408,8 +393,9 @@ input[type="submit"] {
   position: absolute;
   top: 0;
   overflow-y: auto;
+  box-shadow: 0px -0.5rem 0.4rem rgb(0 0 0 / 5%);
   width: 100%;
-  /*position the autocomplete items to be the same width as the container:*/
+  margin-left: 1rem;
   /* top: 100%; */
   left: 0;
   right: 0;

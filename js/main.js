@@ -92,12 +92,6 @@ function createAutocomplete() {
     const form = document.getElementsByClassName("rw-sender")[0];
     form.setAttribute("autocomplete", "off");
     form.appendChild(containerForm);
-    //
-    form.insertAdjacentHTML(
-      "afterbegin",
-      `<div class="feedback"><p>Lascia un feedback</p></div>`
-    );
-    //
   }
 }
 
@@ -594,16 +588,16 @@ function createListToComplete(context, list) {
   if (list) {
     switch (list.length) {
       case 1:
-        divWrapper.style.marginTop = "-3.4rem";
+        divWrapper.style.marginTop = "-2.5rem";
         break;
       case 2:
-        divWrapper.style.marginTop = "-5.9rem";
+        divWrapper.style.marginTop = "-5rem";
         break;
       case 3:
-        divWrapper.style.marginTop = "-8.37rem";
+        divWrapper.style.marginTop = "-7.5rem";
         break;
       default:
-        divWrapper.style.marginTop = "-10.9rem";
+        divWrapper.style.marginTop = "-10rem";
         divWrapper.style.height = "10rem";
         break;
     }
@@ -687,9 +681,3 @@ window.onbeforeunload = () => {
   localStorage.removeItem("interaction");
 };
 
-// // Avatar title
-// const avatar = document.createElement('img');
-// avatar.setAttribute('src', './images/favicon.png');
-// avatar.setAttribute('alt', 'chat avatar');
-// avatar.classList.add('rw-avatar');
-// document.getElementsByClassName('rw-header rw-with-subtitle')[0].insertBefore(avatar, document.getElementsByClassName('rw-header-buttons')[0]);
