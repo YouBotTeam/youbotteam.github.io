@@ -19,7 +19,7 @@ ChatCustomization.configuration = (config) => {
 
 document.addEventListener("readystatechange", () => {
   if (document.readyState === "interactive") {
-    customStyleOfPage();
+    setCustomStyleOfPage();
     if (configuration.clearCacheOnRefresh) {
       sessionStorage.clear();
     }
@@ -36,7 +36,7 @@ document.addEventListener("readystatechange", () => {
   }
 });
 
-function customStyleOfPage() {
+function setCustomStyleOfPage() {
   const { colorCustom } = configuration;
   if (colorCustom) {
     const { primary, messageUser, sendButton, messageBot } = colorCustom;
@@ -367,56 +367,13 @@ function pilloleSection() {
       createCustomHeader("Pillole");
       conversationContainer.appendChild(containerCustom);
       containerCustom.innerHTML = `<div id="container-custom"></div>`;
-      const pillole = [
-        {
-          title: "Active Business",
-          content: "Pillola polizza Active Business",
-          multimedia: [
-            {
-              type: "icon",
-              link: "https://cattolica.weai.it/static/bot-images/icon_business.PNG",
-            },
-            {
-              type: "video",
-              link: "https://www.youtube-nocookie.com/embed/F2_aSibJ1P8",
-            },
-          ],
-        },
-        {
-          title: "Active Casa & Persona",
-          content: "Pillola polizza Active Casa & Persona",
-          multimedia: [
-            {
-              type: "icon",
-              link: "https://cattolica.weai.it/static/bot-images/icon_home.PNG",
-            },
-            {
-              type: "video",
-              link: "https://www.youtube-nocookie.com/embed/4drzqU3pSso",
-            },
-          ],
-        },
-        {
-          title: "TCM",
-          content: "Pillola polizza TCM",
-          multimedia: [
-            {
-              type: "icon",
-              link: "https://cattolica.weai.it/static/bot-images/icon_tcm.PNG",
-            },
-            {
-              type: "video",
-              link: "https://www.youtube-nocookie.com/embed/YZFqTN9VVlQ",
-            },
-          ],
-        },
-      ];
-
-      const domPillole = document.createElement("ul");
-      pillole.forEach((pillola) => {
-        const contentLi = document.createElement("div");
-        contentLi.classList.add("container-collapse");
-        contentLi.innerHTML = `
+      getPillole().then((response) => {
+        const { value } = response;
+        const domPillole = document.createElement("ul");
+        value.forEach((pillola) => {
+          const contentLi = document.createElement("div");
+          contentLi.classList.add("container-collapse");
+          contentLi.innerHTML = `
                                 <button type="button" class="collapsible">
                                   <div class="collapsibile-icon-img">
                                     <img class="pillole-icon" src="${
@@ -448,29 +405,30 @@ function pilloleSection() {
                                       ).link
                                     }" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                                     `;
-        const li = document.createElement("li");
-        li.appendChild(contentLi);
-        domPillole.appendChild(li);
-      });
-      [...domPillole.getElementsByTagName("button")].forEach((button) => {
-        button.addEventListener("click", function () {
-          this.classList.toggle("active");
-          const arrow =
-            button.getElementsByClassName("arrow-down")[0].classList;
-          if (!arrow.contains("rotate-arrow")) {
-            arrow.add("rotate-arrow");
-          } else {
-            arrow.remove("rotate-arrow");
-          }
-          var content = this.nextElementSibling;
-          if (content.style.display === "block") {
-            content.style.display = "none";
-          } else {
-            content.style.display = "block";
-          }
+          const li = document.createElement("li");
+          li.appendChild(contentLi);
+          domPillole.appendChild(li);
         });
+        [...domPillole.getElementsByTagName("button")].forEach((button) => {
+          button.addEventListener("click", function () {
+            this.classList.toggle("active");
+            const arrow =
+              button.getElementsByClassName("arrow-down")[0].classList;
+            if (!arrow.contains("rotate-arrow")) {
+              arrow.add("rotate-arrow");
+            } else {
+              arrow.remove("rotate-arrow");
+            }
+            var content = this.nextElementSibling;
+            if (content.style.display === "block") {
+              content.style.display = "none";
+            } else {
+              content.style.display = "block";
+            }
+          });
+        });
+        document.getElementById("container-custom").appendChild(domPillole);
       });
-      document.getElementById("container-custom").appendChild(domPillole);
     }
   }
 }
@@ -498,33 +456,6 @@ function createCustomHeader(title) {
       localStorage.setItem("position", "close");
     }
   });
-}
-
-async function getHintComplete(text) {
-  var headers = new Headers();
-  headers.append(
-    "Authorization",
-    "Basic dXRlbnRlOjQ0YzJkYmUyYzI0NzE5YWFlNjRlZDQyOTg5YzllM2YxZTUwNDQ3NGQwZjQ4NzFiYzI2YmFiNjY5NWY5NWQ5MTI="
-  );
-  headers.append("Content-Type", "application/json");
-
-  var body = JSON.stringify({
-    text,
-  });
-
-  var requestOptions = {
-    method: "POST",
-    headers,
-    body,
-    redirect: "follow",
-  };
-
-  const call = await fetch(
-    "https://weai.it/service/recommend/cattolica",
-    requestOptions
-  );
-  const response = await call.json();
-  return response;
 }
 
 function showOrHideChatContainer(show) {
@@ -691,6 +622,55 @@ const checkElement = async (selector) => {
   }
   return document.querySelector(selector);
 };
+
+async function getHintComplete(text) {
+  const headers = new Headers();
+  headers.append(
+    "Authorization",
+    "Basic dXRlbnRlOjQ0YzJkYmUyYzI0NzE5YWFlNjRlZDQyOTg5YzllM2YxZTUwNDQ3NGQwZjQ4NzFiYzI2YmFiNjY5NWY5NWQ5MTI="
+  );
+  headers.append("Content-Type", "application/json");
+
+  var body = JSON.stringify({
+    text,
+  });
+
+  var requestOptions = {
+    method: "POST",
+    headers,
+    body,
+    redirect: "follow",
+  };
+
+  const call = await fetch(
+    "https://weai.it/service/recommend/cattolica",
+    requestOptions
+  );
+  const response = await call.json();
+  return response;
+}
+
+async function getPillole() {
+  const headers = new Headers();
+  headers.append(
+    "Authorization",
+    "Basic dXRlbnRlOjQ0YzJkYmUyYzI0NzE5YWFlNjRlZDQyOTg5YzllM2YxZTUwNDQ3NGQwZjQ4NzFiYzI2YmFiNjY5NWY5NWQ5MTI="
+  );
+  headers.append("Content-Type", "application/json");
+
+  var requestOptions = {
+    method: "GET",
+    headers,
+    // redirect: "follow",
+  };
+
+  const call = await fetch(
+    "https://weai.it/service/load/pillole_ref",
+    requestOptions
+  );
+  const response = await call.json();
+  return response;
+}
 
 window.onbeforeunload = () => {
   localStorage.removeItem("interaction");
