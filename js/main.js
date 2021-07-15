@@ -105,19 +105,23 @@ function webChatOperation() {
     if (localStorage.getItem("interaction")) {
       openFeedbackSection();
     }
-    localStorage.removeItem("interaction");
     localStorage.setItem("position", "popup");
-    const textCustomPopup = configuration?.popupText;
+    const popupConfiguration = configuration?.popupSection;
     if (
       showPopup &&
       localStorage.getItem("position") === "popup" &&
-      textCustomPopup
+      popupConfiguration?.showPopup &&
+      !localStorage.getItem("interaction")
     ) {
-      createCustomPopup(textCustomPopup);
+      createCustomPopup(
+        popupConfiguration?.popupText ||
+          "Clicca sul bottone per inziare la chat"
+      );
       customPopupClassList.add("fade-in");
       customPopupClassList.remove("display-none");
       showPopup = false;
     }
+    localStorage.removeItem("interaction");
     localStorage.setItem("position", "close");
   }
 
@@ -262,7 +266,9 @@ function feedbackSection() {
           <input type="button" value="Invia" id="inviaFeedback" />
         </div>
       </div>`;
-    createCustomHeader("Lascia un feedback");
+    createCustomHeader(
+      configuration?.feedbackSection?.title || "Lascia un feedback"
+    );
     handleStarFeedback();
     document.getElementById("inviaFeedback").addEventListener("click", () => {
       let textArea = document.getElementById("textareabox");
@@ -646,4 +652,8 @@ const checkElement = async (selector) => {
     await new Promise((resolve) => requestAnimationFrame(resolve));
   }
   return document.querySelector(selector);
+};
+
+window.onbeforeunload = () => {
+  localStorage.removeItem("interaction");
 };
