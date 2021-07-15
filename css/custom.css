@@ -34,6 +34,11 @@
   color: var(--msg-bot-text-color) !important;
 }
 
+.rw-group-message.rw-from-response
+  .rw-message:not(:first-child):not(:only-child).rw-with-avatar {
+  margin-left: 10px;
+}
+
 .rw-conversation-container .rw-client {
   background-color: var(--msg-user-bg-color) !important;
   color: var(--msg-user-text-color) !important;
@@ -284,7 +289,7 @@ input[type="button"] {
 
 .popup-custom {
   float: right;
-  right: calc(var(--width-button) +  30px);
+  right: calc(var(--width-button) + 30px);
   width: 70%;
   background: var(--primary-color) !important;
   position: absolute;
