@@ -299,6 +299,10 @@ input[type="button"] {
 
 /* Dropdown */
 
+.rw-launcher .rw-tooltip-body {
+  right: calc(var(--width-button) + 30px);
+}
+
 /* Popup custom */
 
 .popup-custom {
