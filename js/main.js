@@ -97,9 +97,13 @@ function createAutocomplete() {
 }
 
 function webChatOperation() {
+  const { enableClickOnImage, enableAutoComplete, popupSection } =
+    configuration;
   if (mainContainer?.classList.contains("rw-chat-open")) {
-    createAutocomplete();
-    autocomplete();
+    if (enableAutoComplete) {
+      createAutocomplete();
+      autocomplete();
+    }
     buttonMenu();
     // TODO: capire se da rimuovere nel caso mettere un mutationObserver sul change
     // removeAvatarOnMsg();
@@ -112,7 +116,7 @@ function webChatOperation() {
     if (document.querySelector(".container-custom")) {
       removeConversationContainer();
     }
-    if (configuration?.enableClickOnImage) {
+    if (enableClickOnImage) {
       mutationObserverChatContainer();
       clickOnImage();
     }
@@ -147,15 +151,14 @@ function webChatOperation() {
       openFeedbackSection();
     }
     localStorage.setItem("position", "popup");
-    const popupConfiguration = configuration?.popupSection;
     if (
       showPopup &&
       localStorage.getItem("position") === "popup" &&
-      popupConfiguration?.showPopup &&
+      popupSection?.showPopup &&
       !localStorage.getItem("interaction")
     ) {
       createCustomPopup(
-        popupConfiguration?.popupText ||
+        popupSection?.popupText ||
           "Clicca sul bottone per inziare la chat"
       );
       customPopupClassList.add("fade-in");
@@ -517,13 +520,6 @@ function removeConversationContainer() {
   );
 }
 
-// // Avatar title
-// const avatar = document.createElement('img');
-// avatar.setAttribute('src', './images/favicon.png');
-// avatar.setAttribute('alt', 'chat avatar');
-// avatar.classList.add('rw-avatar');
-// document.getElementsByClassName('rw-header rw-with-subtitle')[0].insertBefore(avatar, document.getElementsByClassName('rw-header-buttons')[0]);
-
 function autocomplete() {
   autocompleteElement = document.getElementById("autocomplete");
   if (configuration?.autoFocusOnInput) {
@@ -684,3 +680,10 @@ async function getPillole() {
 window.onbeforeunload = () => {
   localStorage.removeItem("interaction");
 };
+
+// // Avatar title
+// const avatar = document.createElement('img');
+// avatar.setAttribute('src', './images/favicon.png');
+// avatar.setAttribute('alt', 'chat avatar');
+// avatar.classList.add('rw-avatar');
+// document.getElementsByClassName('rw-header rw-with-subtitle')[0].insertBefore(avatar, document.getElementsByClassName('rw-header-buttons')[0]);
