@@ -1,20 +1,30 @@
-var i = 0;
 var mainContainer;
 var chatContainer;
 var inputChat = "";
 var lastSearch = "";
 var containerCustom;
 var showPopup = true;
+var configuration = {};
+var typingTimer = null;
 var autocompleteElement;
 var customPopupClassList;
-var commanderResponse = null;
 var conversationContainer;
+var commanderResponse = null;
+
+function ChatCustomization() {}
+
+ChatCustomization.configuration = (config) => {
+  configuration = config;
+};
 
 document.addEventListener("readystatechange", () => {
   if (document.readyState === "interactive") {
+    console.log(configuration);
+    if (configuration?.clearCacheOnRefresh) {
+      sessionStorage.clear();
+    }
     checkElement(".rw-widget-container").then(() => {
       mainContainer = document.getElementsByClassName("rw-widget-container")[0];
-      // sessionStorage.clear();
       webChatOperation();
 
       const mutationObserver = new MutationObserver(() => {
@@ -61,8 +71,10 @@ function webChatOperation() {
     if (document.querySelector(".container-custom")) {
       removeConversationContainer();
     }
-    mutationObserverChatContainer();
-    clickOnImage();
+    if (configuration?.enableClickOnImage) {
+      mutationObserverChatContainer();
+      clickOnImage();
+    }
     const inputConversation =
       document.getElementsByClassName("rw-new-message")[0];
     inputConversation.addEventListener("input", (event) => {
@@ -94,8 +106,14 @@ function webChatOperation() {
       openFeedbackSection();
     }
     localStorage.removeItem("interaction");
-    if (showPopup && localStorage.getItem("position") === "popup") {
-      createCustomPopup("Clicca sul bottone per inziare la chat");
+    localStorage.setItem("position", "popup");
+    const textCustomPopup = configuration?.popupText;
+    if (
+      showPopup &&
+      localStorage.getItem("position") === "popup" &&
+      textCustomPopup
+    ) {
+      createCustomPopup(textCustomPopup);
       customPopupClassList.add("fade-in");
       customPopupClassList.remove("display-none");
       showPopup = false;
@@ -108,7 +126,7 @@ function webChatOperation() {
       localStorage.getItem("hint") &&
       (mainContainer.classList.contains("rw-full-screen") ||
         mainContainer?.classList.contains("rw-chat-open")) &&
-      autocompleteElement.value &&
+      autocompleteElement?.value &&
       lastSearch &&
       commanderResponse &&
       autocompleteElement.value === lastSearch
@@ -524,8 +542,9 @@ function removeConversationContainer() {
 
 function autocomplete() {
   autocompleteElement = document.getElementById("autocomplete");
-  autocompleteElement.focus();
-  let typingTimer = null;
+  if (configuration?.autoFocusOnInput) {
+    autocompleteElement.focus();
+  }
   autocompleteElement.addEventListener("input", function (e) {
     let input = e.target.value;
     input = input.trimStart();
@@ -536,7 +555,6 @@ function autocomplete() {
     }
     typingTimer = setTimeout(() => {
       if (input.length > 5 && [...input].find((char) => char === " ")) {
-        console.log(`call ${i++}`);
         lastSearch = input;
         localStorage.setItem("hint", true);
         getHintComplete(input)
@@ -587,34 +605,36 @@ function createListToComplete(context, list) {
   divWrapper = document.createElement("div");
   divWrapper.setAttribute("id", `${context.id}autocomplete-list`);
   divWrapper.setAttribute("class", "autocomplete-items");
-  switch (list.length) {
-    case 1:
-      divWrapper.style.marginTop = "-3.4rem";
-      break;
-    case 2:
-      divWrapper.style.marginTop = "-5.9rem";
-      break;
-    case 3:
-      divWrapper.style.marginTop = "-8.37rem";
-      break;
-    default:
-      divWrapper.style.marginTop = "-10.9rem";
-      divWrapper.style.height = "10rem";
-      break;
-  }
-  for (item in list) {
-    child = document.createElement("div");
-    child.innerText += list[item];
-    child.addEventListener("click", function (e) {
-      autocompleteElement.value = this.innerText;
-      localStorage.setItem("hint", false);
-      closeAllLists();
+  if (list) {
+    switch (list.length) {
+      case 1:
+        divWrapper.style.marginTop = "-3.4rem";
+        break;
+      case 2:
+        divWrapper.style.marginTop = "-5.9rem";
+        break;
+      case 3:
+        divWrapper.style.marginTop = "-8.37rem";
+        break;
+      default:
+        divWrapper.style.marginTop = "-10.9rem";
+        divWrapper.style.height = "10rem";
+        break;
+    }
+    for (item in list) {
+      child = document.createElement("div");
+      child.innerText += list[item];
+      child.addEventListener("click", function (e) {
+        autocompleteElement.value = this.innerText;
+        localStorage.setItem("hint", false);
+        closeAllLists();
+      });
+      divWrapper.appendChild(child);
+    }
+    setTimeout(() => {
+      context.parentNode.appendChild(divWrapper);
     });
-    divWrapper.appendChild(child);
   }
-  setTimeout(() => {
-    context.parentNode.appendChild(divWrapper);
-  });
 }
 
 function clearHistoriesChat() {
