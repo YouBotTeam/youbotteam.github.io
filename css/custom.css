@@ -31,7 +31,7 @@
 
 @media screen and (max-width: 800px) {
   .rw-launcher .rw-tooltip-body {
-    width: 10rem;
+    width: 20rem;
   }
 }
 
