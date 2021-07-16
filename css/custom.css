@@ -29,6 +29,12 @@
   right: calc(var(--width-button) + 30px);
 }
 
+@media screen and (max-width: 800px) {
+  .rw-launcher .rw-tooltip-body {
+    width: 10rem;
+  }
+}
+
 .rw-launcher .rw-tooltip-body {
   margin-right: -1rem;
 }
