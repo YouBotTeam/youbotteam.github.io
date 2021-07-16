@@ -103,7 +103,6 @@
 .icon-button-menu {
   width: 1.8rem;
   height: 1.8rem;
-  margin-top: 0.1rem;
 }
 
 .button-menu {
@@ -226,7 +225,7 @@ textarea {
 }
 
 #close-icon {
-  padding: 0.5rem 1rem;
+  margin-right: 1rem;
 }
 
 #error-feedback {
