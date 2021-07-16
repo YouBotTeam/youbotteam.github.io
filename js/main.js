@@ -213,18 +213,23 @@ function buttonMenu() {
             </svg>
           </button>
           <div id="dropdown-content">
-            <a id="reset-chat">Reset chat</a>
             <a id="pillole">Pillole</a>
           </div>
         </div>`
     );
 
-    document.getElementById("reset-chat").addEventListener("click", () => {
-      /* Lato FE la chat si puo svuotare ma al refresh della 
-      pagina viene ricaricato lo storico del web-socket
-      */
-      // clearHistoryChat();
-    });
+    if (configuration?.buttonMenu?.enableResetChat) {
+      document
+        .getElementById("dropdown-content")
+        .insertAdjacentHTML("beforeend", ` <a id="reset-chat">Reset chat</a>`);
+
+      document.getElementById("reset-chat").addEventListener("click", () => {
+        /* Lato FE la chat si puo svuotare ma al refresh della 
+          pagina viene ricaricato lo storico del web-socket
+          */
+        // clearHistoryChat();
+      });
+    }
 
     document.getElementById("pillole").addEventListener("click", () => {
       showOrHideChatContainer(false);
@@ -680,4 +685,3 @@ async function getPillole() {
 window.onbeforeunload = () => {
   localStorage.removeItem("interaction");
 };
-
