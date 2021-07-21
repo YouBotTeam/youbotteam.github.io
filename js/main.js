@@ -389,14 +389,21 @@ function pilloleSection() {
           value.forEach((pillola) => {
             const contentLi = document.createElement("div");
             contentLi.classList.add("container-collapse");
+            const { multimedia } = pillola;
+            const multimideaTypeVideo = multimedia?.find(
+              (multi) => multi.type === "video"
+            );
+            const multimideaTypeIcon = multimedia?.find(
+              (multi) => multi.type === "icon"
+            );
             contentLi.innerHTML = `
                                 <button type="button" class="collapsible">
                                   <div class="collapsibile-icon-img">
-                                    <img class="pillole-icon" src="${
-                                      pillola.multimedia.find(
-                                        (multi) => multi.type === "icon"
-                                      ).link
-                                    }"/>
+                                  ${
+                                    multimideaTypeIcon
+                                      ? `  <img class="pillole-icon" src="${multimideaTypeIcon.link}"/>`
+                                      : ``
+                                  }
                                     <h1 class="pillole-title">${
                                       pillola.title
                                     }</h1>
@@ -408,19 +415,25 @@ function pilloleSection() {
                                   </div>
                                 </button>
                                 <div class="content">
-                                    <p>${pillola.content}</p>
-                                    <iframe src="${
-                                      pillola.multimedia.find(
-                                        (multi) => multi.type === "video"
-                                      ).link
-                                    }" style="${
-                                      mainContainer.classList.contains(
-                                        "rw-full-screen"
-                                      )
-                                        ? "height: 30rem;"
-                                        : ""
-                                    }"
-                                    title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    ${
+                                      pillola.title === pillola.content
+                                        ? ""
+                                        : `<p>${pillola.content}</p>`
+                                    }
+                                    ${
+                                      multimideaTypeVideo
+                                        ? `                                    <iframe src="${
+                                            multimideaTypeVideo.link
+                                          }" style="${
+                                            mainContainer.classList.contains(
+                                              "rw-full-screen"
+                                            )
+                                              ? "height: 30rem;"
+                                              : ""
+                                          }"
+                                    title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+                                        : ``
+                                    }
                                     <div>
                                       ${pillola?.description}
                                     </div>
