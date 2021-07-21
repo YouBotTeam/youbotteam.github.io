@@ -48,10 +48,10 @@
   color: var(--msg-bot-text-color) !important;
 }
 
-.rw-group-message.rw-from-response
+/* .rw-group-message.rw-from-response
   .rw-message:not(:first-child):not(:only-child).rw-with-avatar {
-  margin-left: 10px;
-}
+  margin-left: 33px;
+} */
 
 .rw-conversation-container .rw-client {
   background-color: var(--msg-user-bg-color) !important;
@@ -188,6 +188,10 @@ iframe {
   overflow: hidden;
   margin-bottom: 0.5rem;
   /* background-color: var(--content-color); */
+}
+
+.content > div > ul > li {
+  margin-left: 1rem;
 }
 
 /* collapsible */

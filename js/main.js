@@ -407,19 +407,24 @@ function pilloleSection() {
                                     </svg>
                                   </div>
                                 </button>
-                                <div class="content" style="${
-                                  mainContainer.classList.contains(
-                                    "rw-full-screen"
-                                  )
-                                    ? "height: 30rem;"
-                                    : ""
-                                }">
+                                <div class="content">
                                     <p>${pillola.content}</p>
                                     <iframe src="${
                                       pillola.multimedia.find(
                                         (multi) => multi.type === "video"
                                       ).link
-                                    }" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    }" style="${
+                                      mainContainer.classList.contains(
+                                        "rw-full-screen"
+                                      )
+                                        ? "height: 30rem;"
+                                        : ""
+                                    }"
+                                    title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    <div>
+                                      ${pillola?.description}
+                                    </div>
+                                </div>
                                     `;
             const li = document.createElement("li");
             li.appendChild(contentLi);
