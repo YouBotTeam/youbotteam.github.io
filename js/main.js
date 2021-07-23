@@ -617,7 +617,7 @@ function createListToComplete(context, list) {
         divWrapper.style.marginTop = "-7.5rem";
         break;
       default:
-        divWrapper.style.marginTop = "-10rem";
+        divWrapper.style.marginTop = "-9rem";
         divWrapper.style.height = "10rem";
         break;
     }
