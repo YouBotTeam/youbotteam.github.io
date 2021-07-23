@@ -223,12 +223,7 @@ function buttonMenu() {
         .getElementById("dropdown-content")
         .insertAdjacentHTML("beforeend", ` <a id="reset-chat">Reset chat</a>`);
 
-      document.getElementById("reset-chat").addEventListener("click", () => {
-        /* Lato FE la chat si puo svuotare ma al refresh della 
-          pagina viene ricaricato lo storico del web-socket
-          */
-        // clearHistoryChat();
-      });
+      document.getElementById("reset-chat").addEventListener("click", () => {});
     }
 
     document.getElementById("pillole").addEventListener("click", () => {
@@ -298,14 +293,14 @@ function feedbackSection() {
     }
     localStorage.setItem("position", "feedback");
     conversationContainer.appendChild(containerCustom);
+    const starSvg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
+      <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+    </svg>`;
+    const starSvglist = Array(5).fill(`${starSvg}`);
     containerCustom.innerHTML = `
       <div id="container-custom">
         <div class="class-rating">
-          <span class="fa fa-star"></span>
-          <span class="fa fa-star"></span>
-          <span class="fa fa-star"></span>
-          <span class="fa fa-star"></span>
-          <span class="fa fa-star"></span>
         </div>
         <div class="container-textarea">
             <textarea id="textareabox" placeholder="Lascia un feedback..."></textarea>
@@ -318,15 +313,15 @@ function feedbackSection() {
     createCustomHeader(
       configuration?.feedbackSection?.title || "Lascia un feedback"
     );
+    const classRating = document.getElementsByClassName("class-rating")[0];
+    starSvglist.forEach((star) =>
+      classRating.insertAdjacentHTML("afterbegin", star)
+    );
     handleStarFeedback();
     document.getElementById("inviaFeedback").addEventListener("click", () => {
       let textArea = document.getElementById("textareabox");
       let textAreaValue = textArea.value.trim();
-      const listOfStar = [
-        ...document
-          .getElementsByClassName("class-rating")[0]
-          .getElementsByTagName("span"),
-      ];
+      const listOfStar = [...classRating.getElementsByTagName("svg")];
       const starSelected = listOfStar.filter((star) =>
         star.classList.contains("checked")
       ).length;
@@ -341,14 +336,16 @@ function handleStarFeedback() {
   const listOfStar = [
     ...document
       .getElementsByClassName("class-rating")[0]
-      .getElementsByTagName("span"),
+      .getElementsByTagName("svg"),
   ];
   listOfStar.forEach((star, index) => {
     let recordLastStatus = "";
     star.addEventListener("mouseover", () => {
-      recordLastStatus = "mouseover";
-      starAddChecked(listOfStar.slice(0, index + 1));
-      starRemoveChecked(listOfStar.slice(index + 1, listOfStar.length));
+      if (recordLastStatus !== "click") {
+        recordLastStatus = "mouseover";
+        starAddChecked(listOfStar.slice(0, index + 1));
+        starRemoveChecked(listOfStar.slice(index + 1, listOfStar.length));
+      }
     });
     star.addEventListener("mouseout", () => {
       if (recordLastStatus !== "click") {
@@ -640,10 +637,6 @@ function createListToComplete(context, list) {
   }
 }
 
-function clearHistoriesChat() {
-  chatContainer.innerHTML = "";
-}
-
 const checkElement = async (selector) => {
   while (document.querySelector(selector) === null) {
     await new Promise((resolve) => requestAnimationFrame(resolve));
@@ -652,50 +645,39 @@ const checkElement = async (selector) => {
 };
 
 async function getHintComplete(text) {
-  const headers = new Headers();
-  headers.append(
-    "Authorization",
-    "Basic dXRlbnRlOjQ0YzJkYmUyYzI0NzE5YWFlNjRlZDQyOTg5YzllM2YxZTUwNDQ3NGQwZjQ4NzFiYzI2YmFiNjY5NWY5NWQ5MTI="
+  return this.optionSharedCall(
+    "POST",
+    "service/recommend/cattolica",
+    JSON.stringify({
+      text,
+    })
   );
-  headers.append("Content-Type", "application/json");
-
-  var body = JSON.stringify({
-    text,
-  });
-
-  var requestOptions = {
-    method: "POST",
-    headers,
-    body,
-    redirect: "follow",
-  };
-
-  const call = await fetch(
-    "https://weai.it/service/recommend/cattolica",
-    requestOptions
-  );
-  const response = await call.json();
-  return response;
 }
 
 async function getPillole() {
+  return this.optionSharedCall("GET", "service/load/pillole_ref");
+}
+
+async function optionSharedCall(method, endpoint, body) {
+  const { baseUrl } = configuration;
   const headers = new Headers();
   headers.append(
     "Authorization",
     "Basic dXRlbnRlOjQ0YzJkYmUyYzI0NzE5YWFlNjRlZDQyOTg5YzllM2YxZTUwNDQ3NGQwZjQ4NzFiYzI2YmFiNjY5NWY5NWQ5MTI="
   );
   headers.append("Content-Type", "application/json");
-
   var requestOptions = {
-    method: "GET",
     headers,
-    // redirect: "follow",
+    method,
   };
-
-  const call = await fetch(
-    "https://weai.it/service/load/pillole_ref",
-    requestOptions
-  );
+  if (method === "POST" && body) {
+    requestOptions = {
+      ...requestOptions,
+      body,
+      redirect: "follow",
+    };
+  }
+  const call = await fetch(`${baseUrl}${endpoint}`, requestOptions);
   const response = await call.json();
   return response;
 }
