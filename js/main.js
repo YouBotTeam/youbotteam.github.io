@@ -1,3 +1,7 @@
+// TODO: quando la chiamata del socket va in errore (net::ERR_TIMED_OUT) chiudere la chat
+// TODO: fixare il double click sull'uscita del
+// fullscreen quando abilitato il tasto nella sezione delle pillole
+
 var mainContainer;
 var chatContainer;
 var inputChat = "";
@@ -10,6 +14,10 @@ var autocompleteElement;
 var customPopupClassList;
 var conversationContainer;
 var commanderResponse = null;
+const fullScreenOpen =
+  "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSJ3aGl0ZSIgZD0iTTY0IDM3MS4yaDc2Ljc5NVY0NDhIMTkyVjMyMEg2NHY1MS4yem03Ni43OTUtMjMwLjRINjRWMTkyaDEyOFY2NGgtNTEuMjA1djc2Ljh6TTMyMCA0NDhoNTEuMnYtNzYuOEg0NDhWMzIwSDMyMHYxMjh6bTUxLjItMzA3LjJWNjRIMzIwdjEyOGgxMjh2LTUxLjJoLTc2Ljh6Ii8+PC9zdmc+";
+const fullScreenClose =
+  "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSJ3aGl0ZSIgZD0iTTM5Ni43OTUgMzk2LjhIMzIwVjQ0OGgxMjhWMzIwaC01MS4yMDV6TTM5Ni44IDExNS4yMDVWMTkySDQ0OFY2NEgzMjB2NTEuMjA1ek0xMTUuMjA1IDExNS4ySDE5MlY2NEg2NHYxMjhoNTEuMjA1ek0xMTUuMiAzOTYuNzk1VjMyMEg2NHYxMjhoMTI4di01MS4yMDV6Ii8+PC9zdmc+";
 
 function ChatCustomization() {}
 
@@ -35,6 +43,13 @@ document.addEventListener("readystatechange", () => {
     });
   }
 });
+
+var statusChat = () =>
+  mainContainer?.classList.contains("rw-chat-open")
+    ? mainContainer?.classList.contains("rw-full-screen")
+      ? statusWebChat.FULLSCREEN
+      : statusWebChat.OPEN
+    : statusWebChat.CLOSE;
 
 function setCustomStyleOfPage() {
   const { colorCustom, mainButtonDimension } = configuration;
@@ -96,82 +111,123 @@ function createAutocomplete() {
 }
 
 function webChatOperation() {
-  const { enableClickOnImage, enableAutoComplete, popupSection } =
-    configuration;
-  if (mainContainer?.classList.contains("rw-chat-open")) {
-    if (enableAutoComplete) {
-      createAutocomplete();
-      autocomplete();
-    }
-    buttonMenu();
-    // TODO: capire se da rimuovere nel caso mettere un mutationObserver sul change
-    // removeAvatarOnMsg();
-    conversationContainer = document.getElementsByClassName(
-      "rw-conversation-container"
-    )[0];
-    chatContainer = conversationContainer.getElementsByClassName(
-      "rw-messages-container"
-    )[0];
-    if (document.querySelector(".container-custom")) {
-      removeConversationContainer();
-    }
-    if (enableClickOnImage) {
-      mutationObserverChatContainer();
-      clickOnImage();
-    }
-    const inputConversation =
-      document.getElementsByClassName("rw-new-message")[0];
-    inputConversation.addEventListener("input", (event) => {
-      inputChat = event.srcElement.value;
-      document
-        .getElementsByClassName("rw-send")[0]
-        .addEventListener("click", () => {
-          inputConversationMthd(event.target.value);
-        });
-    });
-    customPopupClassList?.add("display-none");
-    inputConversation.addEventListener("keyup", (event) => {
-      if (event.key === "Enter" && inputChat) {
-        inputConversationMthd(inputChat);
+  const {
+    enableClickOnImage,
+    enableAutoComplete,
+    popupSection,
+    pilloleSection,
+  } = configuration;
+  const { enableFullScreen } = pilloleSection;
+  const containerAutoComplete = document.getElementsByClassName(
+    "autocomplete container-input"
+  )[0];
+  switch (statusChat()) {
+    case statusWebChat.OPEN:
+      if (enableAutoComplete) {
+        createAutocomplete();
+        autocomplete();
       }
-    });
-    const listImage = [...document.getElementsByClassName("rw-image-details")];
-    listImage.forEach((image) => {
-      const imageStyle = image.children[0].style;
-      imageStyle.width = mainContainer?.classList.contains("rw-full-screen")
-        ? "30rem"
-        : "";
-      imageStyle.height = mainContainer?.classList.contains("rw-full-screen")
-        ? "20rem"
-        : "";
-    });
-  } else {
-    if (localStorage.getItem("interaction")) {
-      openFeedbackSection();
-    }
-    localStorage.setItem("position", "popup");
-    if (
-      showPopup &&
-      localStorage.getItem("position") === "popup" &&
-      popupSection?.showPopup &&
-      !localStorage.getItem("interaction")
-    ) {
-      createCustomPopup(
-        popupSection?.popupText || "Clicca sul bottone per inziare la chat"
-      );
-      customPopupClassList.add("fade-in");
-      customPopupClassList.remove("display-none");
-      showPopup = false;
-    }
-    localStorage.removeItem("interaction");
-    localStorage.setItem("position", "close");
+      buttonMenu();
+      // TODO: capire se da rimuovere nel caso mettere un mutationObserver sul change
+      // removeAvatarOnMsg();
+      conversationContainer = document.getElementsByClassName(
+        "rw-conversation-container"
+      )[0];
+      chatContainer = conversationContainer.getElementsByClassName(
+        "rw-messages-container"
+      )[0];
+      if (document.querySelector(".container-custom")) {
+        removeConversationContainer();
+      }
+      if (enableClickOnImage) {
+        mutationObserverChatContainer();
+        clickOnImage();
+      }
+      const inputConversation =
+        document.getElementsByClassName("rw-new-message")[0];
+      inputConversation.addEventListener("input", (event) => {
+        inputChat = event.srcElement.value;
+        document
+          .getElementsByClassName("rw-send")[0]
+          .addEventListener("click", () => {
+            inputConversationMthd(event.target.value);
+          });
+      });
+      customPopupClassList?.add("display-none");
+      inputConversation.addEventListener("keyup", (event) => {
+        if (event.key === "Enter" && inputChat) {
+          inputConversationMthd(inputChat);
+        }
+      });
+      if (containerAutoComplete)
+        containerAutoComplete.style.removeProperty("height");
+      [...document.getElementsByClassName("rw-header")]
+        .filter((header) => !header.classList.contains("custom-header"))[0]
+        .getElementsByClassName("rw-toggle-fullscreen-button")[0]
+        .addEventListener("click", (e) => {
+          mainContainer.classList.toggle("rw-full-screen");
+        });
+      setSizeOfImage(null, null);
+      setHeightOfIframe(null);
+      break;
+    case statusWebChat.FULLSCREEN:
+      if (containerAutoComplete) containerAutoComplete.style.height = "3rem";
+      setHeightOfIframe("30rem");
+      setSizeOfImage("30rem", "20rem");
+      break;
+    case statusWebChat.CLOSE:
+      if (localStorage.getItem("interaction")) {
+        openFeedbackSection();
+      }
+      localStorage.setItem("position", "popup");
+      if (
+        showPopup &&
+        localStorage.getItem("position") === "popup" &&
+        popupSection?.showPopup &&
+        !localStorage.getItem("interaction")
+      ) {
+        createCustomPopup(
+          popupSection?.popupText || "Clicca sul bottone per inziare la chat"
+        );
+        customPopupClassList.add("fade-in");
+        customPopupClassList.remove("display-none");
+        showPopup = false;
+      }
+      localStorage.removeItem("interaction");
+      localStorage.setItem("position", "close");
+      break;
+  }
+
+  if (
+    document.querySelector(".rw-toggle-fullscreen-button") &&
+    document.querySelector(".custom-header") &&
+    enableFullScreen
+  ) {
+    const buttonFullScreen = document.getElementsByClassName(
+      "rw-toggle-fullscreen-button"
+    );
+    const iconButtonFullScreen =
+      buttonFullScreen[0].getElementsByTagName("img")[0];
+    const iconButtonFullScreenP =
+      buttonFullScreen[1].getElementsByTagName("img")[0];
+    setIconToButtonFullScreen(iconButtonFullScreen);
+    setIconToButtonFullScreen(iconButtonFullScreenP);
+    iconButtonFullScreen.classList.add(
+      "rw-toggle-fullscreen",
+      "rw-fullScreenImage"
+    );
+    iconButtonFullScreenP.classList.add(
+      "rw-toggle-fullscreen",
+      "rw-fullScreenExitImage"
+    );
+    iconButtonFullScreenP.classList.remove("rw-fullScreenImage");
   }
 
   if (
     !(
       localStorage.getItem("hint") &&
-      (mainContainer.classList.contains("rw-full-screen") ||
-        mainContainer?.classList.contains("rw-chat-open")) &&
+      (statusChat() === statusWebChat.FULLSCREEN ||
+        statusChat() === statusWebChat.OPEN) &&
       autocompleteElement?.value &&
       lastSearch &&
       commanderResponse &&
@@ -180,6 +236,40 @@ function webChatOperation() {
   ) {
     createListToComplete(autocompleteElement, commanderResponse);
   }
+}
+
+function setSizeOfImage(width, height) {
+  const listImage = [...document.getElementsByClassName("rw-image-details")];
+  listImage.forEach((image) => {
+    const imageStyle = image.children[0].style;
+    imageStyle.width = width;
+    imageStyle.height = height;
+  });
+}
+
+function setHeightOfIframe(height) {
+  [...document.getElementsByTagName("iframe")].forEach((iframe) => {
+    iframe.style.height = height;
+  });
+}
+
+function setIconToButtonFullScreen(iconButtonFullScreen) {
+  if (statusChat() === statusWebChat.FULLSCREEN) {
+    iconButtonFullScreen.setAttribute("src", fullScreenOpen);
+  } else {
+    iconButtonFullScreen.setAttribute("src", fullScreenClose);
+  }
+}
+
+function fullScreenButton() {
+  const { pilloleSection } = configuration;
+  return pilloleSection.enableFullScreen
+    ? `
+  <button class="rw-toggle-fullscreen-button" id="customFullScreenButton">
+    <img class="rw-toggle-fullscreen rw-fullScreenImage" alt="toggle fullscreen">
+  </button>
+  `
+    : "";
 }
 
 function inputConversationMthd(value) {
@@ -263,15 +353,17 @@ function mutationObserverChatContainer() {
 }
 
 function clickOnImage() {
-  const listOfImageTag = document.querySelectorAll("img.rw-image-frame");
+  const listOfImageTag = document.querySelectorAll("img");
   listOfImageTag.forEach((image) => {
-    image.addEventListener(
-      "click",
-      (ev) => {
-        window.open(ev.srcElement.currentSrc, "_blank");
-      },
-      false
-    );
+    if (image.parentNode.nodeName !== "BUTTON") {
+      image.addEventListener(
+        "click",
+        (ev) => {
+          window.open(ev.srcElement.currentSrc, "_blank");
+        },
+        false
+      );
+    }
   });
 }
 
@@ -286,7 +378,7 @@ function removeAvatarOnMsg() {
 }
 
 function feedbackSection() {
-  const containsFullScreen = mainContainer.classList.contains("rw-full-screen");
+  const containsFullScreen = statusChat() === statusWebChat.FULLSCREEN;
   if (!document.querySelector("#container-custom")) {
     if (containsFullScreen) {
       mainContainer.classList.remove("rw-full-screen");
@@ -419,15 +511,7 @@ function pilloleSection() {
                                     }
                                     ${
                                       multimideaTypeVideo
-                                        ? `                                    <iframe src="${
-                                            multimideaTypeVideo.link
-                                          }" style="${
-                                            mainContainer.classList.contains(
-                                              "rw-full-screen"
-                                            )
-                                              ? "height: 30rem;"
-                                              : ""
-                                          }"
+                                        ? `                                    <iframe src="${multimideaTypeVideo.link}"
                                     title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
                                         : ``
                                     }
@@ -472,13 +556,31 @@ function createCustomHeader(title) {
     <div class="rw-header custom-header">
       <h4 class="rw-title">${title}</h4>
       <div class="container-close">
-        <svg xmlns="http://www.w3.org/2000/svg" id="close-icon" width="16" height="16" fill="#ffffff" class="bi bi-x-lg" viewBox="0 0 16 16">
+        <svg xmlns="http://www.w3.org/2000/svg" id="close-icon" width="24" height="24" fill="#ffffff" class="bi bi-x-lg" viewBox="0 0 16 16">
           <path d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z"/>
         </svg>
+        ${localStorage.getItem("interaction") ? "" : fullScreenButton()}
       </div>
     </div>
-    `
+        `
   );
+  let iconButtonFullScreen = document.getElementById("customFullScreenButton");
+  if (iconButtonFullScreen) {
+    iconButtonFullScreen = iconButtonFullScreen.getElementsByTagName("img")[0];
+    setIconToButtonFullScreen(iconButtonFullScreen);
+    iconButtonFullScreen.addEventListener("click", () => {
+      mainContainer.classList.toggle("rw-full-screen");
+      const classButton = ["rw-full-screen", "rw-hide"];
+      // this.toggleClassList(
+      //   document.getElementsByClassName("rw-open-launcher__container")[0],
+      //   classButton
+      // );
+      this.toggleClassList(
+        document.getElementsByClassName("rw-launcher rw-hide-sm")[0],
+        classButton
+      );
+    });
+  }
   document.getElementById("close-icon").addEventListener("click", () => {
     if (localStorage.getItem("position") === "pillole") {
       backToFirstView();
@@ -535,9 +637,10 @@ function backToFirstView() {
 }
 
 function removeConversationContainer() {
-  mainContainer.removeChild(
-    document.getElementsByClassName("custom-container")[0]
-  );
+  let customContainer = document.getElementsByClassName("custom-container")[0];
+  if (customContainer) {
+    mainContainer.removeChild(customContainer);
+  }
 }
 
 function autocomplete() {
@@ -560,7 +663,9 @@ function autocomplete() {
         getHintComplete(input)
           .then((response) => {
             commanderResponse = response.matches;
-            createListToComplete(this, response.matches);
+            if (commanderResponse.length) {
+              createListToComplete(this, commanderResponse);
+            }
           })
           .catch((error) => console.log(`Error: ${error}`));
       }
@@ -592,6 +697,12 @@ function closeAllLists(elmnt) {
       );
     }
   }
+}
+
+function toggleClassList(element, classList) {
+  [...classList].map((e) => {
+    element?.classList?.toggle(e);
+  });
 }
 
 function createListToComplete(context, list) {
@@ -684,4 +795,10 @@ async function optionSharedCall(method, endpoint, body) {
 
 window.onbeforeunload = () => {
   localStorage.removeItem("interaction");
+};
+
+const statusWebChat = {
+  OPEN: "OPEN",
+  CLOSE: "CLOSE",
+  FULLSCREEN: "FULLSCREEN",
 };

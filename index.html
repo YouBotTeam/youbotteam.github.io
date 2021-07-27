@@ -6,42 +6,17 @@
   </head>
 
   <body>
-    <div class="imgbox">
-      <img class="center-fit" src="homepage_screenshot.png" />
+    <div style="width: 100%; height: 100%">
+      <img
+        src="homepage_screenshot.png"
+        style="max-width: 100%; max-height: 100%"
+      />
     </div>
     <!-- https://github.com/botfront/rasa-webchat -->
     <div id="webchat"></div>
     <script src="https://cdn.jsdelivr.net/npm/rasa-webchat@1.0.1/lib/index.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="./css/fontawesome-all.css" />
     <link rel="stylesheet" type="text/css" href="./css/custom.css" />
     <!-- <link rel="stylesheet" type="text/css" href="https://cattolica.weai.it/static/css/widget/custom.css" /> -->
-    <!--
-	<div id="webchat"></div>
-	<script>!(function () {
-		let e = document.createElement("script"),
-			t = document.head || document.getElementsByTagName("head")[0];
-		(e.src =
-			"https://cdn.jsdelivr.net/npm/rasa-webchat@1.0.1/lib/index.js"),
-			(e.async = !0),
-			(e.onload = () => {
-				window.WebChat.default(
-					{
-						selector: "#webchat",
-						initPayload: "/welcome",
-						customData: {"language": "en"}, // arbitrary custom data. Stay minimal as this will be added to the socket
-						socketUrl: "https://demo.weai.it",
-						socketPath: "/socket.io/",
-						title: "Comune di Milano",
-						subtitle: "Infoline 020202",
-						params: {"storage": "session"} // can be set to "local"  or "session". details in storage section.
-					},
-					null
-				);
-			}),
-			t.insertBefore(e, t.firstChild);
-	})();
-</script>
--->
   </body>
   <script src="./js/main.js"></script>
   <script>
@@ -53,9 +28,9 @@
       socketUrl: "https://demo.weai.it",
       socketPath: "/socket.io/",
       showFullScreenButton: true,
-      title: "Comune di Milano",
+      title: "Assistente Virtuale",
       profileAvatar: "./images/favicon.ico",
-      subtitle: "Infoline 020202",
+      subtitle: "ARENA",
       inputTextFieldHint: "Scrivi la tua richiesta...",
       params: { storage: "session" }, // can be set to "local"  or "session". details in storage section.
     });
@@ -83,6 +58,9 @@
         //   backgroundColor: "#4fc7b5",
         // },
         sendButton: "#4fc7b5",
+      },
+      pilloleSection: {
+        enableFullScreen: true,
       },
       popupSection: {
         showPopup: true,
