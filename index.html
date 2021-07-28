@@ -16,13 +16,6 @@
     <div id="webchat"></div>
     <script src="https://cdn.jsdelivr.net/npm/rasa-webchat@1.0.1/lib/index.min.js"></script>
     <link rel="stylesheet" type="text/css" href="./css/custom.css" />
-    <!-- TODO cambiare regola css -->
-    <style>
-      ul {
-        font: 400 0.875rem/1.375rem "Raleway", sans-serif !important;
-        color: #626262 !important;
-      }
-    </style>
     <!-- <link rel="stylesheet" type="text/css" href="https://cattolica.weai.it/static/css/widget/custom.css" /> -->
   </body>
   <script src="./js/main.js"></script>
@@ -32,7 +25,7 @@
       selector: "#webchat",
       initPayload: "/welcome",
       customData: { language: "en" }, // arbitrary custom data. Stay minimal as this will be added to the socket
-      socketUrl: "https://demo.weai.it",
+      socketUrl: "https://weai.it",
       socketPath: "/socket.io/",
       showFullScreenButton: true,
       title: "Assistente Virtuale",

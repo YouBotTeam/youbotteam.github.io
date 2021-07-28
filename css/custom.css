@@ -164,8 +164,7 @@ ul {
   cursor: pointer;
 }
 
-.rw-widget-container .rw-conversation-container ul,
-.rw-widget-embedded .rw-conversation-container ul {
+.container-custom ul {
   list-style: none;
 }
 
