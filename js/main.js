@@ -757,8 +757,7 @@ const checkElement = async (selector) => {
 
 async function getHintComplete(text) {
   return this.optionSharedCall(
-    "POST",
-    "service/recommend/cattolica",
+    "service/recommend",
     JSON.stringify({
       text,
     })
@@ -766,11 +765,13 @@ async function getHintComplete(text) {
 }
 
 async function getPillole() {
-  return this.optionSharedCall("GET", "service/load/pillole_ref");
+  return this.optionSharedCall("service/load/file", null, {
+    filename: "pillole_ref.json",
+  });
 }
 
-async function optionSharedCall(method, endpoint, body) {
-  const { baseUrl } = configuration;
+async function optionSharedCall(endpoint, body, parameters) {
+  const { baseUrl, project_name } = configuration;
   const headers = new Headers();
   headers.append(
     "Authorization",
@@ -779,16 +780,17 @@ async function optionSharedCall(method, endpoint, body) {
   headers.append("Content-Type", "application/json");
   var requestOptions = {
     headers,
-    method,
+    method: body ? "POST" : "GET",
+    ...(body && { body, redirect: "follow" }),
   };
-  if (method === "POST" && body) {
-    requestOptions = {
-      ...requestOptions,
-      body,
-      redirect: "follow",
-    };
-  }
-  const call = await fetch(`${baseUrl}${endpoint}`, requestOptions);
+
+  const call = await fetch(
+    `${baseUrl}${endpoint}?${new URLSearchParams({
+      project_name,
+      ...(parameters && { ...parameters }),
+    })}`,
+    requestOptions
+  );
   const response = await call.json();
   return response;
 }
