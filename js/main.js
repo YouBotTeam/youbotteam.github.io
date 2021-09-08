@@ -2,6 +2,7 @@
 // TODO: fixare il double click sull'uscita del
 // fullscreen quando abilitato il tasto nella sezione delle pillole
 
+var form;
 var mainContainer;
 var chatContainer;
 var inputChat = "";
@@ -52,10 +53,13 @@ var statusChat = () =>
     : statusWebChat.CLOSE;
 
 function setCustomStyleOfPage() {
-  const { colorCustom, mainButtonDimension } = configuration;
   const styleOfDocument = document.documentElement.style;
+  const colorCustom = configuration?.colorCustom;
   if (colorCustom) {
-    const { primary, messageUser, sendButton, messageBot } = colorCustom;
+    const primary = colorCustom?.primary;
+    const messageUser = colorCustom?.messageUser;
+    const sendButton = colorCustom?.sendButton;
+    const messageBot = colorCustom?.messageBot;
     if (primary) {
       styleOfDocument.setProperty("--primary-color", primary);
     }
@@ -81,8 +85,9 @@ function setCustomStyleOfPage() {
       styleOfDocument.setProperty("--button-send-color", sendButton);
     }
   }
-  if (mainButtonDimension) {
-    const { width, height } = mainButtonDimension;
+  if (configuration?.mainButtonDimension) {
+    const width = configuration?.mainButtonDimension?.width;
+    const height = configuration?.mainButtonDimension?.height;
     if (width) {
       styleOfDocument.setProperty("--width-button", width);
     }
@@ -104,30 +109,29 @@ function createAutocomplete() {
     containerForm.appendChild(textArea);
     containerForm.appendChild(rwSend);
 
-    const form = document.getElementsByClassName("rw-sender")[0];
     form.setAttribute("autocomplete", "off");
     form.appendChild(containerForm);
   }
 }
 
 function webChatOperation() {
-  const {
-    enableClickOnImage,
-    enableAutoComplete,
-    popupSection,
-    pilloleSection,
-  } = configuration;
-  const { enableFullScreen } = pilloleSection;
   const containerAutoComplete = document.getElementsByClassName(
     "autocomplete container-input"
   )[0];
   switch (statusChat()) {
     case statusWebChat.OPEN:
-      if (enableAutoComplete) {
+      form = document.getElementsByClassName("rw-sender")[0];
+      if (configuration?.enableAutoComplete) {
         createAutocomplete();
         autocomplete();
       }
-      buttonMenu();
+      if (
+        configuration?.baseUrl &&
+        configuration?.project_name &&
+        configuration?.buttonMenu?.enableSection
+      ) {
+        buttonMenuToggle();
+      }
       // TODO: capire se da rimuovere nel caso mettere un mutationObserver sul change
       // removeAvatarOnMsg();
       conversationContainer = document.getElementsByClassName(
@@ -139,7 +143,7 @@ function webChatOperation() {
       if (document.querySelector(".container-custom")) {
         removeConversationContainer();
       }
-      if (enableClickOnImage) {
+      if (configuration?.enableClickOnImage) {
         mutationObserverChatContainer();
         clickOnImage();
       }
@@ -159,14 +163,19 @@ function webChatOperation() {
           inputConversationMthd(inputChat);
         }
       });
-      if (containerAutoComplete)
+      if (containerAutoComplete) {
         containerAutoComplete.style.removeProperty("height");
-      [...document.getElementsByClassName("rw-header")]
+      }
+      const toggleFullscreenButton = [
+        ...document.getElementsByClassName("rw-header"),
+      ]
         .filter((header) => !header.classList.contains("custom-header"))[0]
-        .getElementsByClassName("rw-toggle-fullscreen-button")[0]
-        .addEventListener("click", (e) => {
+        .getElementsByClassName("rw-toggle-fullscreen-button");
+      if (toggleFullscreenButton.length) {
+        toggleFullscreenButton[0].addEventListener("click", (e) => {
           mainContainer.classList.toggle("rw-full-screen");
         });
+      }
       setSizeOfImage(null, null);
       setHeightOfIframe(null);
       break;
@@ -183,11 +192,12 @@ function webChatOperation() {
       if (
         showPopup &&
         localStorage.getItem("position") === "popup" &&
-        popupSection?.showPopup &&
+        configuration?.popupSection?.showPopup &&
         !localStorage.getItem("interaction")
       ) {
         createCustomPopup(
-          popupSection?.popupText || "Clicca sul bottone per inziare la chat"
+          configuration?.popupSection?.popupText ||
+            "Clicca sul bottone per inziare la chat"
         );
         customPopupClassList.add("fade-in");
         customPopupClassList.remove("display-none");
@@ -201,7 +211,7 @@ function webChatOperation() {
   if (
     document.querySelector(".rw-toggle-fullscreen-button") &&
     document.querySelector(".custom-header") &&
-    enableFullScreen
+    configuration?.pilloleSection?.enableFullScreen
   ) {
     const buttonFullScreen = document.getElementsByClassName(
       "rw-toggle-fullscreen-button"
@@ -262,8 +272,7 @@ function setIconToButtonFullScreen(iconButtonFullScreen) {
 }
 
 function fullScreenButton() {
-  const { pilloleSection } = configuration;
-  return pilloleSection.enableFullScreen
+  return configuration?.pilloleSection?.enableFullScreen
     ? `
   <button class="rw-toggle-fullscreen-button" id="customFullScreenButton">
     <img class="rw-toggle-fullscreen rw-fullScreenImage" alt="toggle fullscreen">
@@ -291,7 +300,7 @@ function createCustomPopup(contentPopup) {
   }
 }
 
-function buttonMenu() {
+function buttonMenuToggle() {
   if (!document.getElementsByClassName("dropdown").length) {
     document.getElementsByClassName("rw-header-buttons")[0].insertAdjacentHTML(
       "beforeend",
@@ -648,29 +657,31 @@ function autocomplete() {
   if (configuration?.autoFocusOnInput) {
     autocompleteElement.focus();
   }
-  autocompleteElement.addEventListener("input", function (e) {
-    let input = e.target.value;
-    input = input.trimStart();
-    clearTimeout(typingTimer);
-    if (commanderResponse && lastSearch !== input) {
-      closeAllLists();
-      localStorage.setItem("hint", false);
-    }
-    typingTimer = setTimeout(() => {
-      if (input.length > 5 && [...input].find((char) => char === " ")) {
-        lastSearch = input;
-        localStorage.setItem("hint", true);
-        getHintComplete(input)
-          .then((response) => {
-            commanderResponse = response.matches;
-            if (commanderResponse.length) {
-              createListToComplete(this, commanderResponse);
-            }
-          })
-          .catch((error) => console.log(`Error: ${error}`));
+  if (configuration?.baseUrl && configuration?.project_name) {
+    autocompleteElement.addEventListener("input", function (e) {
+      let input = e.target.value;
+      input = input.trimStart();
+      clearTimeout(typingTimer);
+      if (commanderResponse && lastSearch !== input) {
+        closeAllLists();
+        localStorage.setItem("hint", false);
       }
-    }, 1000);
-  });
+      typingTimer = setTimeout(() => {
+        if (input.length > 5 && [...input].find((char) => char === " ")) {
+          lastSearch = input;
+          localStorage.setItem("hint", true);
+          getHintComplete(input)
+            .then((response) => {
+              commanderResponse = response.matches;
+              if (commanderResponse.length) {
+                createListToComplete(this, commanderResponse);
+              }
+            })
+            .catch((error) => console.log(`Error: ${error}`));
+        }
+      }, 1000);
+    });
+  }
 
   autocompleteElement.addEventListener("keyup", (event) => {
     if (event.code === "Enter") {
@@ -687,11 +698,14 @@ function autocomplete() {
     });
 }
 
-function closeAllLists(elmnt) {
+function closeAllLists(element) {
   var automCompleteItemsList =
     document.getElementsByClassName("autocomplete-items");
   for (var i = 0; i < automCompleteItemsList.length; i++) {
-    if (elmnt != automCompleteItemsList[i] && elmnt != autocompleteElement) {
+    if (
+      element != automCompleteItemsList[i] &&
+      element != autocompleteElement
+    ) {
       automCompleteItemsList[i].parentNode.removeChild(
         automCompleteItemsList[i]
       );
@@ -717,21 +731,10 @@ function createListToComplete(context, list) {
   divWrapper.setAttribute("id", `${context.id}autocomplete-list`);
   divWrapper.setAttribute("class", "autocomplete-items");
   if (list) {
-    switch (list.length) {
-      case 1:
-        divWrapper.style.marginTop = "-2.5rem";
-        break;
-      case 2:
-        divWrapper.style.marginTop = "-5rem";
-        break;
-      case 3:
-        divWrapper.style.marginTop = "-7.5rem";
-        break;
-      default:
-        divWrapper.style.marginTop = "-9rem";
-        divWrapper.style.height = "10rem";
-        break;
+    if (list.length > 3) {
+      divWrapper.style.height = "10rem";
     }
+    divWrapper.style.bottom = "4rem";
     for (item in list) {
       child = document.createElement("div");
       child.innerText += list[item];
@@ -743,7 +746,7 @@ function createListToComplete(context, list) {
       divWrapper.appendChild(child);
     }
     setTimeout(() => {
-      context.parentNode.appendChild(divWrapper);
+      conversationContainer.insertBefore(divWrapper, form);
     });
   }
 }
@@ -771,28 +774,32 @@ async function getPillole() {
 }
 
 async function optionSharedCall(endpoint, body, parameters) {
-  const { baseUrl, project_name } = configuration;
-  const headers = new Headers();
-  headers.append(
-    "Authorization",
-    "Basic dXRlbnRlOjQ0YzJkYmUyYzI0NzE5YWFlNjRlZDQyOTg5YzllM2YxZTUwNDQ3NGQwZjQ4NzFiYzI2YmFiNjY5NWY5NWQ5MTI="
-  );
-  headers.append("Content-Type", "application/json");
-  var requestOptions = {
-    headers,
-    method: body ? "POST" : "GET",
-    ...(body && { body, redirect: "follow" }),
-  };
+  const baseUrl = configuration?.baseUrl;
+  const project_name = configuration?.project_name;
+  if (project_name && baseUrl) {
+    const headers = new Headers();
+    headers.append(
+      "Authorization",
+      "Basic dXRlbnRlOjQ0YzJkYmUyYzI0NzE5YWFlNjRlZDQyOTg5YzllM2YxZTUwNDQ3NGQwZjQ4NzFiYzI2YmFiNjY5NWY5NWQ5MTI="
+    );
+    headers.append("Content-Type", "application/json");
+    var requestOptions = {
+      headers,
+      method: body ? "POST" : "GET",
+      ...(body && { body, redirect: "follow" }),
+    };
 
-  const call = await fetch(
-    `${baseUrl}${endpoint}?${new URLSearchParams({
-      project_name,
-      ...(parameters && { ...parameters }),
-    })}`,
-    requestOptions
-  );
-  const response = await call.json();
-  return response;
+    const call = await fetch(
+      `${baseUrl}${endpoint}?${new URLSearchParams({
+        project_name,
+        ...(parameters && { ...parameters }),
+      })}`,
+      requestOptions
+    );
+    const response = await call.json();
+    return response;
+  }
+  return null;
 }
 
 window.onbeforeunload = () => {
