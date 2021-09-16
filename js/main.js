@@ -312,18 +312,19 @@ function buttonMenuToggle() {
             </svg>
           </button>
           <div id="dropdown-content">
-            <a id="pillole">Pillole</a>
+            <a id="pillole" class="${
+              configuration?.pilloleSection?.disableButton
+                ? "disabled-link"
+                : ""
+            }">Pillole</a>
+            ${
+              configuration?.buttonMenu?.enableResetChat
+                ? `<a id="reset-chat">Reset chat</a>`
+                : ``
+            }
           </div>
         </div>`
     );
-
-    if (configuration?.buttonMenu?.enableResetChat) {
-      document
-        .getElementById("dropdown-content")
-        .insertAdjacentHTML("beforeend", ` <a id="reset-chat">Reset chat</a>`);
-
-      document.getElementById("reset-chat").addEventListener("click", () => {});
-    }
 
     document.getElementById("pillole").addEventListener("click", () => {
       showOrHideChatContainer(false);
