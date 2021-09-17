@@ -79,6 +79,7 @@ function setCustomStyleOfPage() {
       }
       if (textColor) {
         styleOfDocument.setProperty("--msg-bot-text-color", textColor);
+        styleOfDocument.setProperty("--color-wave-dot", textColor);
       }
     }
     if (sendButton) {

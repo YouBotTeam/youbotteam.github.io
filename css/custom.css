@@ -1,6 +1,7 @@
 :root {
   --primary-color: #135afe;
   --msg-user-bg-color: #135afe;
+  --color-wave-dot: #000;
   --msg-bot-bg-color: #f4f7f9;
   --button-send-color: #135afe;
   --width-button: 60px;
@@ -67,8 +68,7 @@ h4.rw-title.rw-with-avatar {
 }
 
 .rw-dot {
-  background: white !important;
-  opacity: 1 !important;
+  background: var(--color-wave-dot) !important;
 }
 
 .rw-conversation-container .rw-response {
