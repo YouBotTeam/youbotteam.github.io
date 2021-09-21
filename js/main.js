@@ -28,6 +28,11 @@ ChatCustomization.configuration = (config) => {
 
 document.addEventListener('readystatechange', () => {
   if (document.readyState === 'interactive') {
+    getEncodeJWT()
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => console.log(`Erorr: ${err}`));
     setCustomStyleOfPage();
     if (configuration.clearCacheOnRefresh) {
       sessionStorage.clear();
@@ -179,12 +184,6 @@ function webChatOperation() {
       }
       setSizeOfImage(null, null);
       setHeightOfIframe(null);
-
-      getEncodeJWT()
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((err) => console.log(`Erorr: ${err}`));
       break;
     case statusWebChat.FULLSCREEN:
       if (containerAutoComplete) containerAutoComplete.style.height = '3rem';
