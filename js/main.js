@@ -438,8 +438,7 @@ function feedbackSection() {
       const starSelected = listOfStar.filter((star) =>
         star.classList.contains("checked")
       ).length;
-      // TODO: allegare la chiamata per il salvataggio del feedback
-      console.log({ textAreaValue, starSelected });
+      submitFeedback(textAreaValue, starSelected);
       removeConversationContainer();
     });
   }
@@ -494,9 +493,8 @@ function pilloleSection() {
       containerCustom.innerHTML = `<div id="container-custom"></div>`;
       getPillole()
         .then((response) => {
-          const { value } = response;
           const domPillole = document.createElement("ul");
-          value.forEach((pillola) => {
+          response.forEach((pillola) => {
             const contentLi = document.createElement("div");
             contentLi.classList.add("container-collapse");
             const { multimedia } = pillola;
@@ -682,12 +680,17 @@ function autocomplete() {
         if (input.length > 5 && [...input].find((char) => char === " ")) {
           lastSearch = input;
           localStorage.setItem("hint", true);
-          getHintComplete(input)
+          // getHintComplete(input)
+          //   .then((response) => {
+          //     commanderResponse = response.matches;
+          //     if (commanderResponse.length) {
+          //       createListToComplete(this, commanderResponse);
+          //     }
+          //   })
+          //   .catch((error) => console.log(`Error: ${error}`));
+          getHintComplete2(input)
             .then((response) => {
-              commanderResponse = response.matches;
-              if (commanderResponse.length) {
-                createListToComplete(this, commanderResponse);
-              }
+              console.log(response);
             })
             .catch((error) => console.log(`Error: ${error}`));
         }
@@ -779,6 +782,28 @@ async function getHintComplete(text) {
   );
 }
 
+async function getHintComplete2(text) {
+  return this.optionSharedCall(
+    "service/nlu/recommender",
+    JSON.stringify({
+      text,
+    }),
+    {
+      branch: "master",
+    }
+  );
+}
+
+async function submitFeedback(message, rating) {
+  return this.optionSharedCall(
+    "service/feedback",
+    JSON.stringify({
+      message,
+      rating,
+    })
+  );
+}
+
 async function getPillole() {
   return this.optionSharedCall("service/load/file", null, {
     filename: "pillole_ref.json",
@@ -809,7 +834,7 @@ async function optionSharedCall(endpoint, body, parameters) {
       requestOptions
     );
     const response = await call.json();
-    return response;
+    return response.value;
   }
   return null;
 }
