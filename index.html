@@ -16,15 +16,15 @@
     <div id="webchat"></div>
 
     <!-- <script src="https://cdn.jsdelivr.net/npm/rasa-webchat@1.0.1/lib/index.min.js"></script> -->
-    <link
+    <!-- <link
       rel="stylesheet"
       type="text/css"
       href="https://weai.it/static/css/widget/custom.css"
-    />
+    /> -->
     <!-- <script src="https://weai.it/static/js/widget/main.js"></script> -->
     <script src="https://weai.it/static/js/widget/index.js"></script>
 
-    <!-- <link rel="stylesheet" type="text/css" href="./css/custom.css" /> -->
+    <link rel="stylesheet" type="text/css" href="./css/custom.css" />
     <script src="./js/main.js"></script>
     <!-- <script src="./js/index.js"></script> -->
   </body>
@@ -44,6 +44,8 @@
       profileAvatar: "./images/favicon.ico",
       subtitle: "ARENA",
       hideWhenNotConnected: true,
+      openAutomatically: true,
+
       showBadge: true,
       // elementTriggerOpenChat: {
       //   elementRef: document.getElementById("button-custom"),
@@ -94,6 +96,9 @@
       },
       feedbackSection: {
         title: "Lascia un feedback",
+      },
+      attachmentsSection: {
+        show: true,
       },
     });
   </script>

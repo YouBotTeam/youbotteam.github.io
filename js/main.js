@@ -1,6 +1,5 @@
 // TODO: quando la chiamata del socket va in errore (net::ERR_TIMED_OUT) chiudere la chat
-// TODO: fixare il double click sull'uscita del
-// fullscreen quando abilitato il tasto nella sezione delle pillole
+// TODO: fixare il double click sull'uscita del fullscreen quando abilitato il tasto nella sezione delle pillole
 
 var form;
 var mainContainer;
@@ -14,6 +13,7 @@ var typingTimer = null;
 var autocompleteElement;
 var customPopupClassList;
 var conversationContainer;
+var listOfFileSelected = [];
 var commanderResponse = null;
 const fullScreenOpen =
   "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSJ3aGl0ZSIgZD0iTTY0IDM3MS4yaDc2Ljc5NVY0NDhIMTkyVjMyMEg2NHY1MS4yem03Ni43OTUtMjMwLjRINjRWMTkyaDEyOFY2NGgtNTEuMjA1djc2Ljh6TTMyMCA0NDhoNTEuMnYtNzYuOEg0NDhWMzIwSDMyMHYxMjh6bTUxLjItMzA3LjJWNjRIMzIwdjEyOGgxMjh2LTUxLjJoLTc2Ljh6Ii8+PC9zdmc+";
@@ -110,9 +110,135 @@ function createAutocomplete() {
     containerForm.appendChild(textArea);
     containerForm.appendChild(rwSend);
 
+    if (configuration?.attachmentsSection?.show) {
+      const attachments = `
+      <button id="btn-attachments">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"/></svg>
+      </button>`;
+      containerForm.insertAdjacentHTML("afterbegin", attachments);
+      handleInputFileModal();
+    }
+
     form.setAttribute("autocomplete", "off");
     form.appendChild(containerForm);
   }
+}
+
+function handleInputFileModal() {
+  const acceptFile = "";
+  // "image/png, image/jpeg";
+
+  const iconFileUpload = `<svg xmlns="http://www.w3.org/2000/svg" class="icon-upload" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>`;
+
+  setTimeout(() => {
+    document.getElementById("btn-attachments").addEventListener("click", () => {
+      if (!document.querySelector(".modal-attachments")) {
+        chatContainer.insertAdjacentHTML(
+          "afterbegin",
+          `
+            <div class="container-modal-attachments" data-keyboard="false" data-backdrop="static">
+              <div class="modal-attachments">
+                <div class="input-file-container">
+                  ${iconFileUpload}
+                  <input type="file" id="input-file-attachments" accept="${acceptFile}" multiple/> 
+                  <h2>Scegli un file</h2>
+                </div>
+                <div class="file-selected-container" style="display: none;">
+                </div>
+                <div class="btn-footer-attachments">
+                  <button id="cancel-attachments" class="rw-conversation-container rw-reply"> Annulla</button>
+                  <button id="confirm-attachments" disabled class="rw-conversation-container rw-reply"> Conferma</button>
+                </div>
+              </div>
+            </div>
+            `
+        );
+
+        const cancelAttachmetsEl =
+          document.getElementById("cancel-attachments");
+
+        const confirmAttachmetsEl = document.getElementById(
+          "confirm-attachments"
+        );
+
+        const inputFileAttachmentsEl = document.getElementById(
+          "input-file-attachments"
+        );
+
+        inputFileAttachmentsEl.addEventListener("change", (event) => {
+          listOfFileSelected = Object.values(event.target.files).map(
+            (item) => item
+          );
+          generateUIListFileSelected(confirmAttachmetsEl);
+        });
+
+        cancelAttachmetsEl.addEventListener("click", () => {
+          listOfFileSelected = [];
+          chatContainer.removeChild(
+            chatContainer.getElementsByClassName(
+              "container-modal-attachments"
+            )[0]
+          );
+        });
+
+        confirmAttachmetsEl.addEventListener("click", () => {
+          const formData = new FormData();
+          listOfFileSelected.forEach((file, index) =>
+            formData.append(`file##${index}`, file, file.name)
+          );
+        });
+      }
+    });
+  }, 500);
+}
+
+function generateUIListFileSelected(confirmAttachmetsEl) {
+  const inputFileContainerEl = document.getElementsByClassName(
+    "input-file-container"
+  )[0];
+
+  const fileSelectedContainerEl = document.getElementsByClassName(
+    "file-selected-container"
+  )[0];
+
+  if (listOfFileSelected.length) {
+    const formData = new FormData();
+    var li = "";
+    listOfFileSelected.forEach((file, index) => {
+      const cancelButton = `<svg xmlns="http://www.w3.org/2000/svg" onclick="fileSelezionato('${file.name}##${index}')" class="delete-file" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg>`;
+      formData.append(`file-${index}`, file);
+      li += `
+        <li class="file-selected" id="${file.name}##${index}">
+          ${cancelButton}
+          <p class="name-file">
+            ${file.name}
+          </p>
+        </li>
+      `;
+    });
+    fileSelectedContainerEl.innerHTML = `
+      <ul class="ul-file-selected">
+        ${li}
+      <ul>
+    `;
+    confirmAttachmetsEl.removeAttribute("disabled");
+    inputFileContainerEl.style.display = "none";
+    fileSelectedContainerEl.style.display = "";
+  } else {
+    inputFileContainerEl.style.display = "";
+    fileSelectedContainerEl.style.display = "none";
+  }
+}
+
+function fileSelezionato(indentifier) {
+  const indentifierSplitted = indentifier.split("##");
+  listOfFileSelected = listOfFileSelected.filter(
+    (item) => item.name !== indentifierSplitted[0]
+  );
+  document
+    .getElementsByClassName("ul-file-selected")[0]
+    .removeChild(document.getElementById(indentifier));
+  generateUIListFileSelected(document.getElementById("confirm-attachments"));
 }
 
 function webChatOperation() {
@@ -680,17 +806,13 @@ function autocomplete() {
         if (input.length > 5 && [...input].find((char) => char === " ")) {
           lastSearch = input;
           localStorage.setItem("hint", true);
-          // getHintComplete(input)
-          //   .then((response) => {
-          //     commanderResponse = response.matches;
-          //     if (commanderResponse.length) {
-          //       createListToComplete(this, commanderResponse);
-          //     }
-          //   })
-          //   .catch((error) => console.log(`Error: ${error}`));
-          getHintComplete2(input)
+          getHintComplete(input)
             .then((response) => {
               console.log(response);
+              // commanderResponse = response.matches;
+              // if (commanderResponse.length) {
+              //   createListToComplete(this, commanderResponse);
+              // }
             })
             .catch((error) => console.log(`Error: ${error}`));
         }
@@ -782,18 +904,6 @@ async function getHintComplete(text) {
   );
 }
 
-async function getHintComplete2(text) {
-  return this.optionSharedCall(
-    "service/nlu/recommender",
-    JSON.stringify({
-      text,
-    }),
-    {
-      branch: "master",
-    }
-  );
-}
-
 async function submitFeedback(message, rating) {
   return this.optionSharedCall(
     "service/feedback",
@@ -820,6 +930,7 @@ async function optionSharedCall(endpoint, body, parameters) {
       "Basic dXRlbnRlOjQ0YzJkYmUyYzI0NzE5YWFlNjRlZDQyOTg5YzllM2YxZTUwNDQ3NGQwZjQ4NzFiYzI2YmFiNjY5NWY5NWQ5MTI="
     );
     headers.append("Content-Type", "application/json");
+
     var requestOptions = {
       headers,
       method: body ? "POST" : "GET",
