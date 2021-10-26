@@ -65,40 +65,47 @@
       enableAutoComplete: true,
       baseUrl: "https://weai.it/",
       project_name: "Cattolica_bot",
-      buttonMenu: {
-        enableSection: true,
-        showResetChat: true,
-        showPilloleSection: true,
-      },
       mainButtonDimension: {
         width: "5rem",
         height: "5rem",
       },
-      colorCustom: {
-        primary: "#4fc7b5",
-        messageUser: {
-          textColor: "#fff",
-          backgroundColor: "#4fc7b5",
+      section: {
+        pillole: {
+          enable: true,
+          disableButton: false,
+          enableFullScreen: false,
         },
-        // messageBot: {
-        //   textColor: "#fff",
-        //   backgroundColor: "#4fc7b5",
-        // },
+        popup: {
+          show: true,
+          text: "Clicca sul bottone per inziare la chat",
+        },
+        feedback: {
+          enable: true,
+          title: "Lascia un feedback",
+        },
+        attachments: {
+          show: true,
+        },
+        buttonMenu: {
+          enable: true,
+        },
+        resetChat: {
+          enable: true,
+        },
+      },
+      color: {
+        primary: "#4fc7b5",
+        message: {
+          user: {
+            color: "#fff",
+            backgroundColor: "#4fc7b5",
+          },
+          bot: {
+            color: "#fff",
+            backgroundColor: "#4fc7b5",
+          },
+        },
         sendButton: "#4fc7b5",
-      },
-      pilloleSection: {
-        disableButton: false,
-        enableFullScreen: false,
-      },
-      popupSection: {
-        showPopup: true,
-        popupText: "Clicca sul bottone per inziare la chat",
-      },
-      feedbackSection: {
-        title: "Lascia un feedback",
-      },
-      attachmentsSection: {
-        show: true,
       },
     });
   </script>

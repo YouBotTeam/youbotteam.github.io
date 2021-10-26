@@ -54,41 +54,46 @@ var statusChat = () =>
 
 function setCustomStyleOfPage() {
   const styleOfDocument = document.documentElement.style;
-  const colorCustom = configuration?.colorCustom;
-  if (colorCustom) {
-    const primary = colorCustom?.primary;
-    const messageUser = colorCustom?.messageUser;
-    const sendButton = colorCustom?.sendButton;
-    const messageBot = colorCustom?.messageBot;
+  const color = configuration?.color;
+  if (color) {
+    const primary = color?.primary;
+    const message = color?.message;
+    const sendButton = color?.sendButton;
+
+    const messageBot = message?.bot;
+    const messageUser = message?.user;
     if (primary) {
       styleOfDocument.setProperty("--primary-color", primary);
     }
     if (messageUser) {
-      const { backgroundColor, textColor } = messageUser;
+      const backgroundColor = messageUser?.backgroundColor;
+      const color = messageUser?.color;
       if (backgroundColor) {
         styleOfDocument.setProperty("--msg-user-bg-color", backgroundColor);
       }
-      if (textColor) {
-        styleOfDocument.setProperty("--msg-user-text-color", textColor);
+      if (color) {
+        styleOfDocument.setProperty("--msg-user-text-color", color);
       }
     }
     if (messageBot) {
-      const { backgroundColor, textColor } = messageBot;
+      const backgroundColor = messageBot?.backgroundColor;
+      const color = messageBot?.color;
       if (backgroundColor) {
         styleOfDocument.setProperty("--msg-bot-bg-color", backgroundColor);
       }
-      if (textColor) {
-        styleOfDocument.setProperty("--msg-bot-text-color", textColor);
-        styleOfDocument.setProperty("--color-wave-dot", textColor);
+      if (color) {
+        styleOfDocument.setProperty("--msg-bot-text-color", color);
+        styleOfDocument.setProperty("--color-wave-dot", color);
       }
     }
     if (sendButton) {
       styleOfDocument.setProperty("--button-send-color", sendButton);
     }
   }
-  if (configuration?.mainButtonDimension) {
-    const width = configuration?.mainButtonDimension?.width;
-    const height = configuration?.mainButtonDimension?.height;
+  const mainButtonDimension = configuration?.mainButtonDimension;
+  if (mainButtonDimension) {
+    const width = mainButtonDimension?.width;
+    const height = mainButtonDimension?.height;
     if (width) {
       styleOfDocument.setProperty("--width-button", width);
     }
@@ -110,7 +115,7 @@ function createAutocomplete() {
     containerForm.appendChild(textArea);
     containerForm.appendChild(rwSend);
 
-    if (configuration?.attachmentsSection?.show) {
+    if (configuration?.section?.attachments?.show) {
       const attachments = `
       <button id="btn-attachments">
         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"/></svg>
@@ -252,12 +257,13 @@ function webChatOperation() {
         createAutocomplete();
         autocomplete();
       }
-      const buttonMenu = configuration?.buttonMenu;
+      const section = configuration?.section;
+      const buttonMenu = section?.buttonMenu.enable;
       if (
         configuration?.baseUrl &&
         configuration?.project_name &&
-        buttonMenu?.enableSection &&
-        (buttonMenu?.showPilloleSection || buttonMenu?.showResetChat)
+        buttonMenu &&
+        (section?.pillole?.enable || section?.resetChat?.enable)
       ) {
         buttonMenuToggle();
       }
@@ -314,19 +320,22 @@ function webChatOperation() {
       setSizeOfImage("30rem", "20rem");
       break;
     case statusWebChat.CLOSE:
-      if (localStorage.getItem("interaction")) {
+      if (
+        localStorage.getItem("interaction") &&
+        configuration?.section?.feedback?.enable
+      ) {
         openFeedbackSection();
       }
       localStorage.setItem("position", "popup");
+      const popup = configuration?.section?.popup;
       if (
         showPopup &&
         localStorage.getItem("position") === "popup" &&
-        configuration?.popupSection?.showPopup &&
+        popup?.show &&
         !localStorage.getItem("interaction")
       ) {
         createCustomPopup(
-          configuration?.popupSection?.popupText ||
-            "Clicca sul bottone per inziare la chat"
+          popup?.text || "Clicca sul bottone per inziare la chat"
         );
         customPopupClassList.add("fade-in");
         customPopupClassList.remove("display-none");
@@ -340,7 +349,7 @@ function webChatOperation() {
   if (
     document.querySelector(".rw-toggle-fullscreen-button") &&
     document.querySelector(".custom-header") &&
-    configuration?.pilloleSection?.enableFullScreen
+    configuration?.section?.pillole?.enableFullScreen
   ) {
     const buttonFullScreen = document.getElementsByClassName(
       "rw-toggle-fullscreen-button"
@@ -401,7 +410,7 @@ function setIconToButtonFullScreen(iconButtonFullScreen) {
 }
 
 function fullScreenButton() {
-  return configuration?.pilloleSection?.enableFullScreen
+  return configuration?.section?.pillole?.enableFullScreen
     ? `
   <button class="rw-toggle-fullscreen-button" id="customFullScreenButton">
     <img class="rw-toggle-fullscreen rw-fullScreenImage" alt="toggle fullscreen">
@@ -431,8 +440,9 @@ function createCustomPopup(contentPopup) {
 
 function buttonMenuToggle() {
   if (!document.getElementsByClassName("dropdown").length) {
-    const showResetChat = configuration?.buttonMenu?.showResetChat;
-    const showPilloleSection = configuration?.buttonMenu?.showPilloleSection;
+    const section = configuration?.section;
+    const showResetChat = section?.resetChat?.enable;
+    const showPilloleSection = section?.pillole?.enable;
     document.getElementsByClassName("rw-header-buttons")[0].insertAdjacentHTML(
       "beforeend",
       `
@@ -448,7 +458,7 @@ function buttonMenuToggle() {
               ? `<a
               id="pillole"
               class="${
-                configuration?.pilloleSection?.disableButton
+                configuration?.section?.pillole?.disableButton
                   ? "disabled-link"
                   : ""
               }">
@@ -550,7 +560,7 @@ function feedbackSection() {
         </div>
       </div>`;
     createCustomHeader(
-      configuration?.feedbackSection?.title || "Lascia un feedback"
+      configuration?.section.feedback?.title || "Lascia un feedback"
     );
     const classRating = document.getElementsByClassName("class-rating")[0];
     starSvglist.forEach((star) =>
