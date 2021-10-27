@@ -36,7 +36,11 @@
     window.WebChat.default({
       selector: "#webchat",
       initPayload: "/welcome",
-      customData: { language: "en" }, // arbitrary custom data. Stay minimal as this will be added to the socket
+      customData: {
+        language: "en",
+        token:
+          "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3ZWFpX3VzZXIiOnsidXNlcm5hbWUiOiJhZG1pbiIsInVzZXJfYWNjb3VudCI6W3siY2xpZW50Ijp7ImlkIjo1LCJuYW1lIjoidGVzdF9jb21wYW55In0sInByb2plY3QiOnsiaWQiOjYsIm5hbWUiOiJ0ZXN0X3Byb2plY3QiLCJyZXBvIjp7InVybCI6Imh0dHBzOi8vZ2l0aHViLmNvbS9Zb3VCb3RUZWFtL2RlbW8uZ2l0IiwiYWNjb3VudF9uYW1lIjoiWW91Qm90VGVhbSIsImJyYW5jaCI6WyJtYXN0ZXIiXX19LCJncm91cCI6eyJpZCI6MiwibmFtZSI6ImFkbWluIn0sInJvbGUiOlsiYWRtaW4iXSwic2VydmljZV9hY2NvdW50Ijp0cnVlLCJzdXBlcnVzZXIiOnRydWUsInVzZXJuYW1lIjoiYWRtaW4iLCJzdGF0dXMiOiJUQkQifV19LCJkYXRhIjp7fSwiaWF0IjoxNjM0ODA5NzgyLjc5NjgyMDR9.CR4cckYEsOloR6tA1oOQu0u6exgzyVA7w5HlohShf7o",
+      }, // arbitrary custom data. Stay minimal as this will be added to the socket
       socketUrl: "https://cattolica.weai.it",
       socketPath: "/socket.io/",
       showFullScreenButton: true,
@@ -63,6 +67,8 @@
       autoFocusOnInput: true,
       enableClickOnImage: true,
       enableAutoComplete: true,
+      token:
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3ZWFpX3VzZXIiOnsidXNlcm5hbWUiOiJhZG1pbiIsInVzZXJfYWNjb3VudCI6W3siY2xpZW50Ijp7ImlkIjo1LCJuYW1lIjoidGVzdF9jb21wYW55In0sInByb2plY3QiOnsiaWQiOjYsIm5hbWUiOiJ0ZXN0X3Byb2plY3QiLCJyZXBvIjp7InVybCI6Imh0dHBzOi8vZ2l0aHViLmNvbS9Zb3VCb3RUZWFtL2RlbW8uZ2l0IiwiYWNjb3VudF9uYW1lIjoiWW91Qm90VGVhbSIsImJyYW5jaCI6WyJtYXN0ZXIiXX19LCJncm91cCI6eyJpZCI6MiwibmFtZSI6ImFkbWluIn0sInJvbGUiOlsiYWRtaW4iXSwic2VydmljZV9hY2NvdW50Ijp0cnVlLCJzdXBlcnVzZXIiOnRydWUsInVzZXJuYW1lIjoiYWRtaW4iLCJzdGF0dXMiOiJUQkQifV19LCJkYXRhIjp7fSwiaWF0IjoxNjM0ODA5NzgyLjc5NjgyMDR9.CR4cckYEsOloR6tA1oOQu0u6exgzyVA7w5HlohShf7o",
       baseUrl: "https://weai.it/",
       project_name: "Cattolica_bot",
       mainButtonDimension: {
@@ -84,7 +90,7 @@
           title: "Lascia un feedback",
         },
         attachments: {
-          show: true,
+          show: false,
         },
         buttonMenu: {
           enable: true,

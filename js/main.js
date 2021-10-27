@@ -933,12 +933,10 @@ async function getPillole() {
 async function optionSharedCall(endpoint, body, parameters) {
   const baseUrl = configuration?.baseUrl;
   const project_name = configuration?.project_name;
-  if (project_name && baseUrl) {
+  const token = configuration?.token;
+  if (project_name && baseUrl && token) {
     const headers = new Headers();
-    headers.append(
-      "Authorization",
-      "Basic dXRlbnRlOjQ0YzJkYmUyYzI0NzE5YWFlNjRlZDQyOTg5YzllM2YxZTUwNDQ3NGQwZjQ4NzFiYzI2YmFiNjY5NWY5NWQ5MTI="
-    );
+    headers.append("token", token);
     headers.append("Content-Type", "application/json");
 
     var requestOptions = {
