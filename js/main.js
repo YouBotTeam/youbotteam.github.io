@@ -178,12 +178,7 @@ function handleInputFileModal() {
         });
 
         cancelAttachmetsEl.addEventListener("click", () => {
-          listOfFileSelected = [];
-          chatContainer.removeChild(
-            chatContainer.getElementsByClassName(
-              "container-modal-attachments"
-            )[0]
-          );
+          removeAttachmentsSection();
         });
 
         confirmAttachmetsEl.addEventListener("click", () => {
@@ -191,10 +186,18 @@ function handleInputFileModal() {
           listOfFileSelected.forEach((file, index) =>
             formData.append(`file##${index}`, file, file.name)
           );
+          removeAttachmentsSection();
         });
       }
     });
   }, 500);
+}
+
+function removeAttachmentsSection() {
+  listOfFileSelected = [];
+  chatContainer.removeChild(
+    chatContainer.getElementsByClassName("container-modal-attachments")[0]
+  );
 }
 
 function generateUIListFileSelected(confirmAttachmetsEl) {
@@ -253,7 +256,7 @@ function webChatOperation() {
   switch (statusChat()) {
     case statusWebChat.OPEN:
       form = document.getElementsByClassName("rw-sender")[0];
-      if (configuration?.enableAutoComplete) {
+      if (configuration?.section?.autocomplete?.enable) {
         createAutocomplete();
         autocomplete();
       }
@@ -346,10 +349,13 @@ function webChatOperation() {
       break;
   }
 
+  const pillole = configuration?.section?.pillole;
+
   if (
     document.querySelector(".rw-toggle-fullscreen-button") &&
     document.querySelector(".custom-header") &&
-    configuration?.section?.pillole?.enableFullScreen
+    pillole?.enableFullScreen &&
+    pillole?.filename
   ) {
     const buttonFullScreen = document.getElementsByClassName(
       "rw-toggle-fullscreen-button"
@@ -510,7 +516,7 @@ function mutationObserverChatContainer() {
 }
 
 function clickOnImage() {
-  const listOfImageTag = document.querySelectorAll("img");
+  const listOfImageTag = document.querySelectorAll(".rw-image-frame");
   listOfImageTag.forEach((image) => {
     if (image.parentNode.nodeName !== "BUTTON") {
       image.addEventListener(
@@ -629,8 +635,9 @@ function pilloleSection() {
       containerCustom.innerHTML = `<div id="container-custom"></div>`;
       getPillole()
         .then((response) => {
+          const { content } = response;
           const domPillole = document.createElement("ul");
-          response.forEach((pillola) => {
+          content.forEach((pillola) => {
             const contentLi = document.createElement("div");
             contentLi.classList.add("container-collapse");
             const { multimedia } = pillola;
@@ -640,41 +647,57 @@ function pilloleSection() {
             const multimideaTypeIcon = multimedia?.find(
               (multi) => multi.type === "icon"
             );
-            contentLi.innerHTML = `
-                                <button type="button" class="collapsible">
-                                  <div class="collapsibile-icon-img">
-                                  ${
-                                    multimideaTypeIcon
-                                      ? `  <img class="pillole-icon" src="${multimideaTypeIcon.link}"/>`
-                                      : ``
-                                  }
-                                    <h1 class="pillole-title">${
-                                      pillola.title
-                                    }</h1>
-                                  </div>
-                                  <div>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#000" class="bi bi-chevron-down arrow-down" viewBox="0 0 16 16">
-                                      <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
-                                    </svg>
-                                  </div>
-                                </button>
-                                <div class="content">
+            contentLi.innerHTML = `<button type="button" class="collapsible">
+                                    <div class="collapsibile-icon-img">
+                                      ${
+                                        multimideaTypeIcon
+                                          ? `
+                                      <img class="pillole-icon" src="${multimideaTypeIcon.link}" />`
+                                          : ``
+                                      }
+                                      <h1 class="pillole-title">${
+                                        pillola.title
+                                      }</h1>
+                                    </div>
+                                    <div>
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="18"
+                                        height="18"
+                                        fill="#000"
+                                        class="bi bi-chevron-down arrow-down"
+                                        viewBox="0 0 16 16"
+                                      >
+                                        <path
+                                          fill-rule="evenodd"
+                                          d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                                        />
+                                      </svg>
+                                    </div>
+                                  </button>
+                                  <div class="content">
                                     ${
                                       pillola.title === pillola.content
                                         ? ""
-                                        : `<p>${pillola.content}</p>`
-                                    }
+                                        : ` <p>${pillola.content}</p>
+                                    `
+                                    }  
                                     ${
                                       multimideaTypeVideo
-                                        ? `                                    <iframe src="${multimideaTypeVideo.link}"
-                                    title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+                                        ? `
+                                    <iframe
+                                      src="${multimideaTypeVideo.link}"
+                                      title="YouTube video player"
+                                      frameborder="0"
+                                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                      allowfullscreen
+                                    ></iframe
+                                    >`
                                         : ``
                                     }
-                                    <div>
-                                      ${pillola?.description}
-                                    </div>
-                                </div>
-                                    `;
+                                    <div>${pillola?.description}</div>
+                                  </div>
+                                  `;
             const li = document.createElement("li");
             li.appendChild(contentLi);
             domPillole.appendChild(li);
@@ -818,11 +841,10 @@ function autocomplete() {
           localStorage.setItem("hint", true);
           getHintComplete(input)
             .then((response) => {
-              console.log(response);
-              // commanderResponse = response.matches;
-              // if (commanderResponse.length) {
-              //   createListToComplete(this, commanderResponse);
-              // }
+              commanderResponse = response;
+              if (commanderResponse.length) {
+                createListToComplete(this, commanderResponse);
+              }
             })
             .catch((error) => console.log(`Error: ${error}`));
         }
@@ -907,26 +929,43 @@ const checkElement = async (selector) => {
 
 async function getHintComplete(text) {
   return this.optionSharedCall(
-    "service/recommend",
+    "recommend",
     JSON.stringify({
       text,
-    })
+    }),
+    { repo_name: configuration?.project_name }
   );
+}
+
+async function getRecommender() {
+  return this.optionSharedCall("nlu/recommender", null, {
+    repo_name: configuration?.project_name,
+  });
 }
 
 async function submitFeedback(message, rating) {
   return this.optionSharedCall(
-    "service/feedback",
+    "feedback",
     JSON.stringify({
       message,
       rating,
-    })
+      channel: "webchat",
+      channel_session_id: getSessionId(),
+    }),
+    { project_id: configuration?.project_id }
   );
 }
 
+function getSessionId() {
+  const key = "chat_session";
+  const chat_session = sessionStorage.getItem(key) || localStorage.getItem(key);
+  return JSON.parse(chat_session).session_id;
+}
+
 async function getPillole() {
-  return this.optionSharedCall("service/load/file", null, {
-    filename: "pillole_ref.json",
+  return this.optionSharedCall("load/file", null, {
+    filename: configuration?.section?.pillole?.filename,
+    repo_name: configuration?.project_name,
   });
 }
 
@@ -947,13 +986,12 @@ async function optionSharedCall(endpoint, body, parameters) {
 
     const call = await fetch(
       `${baseUrl}${endpoint}?${new URLSearchParams({
-        project_name,
         ...(parameters && { ...parameters }),
       })}`,
       requestOptions
     );
     const response = await call.json();
-    return response.value;
+    return response.value || response.matches;
   }
   return null;
 }
