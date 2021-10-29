@@ -97,8 +97,11 @@ h4.rw-title.rw-with-avatar {
   padding-right: 0.5rem;
 }
 
+.rw-sender {
+  padding: 0 !important;
+}
+
 .rw-conversation-container .rw-sender {
-  padding: 0;
   flex-direction: column-reverse;
 }
 
