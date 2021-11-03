@@ -11,6 +11,7 @@
   --white-dark-color: #dddddd;
   --error-color: #ff0000;
   --star-checked-color: #ffa500;
+  --rw-widget-container-width: 50%;
 }
 
 * {
@@ -21,7 +22,7 @@
 
 .rw-widget-container {
   gap: 1rem;
-  width: 50%;
+  width: var(--rw-widget-container-width);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -492,6 +493,7 @@ input[type="submit"] {
 #btn-attachments {
   border: none;
   padding: 0.3rem;
+  background: none;
   margin-left: 0.4rem;
   border-radius: 0.2rem;
 }
@@ -501,13 +503,16 @@ input[type="submit"] {
   z-index: 2;
   width: 100%;
   height: 100%;
+  display: flex;
   position: fixed;
   background: #80808059;
+  flex-direction: column-reverse;
 }
 
 .modal-attachments {
   height: 50%;
   margin: 1rem;
+  margin-bottom: 4rem !important;
   display: flex;
   /* color: white; */
   padding: 0.5rem;
@@ -527,6 +532,7 @@ input[type="submit"] {
   height: 50%;
   display: flex;
   color: #7e7d7d;
+  border-radius: 1rem;
   align-items: center;
   flex-direction: column;
   justify-content: center;
@@ -598,4 +604,42 @@ li.file-selected > svg {
   background-color: var(--primary-color);
 }
 
+#cancel-attachments {
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+#confirm-attachments {
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
 /* attachments */
+
+#file-status {
+}
+
+ol {
+  padding: 0.5rem !important;
+  list-style: none !important;
+}
+
+.list-file-uploaded {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.item-file-uploaded {
+  display: flex;
+  margin: 0.2rem 0;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+}
+
+.item-file-uploaded:first {
+  margin-right: 0.2rem;
+}
