@@ -9,7 +9,7 @@ var containerCustom;
 var showPopup = true;
 var typingTimer = null;
 var autocompleteElement;
-var configuration = null;
+var configuration = {};
 var customPopupClassList;
 var conversationContainer;
 var listOfFileSelected = [];
