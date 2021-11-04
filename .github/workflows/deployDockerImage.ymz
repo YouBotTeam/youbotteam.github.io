@@ -1,0 +1,36 @@
+name: Build Angular
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  test:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Branch name
+        id: branch_name
+        run: |
+          echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs/*/}
+          echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
+          echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
+          echo ::set-output name=GITHUB_REF::${GITHUB_REF}
+      - name: Build base image
+        run: |
+          echo $SOURCE_NAME
+          echo $SOURCE_BRANCH
+          echo $SOURCE_TAG
+          echo $GITHUB_REF
+        env:
+          SOURCE_NAME: ${{ steps.branch_name.outputs.SOURCE_NAME }}
+          SOURCE_BRANCH: ${{ steps.branch_name.outputs.SOURCE_BRANCH }}
+          SOURCE_TAG: ${{ steps.branch_name.outputs.SOURCE_TAG }}
+          GITHUB_REF: ${{ steps.branch_name.outputs.GITHUB_REF }}
+
+
+# RASA_X_VERSION=$1
+# PROJECT=$2
+# VERSION=$3
+# IMAGE_NAME="rasa-x-${RASA_X_VERSION}-${PROJECT}:${VERSION}"
+# docker build --build-arg rasa_x_version=$1 -t ${IMAGE_NAME} .
