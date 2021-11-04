@@ -34,3 +34,5 @@ jobs:
 # VERSION=$3
 # IMAGE_NAME="rasa-x-${RASA_X_VERSION}-${PROJECT}:${VERSION}"
 # docker build --build-arg rasa_x_version=$1 -t ${IMAGE_NAME} .
+
+# git push origin v0.0.1-rasa_x_version:1-project:2
