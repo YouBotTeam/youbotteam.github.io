@@ -637,6 +637,10 @@ ol {
   justify-content: start;
 }
 
-.item-file-uploaded:first {
+.item-file-uploaded-status {
   margin-right: 0.2rem;
+}
+
+.item-file-upload-name {
+  word-break: break-all !important;
 }

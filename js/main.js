@@ -234,23 +234,22 @@ function generateMessage(nameOfFileSelected, error) {
 function generateListOfNameFileUploaded(nameOfFileSelected) {
   return `${
     nameOfFileSelected !== null
-      ? nameOfFileSelected
-          .map(
-            (item) =>
-              `
-              <div class="list-file-uploaded">
-                <div class="item-file-uploaded">
-                  <div id="${item.filename}">
-                    ${item.success ? iconDoubleDone : iconError}
-                  </div>
-                  <div>
-                    ${item.filename}
-                  </div>
-                </div>
-              <div>`
-          )
-          .toString()
-          .replaceAll(",", " ")
+      ? `
+  <div class="list-file-uploaded">${nameOfFileSelected
+    .map(
+      (item) =>
+        `<div class="item-file-uploaded">
+          <div id="${item.filename}" class="item-file-uploaded-status">
+            ${item.success ? iconDoubleDone : iconError}
+          </div>
+          <div class="item-file-upload-name">
+            ${item.filename}
+          </div>
+        </div>`
+    )
+    .toString()
+    .replaceAll(",", "")}
+  </div>`
       : ``
   }`;
 }
