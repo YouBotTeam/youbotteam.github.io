@@ -60,8 +60,12 @@ jobs:
         id: image_name
         run: |
           echo ::set-output name=IMAGE_NAME::rasa-x-0.38.1-${{ steps.branch_name.outputs.SOURCE_BRANCH }}:v0.0.1
+
+      - name: Print Image name
+        run: |
+          echo $IMAGE_NAME
         env:
-          IMAGE_NAME: ${{ steps.branch_name.outputs.IMAGE_NAME }}
+          IMAGE_NAME: ${{ steps.image_name.outputs.IMAGE_NAME }}
 
       # - uses: actions/checkout@v2
       # - name: Build the Docker image
