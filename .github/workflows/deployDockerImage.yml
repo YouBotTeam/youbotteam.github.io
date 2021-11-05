@@ -67,10 +67,9 @@ jobs:
         env:
           IMAGE_NAME: ${{ steps.image_name.outputs.IMAGE_NAME }}
 
-      # - uses: actions/checkout@v2
-      # - name: Build the Docker image
-      #   run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
-      # docker build --build-arg rasa_x_version=$1 -t ${IMAGE_NAME} .
+      - uses: actions/checkout@v2
+      - name: Build the Docker image
+        run: docker build --build-arg rasa_x_version=$1 -t ${IMAGE_NAME} .
 # RASA_X_VERSION=$1
 # PROJECT=$2
 # VERSION=$3
