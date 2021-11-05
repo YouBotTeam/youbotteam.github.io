@@ -49,7 +49,6 @@ on:
 jobs:
   push:
     runs-on: ubuntu-latest
-    permissions:
 
     steps:
       - name: Branch name
