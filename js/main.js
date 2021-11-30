@@ -82,15 +82,31 @@ document.addEventListener("readystatechange", () => {
     if (configuration.clearCacheOnRefresh) {
       getStorage().clear();
     }
-    checkElement(".rw-widget-container").then(() => {
-      mainContainer = document.getElementsByClassName("rw-widget-container")[0];
-      webChatOperation();
 
-      const mutationObserver = new MutationObserver(() => {
-        webChatOperation();
+    checkElement("#rasaWebchatPro").then(() => {
+      const mutationObserverParent = new MutationObserver(() => {
+        mainContainer = document.getElementsByClassName(
+          "rw-widget-container"
+        )[0];
+        if (mainContainer) {
+          webChatOperation();
+        }
       });
 
-      mutationObserver.observe(mainContainer, { attributes: true });
+      const parentContainer =
+        document.getElementById("rasaWebchatPro")?.children[0];
+
+      mutationObserverParent.observe(parentContainer, {
+        childList: true,
+      });
+
+      checkElement(".rw-widget-container").then(() => {
+        const mutationObserver = new MutationObserver(() => {
+          webChatOperation();
+        });
+
+        mutationObserver.observe(mainContainer, { attributes: true });
+      });
     });
   }
 });
