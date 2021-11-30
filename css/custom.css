@@ -20,7 +20,7 @@
   flex-direction: column;
   justify-content: center;
   font-family: sans-serif;
-  width: var(--youai-rw-widget-container-width);
+  width: var(--youai-rw-widget-container-width) !important;
 }
 
 .rw-launcher .rw-tooltip-body {
