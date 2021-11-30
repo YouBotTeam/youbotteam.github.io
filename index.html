@@ -1,3 +1,4 @@
+<!-- https://github.com/botfront/rasa-webchat -->
 <!DOCTYPE html>
 <html class="ltr" dir="ltr" lang="it-IT">
   <head>
@@ -12,112 +13,107 @@
         style="max-width: 100%; max-height: 100%"
       />
     </div>
-    <!-- https://github.com/botfront/rasa-webchat -->
-    <div id="webchat"></div>
-
     <!-- <script src="https://cdn.jsdelivr.net/npm/rasa-webchat@1.0.1/lib/index.min.js"></script> -->
-    <link
+    <!-- <link
       rel="stylesheet"
       type="text/css"
       href="https://weai.it/static/css/widget/custom.css"
     />
-    <script src="https://weai.it/static/js/widget/main.js"></script>
+    <script src="https://weai.it/static/js/widget/main.js"></script> -->
     <script src="https://weai.it/static/js/widget/index.js"></script>
 
-    <!-- <link rel="stylesheet" type="text/css" href="./css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="./css/custom.css" />
     <script src="./js/main.js"></script>
-    <script src="./js/index.js"></script> -->
+    <!-- <script src="./js/index.js"></script> -->
   </body>
-  <!-- <button id="button-custom">Cliccami</button> -->
-
   <script>
-    // Rasa Web Chat
-    window.WebChat.default({
-      selector: "#webchat",
-      initPayload: "/welcome",
-      customData: {
-        language: "en",
-        token:
-          "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3ZWFpX3VzZXIiOnsidXNlcm5hbWUiOiJhZG1pbiIsInVzZXJfYWNjb3VudCI6W3siY2xpZW50Ijp7ImlkIjoxLCJuYW1lIjoidGVzdF9jb21wYW55In0sInByb2plY3QiOnsiaWQiOjEsIm5hbWUiOiJ0ZXN0X3Byb2plY3QiLCJyZXBvIjp7InVybCI6Imh0dHBzOi8vZ2l0aHViLmNvbS9Zb3VCb3RUZWFtL0NhdHRvbGljYV9ib3QuZ2l0IiwiYWNjb3VudF9uYW1lIjoiWW91Qm90VGVhbSIsImJyYW5jaCI6WyJtYXN0ZXIiLCJkZXZlbG9wIl19fSwiZ3JvdXAiOnsiaWQiOjIsIm5hbWUiOiJhZG1pbiJ9LCJyb2xlIjpbImFkbWluIl0sInNlcnZpY2VfYWNjb3VudCI6ZmFsc2UsInN1cGVydXNlciI6dHJ1ZSwidXNlcm5hbWUiOiJhZG1pbiIsInN0YXR1cyI6IlRCRCJ9XX0sImRhdGEiOnt9LCJpYXQiOjE2MzU0MzUxOTUuMjc5ODUzOH0.J2xArFwNlERla9n6OlnUlgHnsX6gKMOm7RYCW2OoJ_A",
+    YouaiWebChat.configuration({
+      webchat: {
+        title: "Assistente Virtuale",
+        subtitle: "ARENA",
+        inputTextFieldHint: "Scrivi la tua richiesta...",
+        profileAvatar: "./images/favicon.ico",
+        socketUrl: "https://cattolica.weai.it",
+        socketPath: "/socket.io/",
+        initPayload: "/welcome",
+        selector: "#webchat",
+        storage: "session",
+        docViewer: true,
+        showBadge: true,
+        showFullScreenButton: true,
+        hideWhenNotConnected: true,
+        openAutomatically: false,
+        customData: {
+          language: "en",
+        },
+        elementTriggerResetChat: {
+          elementRef: "reset-chat",
+          typeOfEvent: "click",
+        },
+        // elementTriggerOpenChat: {
+        //   elementRef: document.getElementById("button-custom"),
+        //   typeOfEvent: "click",
+        // },
       },
-      socketUrl: "https://cattolica.weai.it",
-      socketPath: "/socket.io/",
-      showFullScreenButton: true,
-      title: "Assistente Virtuale",
-      profileAvatar: "./images/favicon.ico",
-      subtitle: "ARENA",
-      hideWhenNotConnected: true,
-      openAutomatically: true,
-      showBadge: true,
-      // elementTriggerOpenChat: {
-      //   elementRef: document.getElementById("button-custom"),
-      //   typeOfEvent: "click",
-      // },
-      elementTriggerResetChat: {
-        elementRef: "reset-chat",
-        typeOfEvent: "click",
-      },
-      inputTextFieldHint: "Scrivi la tua richiesta...",
-      params: { storage: "session" },
-    });
-    ChatCustomization.configuration({
-      clearCacheOnRefresh: true,
-      autoFocusOnInput: true,
-      enableClickOnImage: true,
       token:
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3ZWFpX3VzZXIiOnsidXNlcm5hbWUiOiJhZG1pbiIsInVzZXJfYWNjb3VudCI6W3siY2xpZW50Ijp7ImlkIjoxLCJuYW1lIjoidGVzdF9jb21wYW55In0sInByb2plY3QiOnsiaWQiOjEsIm5hbWUiOiJ0ZXN0X3Byb2plY3QiLCJyZXBvIjp7InVybCI6Imh0dHBzOi8vZ2l0aHViLmNvbS9Zb3VCb3RUZWFtL0NhdHRvbGljYV9ib3QuZ2l0IiwiYWNjb3VudF9uYW1lIjoiWW91Qm90VGVhbSIsImJyYW5jaCI6WyJtYXN0ZXIiLCJkZXZlbG9wIl19fSwiZ3JvdXAiOnsiaWQiOjIsIm5hbWUiOiJhZG1pbiJ9LCJyb2xlIjpbImFkbWluIl0sInNlcnZpY2VfYWNjb3VudCI6ZmFsc2UsInN1cGVydXNlciI6dHJ1ZSwidXNlcm5hbWUiOiJhZG1pbiIsInN0YXR1cyI6IlRCRCJ9XX0sImRhdGEiOnt9LCJpYXQiOjE2MzU0MzUxOTUuMjc5ODUzOH0.J2xArFwNlERla9n6OlnUlgHnsX6gKMOm7RYCW2OoJ_A",
-      baseUrl: "https://weai.it/service/",
-      project_name: "Cattolica_bot",
-      project_id: 1,
-      mainButtonDimension: {
-        width: "5rem",
-        height: "5rem",
-      },
-      section: {
-        widget: {
-          width: "80%",
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3ZWFpX3VzZXIiOnsidXNlcm5hbWUiOiJhZG1pbiIsInVzZXJfYWNjb3VudCI6W3siY2xpZW50Ijp7ImlkIjoxLCJuYW1lIjoidGVzdF9jb21wYW55In0sInByb2plY3QiOnsiaWQiOjIsIm5hbWUiOiJUSU0iLCJyZXBvIjp7InVybCI6Imh0dHBzOi8vZ2l0aHViLmNvbS9Zb3VCb3RUZWFtL1RJTWJvdF8yLnguZ2l0IiwiYWNjb3VudF9uYW1lIjoiWW91Qm90VGVhbSIsImJyYW5jaCI6WyJkYXRhc2V0X3YxMiJdfX0sImdyb3VwIjp7ImlkIjoyLCJuYW1lIjoiYWRtaW4ifSwicm9sZSI6WyJhZG1pbiJdLCJzZXJ2aWNlX2FjY291bnQiOmZhbHNlLCJzdXBlcnVzZXIiOnRydWUsInVzZXJuYW1lIjoiYWRtaW4iLCJzdGF0dXMiOiJUQkQifSx7ImNsaWVudCI6eyJpZCI6MSwibmFtZSI6InRlc3RfY29tcGFueSJ9LCJwcm9qZWN0Ijp7ImlkIjoxLCJuYW1lIjoidGVzdF9wcm9qZWN0IiwicmVwbyI6eyJ1cmwiOiJodHRwczovL2dpdGh1Yi5jb20vWW91Qm90VGVhbS9DYXR0b2xpY2FfYm90LmdpdCIsImFjY291bnRfbmFtZSI6IllvdUJvdFRlYW0iLCJicmFuY2giOlsibWFzdGVyIiwiZGV2ZWxvcCJdfX0sImdyb3VwIjp7ImlkIjoyLCJuYW1lIjoiYWRtaW4ifSwicm9sZSI6WyJhZG1pbiJdLCJzZXJ2aWNlX2FjY291bnQiOmZhbHNlLCJzdXBlcnVzZXIiOnRydWUsInVzZXJuYW1lIjoiYWRtaW4iLCJzdGF0dXMiOiJUQkQifV0sInNlcnZpY2VfYWNjb3VudCI6ZmFsc2V9LCJkYXRhIjp7fSwiaWF0IjoxNjM4MjU4OTY5LjIzNzE5MjJ9.Vzxr9UHyLePMyHMtY4E1LHo5vNQDSu1LzYZwTV6WDDs",
+      custom: {
+        clearCacheOnRefresh: true,
+        autoFocusOnInput: true,
+        enableClickOnImage: true,
+        baseUrl: "https://weai.it/service/",
+        project_name: "Cattolica_bot",
+        project_id: 1,
+        mainButtonDimension: {
+          width: "5rem",
+          height: "5rem",
         },
-        autocomplete: {
-          enable: true,
-        },
-        pillole: {
-          enable: true,
-          disableButton: false,
-          enableFullScreen: false,
-          filename: "pillole_ref.json",
-        },
-        popup: {
-          show: true,
-          text: "Clicca sul bottone per inziare la chat",
-        },
-        feedback: {
-          enable: true,
-          title: "Lascia un feedback",
-        },
-        attachments: {
-          show: true,
-          accept: "image/png, image/jpeg",
-        },
-        buttonMenu: {
-          enable: true,
-        },
-        resetChat: {
-          enable: true,
-        },
-      },
-      color: {
-        primary: "#4fc7b5",
-        message: {
-          user: {
-            color: "#fff",
-            backgroundColor: "#4fc7b5",
+        section: {
+          widget: {
+            width: "80%",
           },
-          bot: {
-            color: "#fff",
-            backgroundColor: "#4fc7b5",
+          autocomplete: {
+            enable: true,
+          },
+          pillole: {
+            enable: true,
+            disableButton: false,
+            enableFullScreen: false,
+            filename: "pillole_ref.json",
+          },
+          popup: {
+            show: true,
+            text: "Clicca sul bottone per inziare la chat",
+          },
+          feedback: {
+            enable: true,
+            title: "Lascia un feedback",
+          },
+          attachments: {
+            show: true,
+            accept: "image/png, image/jpeg",
+          },
+          buttonMenu: {
+            enable: true,
+          },
+          resetChat: {
+            enable: true,
           },
         },
-        sendButton: "#4fc7b5",
+        color: {
+          primary: "#4f07b5",
+          message: {
+            user: {
+              color: "#fff",
+              backgroundColor: "#4fc7b5",
+            },
+            bot: {
+              color: "#fff",
+              backgroundColor: "#4fc7b5",
+            },
+          },
+          sendButton: "#4fc7b5",
+        },
       },
     });
   </script>
