@@ -18,8 +18,8 @@
   gap: 1rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   font-family: sans-serif;
+  justify-content: center !important;
   width: var(--youai-rw-widget-container-width) !important;
 }
 
@@ -350,6 +350,7 @@ h4.rw-title.rw-with-avatar {
   border-radius: 1rem;
   align-items: center;
   flex-direction: column;
+  font-family: sans-serif;
   justify-content: center;
   color: var(--youai-white-color);
   right: calc(var(--youai-width-button) + 30px);

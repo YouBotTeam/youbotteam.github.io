@@ -88,9 +88,7 @@ document.addEventListener("readystatechange", () => {
         mainContainer = document.getElementsByClassName(
           "rw-widget-container"
         )[0];
-        if (mainContainer) {
-          webChatOperation();
-        }
+        webChatOperation();
       });
 
       const parentContainer =
@@ -389,145 +387,147 @@ function fileSelezionato(indentifier) {
 }
 
 function webChatOperation() {
-  const containerAutoComplete = document.getElementsByClassName(
-    "autocomplete youai-container-input"
-  )[0];
-  switch (statusChat()) {
-    case statusWebChat.OPEN:
-      form = document.getElementsByClassName("rw-sender")[0];
-      if (configuration?.section?.autocomplete?.enable) {
-        createAutocomplete();
-        autocomplete();
-      }
-      const section = configuration?.section;
-      const buttonMenu = section?.buttonMenu.enable;
-      if (
-        configuration?.baseUrl &&
-        configuration?.project_name &&
-        buttonMenu &&
-        (section?.pillole?.enable || section?.resetChat?.enable)
-      ) {
-        buttonMenuToggle();
-      }
-      // TODO: capire se da rimuovere nel caso mettere un mutationObserver sul change
-      // removeAvatarOnMsg();
-      conversationContainer = document.getElementsByClassName(
-        "rw-conversation-container"
-      )[0];
-      chatContainer = conversationContainer.getElementsByClassName(
-        "rw-messages-container"
-      )[0];
-      if (document.querySelector(".youai-container-custom")) {
-        removeConversationContainer();
-      }
-      if (configuration?.enableClickOnImage) {
-        mutationObserverChatContainer();
-        clickOnImage();
-      }
-      const inputConversation =
-        document.getElementsByClassName("rw-new-message")[0];
-      inputConversation.addEventListener("input", (event) => {
-        inputChat = event.srcElement.value;
-        document
-          .getElementsByClassName("rw-send")[0]
-          .addEventListener("click", () => {
-            inputConversationMthd(event.target.value);
-          });
-      });
-      customPopupClassList?.add("youai-display-none");
-      inputConversation.addEventListener("keyup", (event) => {
-        if (event.key === "Enter" && inputChat) {
-          inputConversationMthd(inputChat);
+  if (mainContainer) {
+    const containerAutoComplete = document.getElementsByClassName(
+      "autocomplete youai-container-input"
+    )[0];
+    switch (statusChat()) {
+      case statusWebChat.OPEN:
+        form = document.getElementsByClassName("rw-sender")[0];
+        if (configuration?.section?.autocomplete?.enable) {
+          createAutocomplete();
+          autocomplete();
         }
-      });
-      if (containerAutoComplete) {
-        containerAutoComplete.style.removeProperty("height");
-      }
-      const toggleFullscreenButton = [
-        ...document.getElementsByClassName("rw-header"),
-      ]
-        .filter((header) => !header.classList.contains("custom-header"))[0]
-        .getElementsByClassName("rw-toggle-fullscreen-button");
-      if (toggleFullscreenButton.length) {
-        toggleFullscreenButton[0].addEventListener("click", (e) => {
-          mainContainer.classList.toggle("rw-full-screen");
+        const section = configuration?.section;
+        const buttonMenu = section?.buttonMenu.enable;
+        if (
+          configuration?.baseUrl &&
+          configuration?.project_name &&
+          buttonMenu &&
+          (section?.pillole?.enable || section?.resetChat?.enable)
+        ) {
+          buttonMenuToggle();
+        }
+        // TODO: capire se da rimuovere nel caso mettere un mutationObserver sul change
+        // removeAvatarOnMsg();
+        conversationContainer = document.getElementsByClassName(
+          "rw-conversation-container"
+        )[0];
+        chatContainer = conversationContainer.getElementsByClassName(
+          "rw-messages-container"
+        )[0];
+        if (document.querySelector(".youai-container-custom")) {
+          removeConversationContainer();
+        }
+        if (configuration?.enableClickOnImage) {
+          mutationObserverChatContainer();
+          clickOnImage();
+        }
+        const inputConversation =
+          document.getElementsByClassName("rw-new-message")[0];
+        inputConversation.addEventListener("input", (event) => {
+          inputChat = event.srcElement.value;
+          document
+            .getElementsByClassName("rw-send")[0]
+            .addEventListener("click", () => {
+              inputConversationMthd(event.target.value);
+            });
         });
-      }
-      setSizeOfImage(null, null);
-      setHeightOfIframe(null);
-      break;
-    case statusWebChat.FULLSCREEN:
-      if (containerAutoComplete) containerAutoComplete.style.height = "3rem";
-      setHeightOfIframe("30rem");
-      setSizeOfImage("30rem", "20rem");
-      break;
-    case statusWebChat.CLOSE:
-      if (
-        localStorage.getItem("interaction") &&
-        configuration?.section?.feedback?.enable
-      ) {
-        openFeedbackSection();
-      }
-      localStorage.setItem("position", "popup");
-      const popup = configuration?.section?.popup;
-      if (
-        showPopup &&
-        localStorage.getItem("position") === "popup" &&
-        popup?.show &&
-        !localStorage.getItem("interaction")
-      ) {
-        createCustomPopup(
-          popup?.text || "Clicca sul bottone per inziare la chat"
-        );
-        customPopupClassList.add("youai-fade-in");
-        customPopupClassList.remove("youai-display-none");
-        showPopup = false;
-      }
-      localStorage.removeItem("interaction");
-      localStorage.setItem("position", "close");
-      break;
-  }
+        customPopupClassList?.add("youai-display-none");
+        inputConversation.addEventListener("keyup", (event) => {
+          if (event.key === "Enter" && inputChat) {
+            inputConversationMthd(inputChat);
+          }
+        });
+        if (containerAutoComplete) {
+          containerAutoComplete.style.removeProperty("height");
+        }
+        const toggleFullscreenButton = [
+          ...document.getElementsByClassName("rw-header"),
+        ]
+          .filter((header) => !header.classList.contains("custom-header"))[0]
+          .getElementsByClassName("rw-toggle-fullscreen-button");
+        if (toggleFullscreenButton.length) {
+          toggleFullscreenButton[0].addEventListener("click", (e) => {
+            mainContainer.classList.toggle("rw-full-screen");
+          });
+        }
+        setSizeOfImage(null, null);
+        setHeightOfIframe(null);
+        break;
+      case statusWebChat.FULLSCREEN:
+        if (containerAutoComplete) containerAutoComplete.style.height = "3rem";
+        setHeightOfIframe("30rem");
+        setSizeOfImage("30rem", "20rem");
+        break;
+      case statusWebChat.CLOSE:
+        if (
+          localStorage.getItem("interaction") &&
+          configuration?.section?.feedback?.enable
+        ) {
+          openFeedbackSection();
+        }
+        localStorage.setItem("position", "popup");
+        const popup = configuration?.section?.popup;
+        if (
+          showPopup &&
+          localStorage.getItem("position") === "popup" &&
+          popup?.show &&
+          !localStorage.getItem("interaction")
+        ) {
+          createCustomPopup(
+            popup?.text || "Clicca sul bottone per inziare la chat"
+          );
+          customPopupClassList.add("youai-fade-in");
+          customPopupClassList.remove("youai-display-none");
+          showPopup = false;
+        }
+        localStorage.removeItem("interaction");
+        localStorage.setItem("position", "close");
+        break;
+    }
 
-  const pillole = configuration?.section?.pillole;
+    const pillole = configuration?.section?.pillole;
 
-  if (
-    document.querySelector(".rw-toggle-fullscreen-button") &&
-    document.querySelector(".custom-header") &&
-    pillole?.enableFullScreen &&
-    pillole?.filename
-  ) {
-    const buttonFullScreen = document.getElementsByClassName(
-      "rw-toggle-fullscreen-button"
-    );
-    const iconButtonFullScreen =
-      buttonFullScreen[0].getElementsByTagName("img")[0];
-    const iconButtonFullScreenP =
-      buttonFullScreen[1].getElementsByTagName("img")[0];
-    setIconToButtonFullScreen(iconButtonFullScreen);
-    setIconToButtonFullScreen(iconButtonFullScreenP);
-    iconButtonFullScreen.classList.add(
-      "rw-toggle-fullscreen",
-      "rw-fullScreenImage"
-    );
-    iconButtonFullScreenP.classList.add(
-      "rw-toggle-fullscreen",
-      "rw-fullScreenExitImage"
-    );
-    iconButtonFullScreenP.classList.remove("rw-fullScreenImage");
-  }
+    if (
+      document.querySelector(".rw-toggle-fullscreen-button") &&
+      document.querySelector(".custom-header") &&
+      pillole?.enableFullScreen &&
+      pillole?.filename
+    ) {
+      const buttonFullScreen = document.getElementsByClassName(
+        "rw-toggle-fullscreen-button"
+      );
+      const iconButtonFullScreen =
+        buttonFullScreen[0].getElementsByTagName("img")[0];
+      const iconButtonFullScreenP =
+        buttonFullScreen[1].getElementsByTagName("img")[0];
+      setIconToButtonFullScreen(iconButtonFullScreen);
+      setIconToButtonFullScreen(iconButtonFullScreenP);
+      iconButtonFullScreen.classList.add(
+        "rw-toggle-fullscreen",
+        "rw-fullScreenImage"
+      );
+      iconButtonFullScreenP.classList.add(
+        "rw-toggle-fullscreen",
+        "rw-fullScreenExitImage"
+      );
+      iconButtonFullScreenP.classList.remove("rw-fullScreenImage");
+    }
 
-  if (
-    !(
-      localStorage.getItem("hint") &&
-      (statusChat() === statusWebChat.FULLSCREEN ||
-        statusChat() === statusWebChat.OPEN) &&
-      autocompleteElement?.value &&
-      lastSearch &&
-      commanderResponse &&
-      autocompleteElement.value === lastSearch
-    )
-  ) {
-    createListToComplete(autocompleteElement, commanderResponse);
+    if (
+      !(
+        localStorage.getItem("hint") &&
+        (statusChat() === statusWebChat.FULLSCREEN ||
+          statusChat() === statusWebChat.OPEN) &&
+        autocompleteElement?.value &&
+        lastSearch &&
+        commanderResponse &&
+        autocompleteElement.value === lastSearch
+      )
+    ) {
+      createListToComplete(autocompleteElement, commanderResponse);
+    }
   }
 }
 
