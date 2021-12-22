@@ -19,6 +19,7 @@ var customPopupClassList;
 var conversationContainer;
 var listOfFileSelected = [];
 var commanderResponse = null;
+const styleOfDocument = document.documentElement.style;
 const fullScreenOpen =
   "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSJ3aGl0ZSIgZD0iTTY0IDM3MS4yaDc2Ljc5NVY0NDhIMTkyVjMyMEg2NHY1MS4yem03Ni43OTUtMjMwLjRINjRWMTkyaDEyOFY2NGgtNTEuMjA1djc2Ljh6TTMyMCA0NDhoNTEuMnYtNzYuOEg0NDhWMzIwSDMyMHYxMjh6bTUxLjItMzA3LjJWNjRIMzIwdjEyOGgxMjh2LTUxLjJoLTc2Ljh6Ii8+PC9zdmc+";
 const fullScreenClose =
@@ -119,7 +120,6 @@ var statusChat = () =>
     : statusWebChat.CLOSE;
 
 function setCustomStyleOfPage() {
-  const styleOfDocument = document.documentElement.style;
   const color = configuration?.color;
   if (color) {
     const primary = color?.primary;
@@ -173,10 +173,6 @@ function setCustomStyleOfPage() {
       styleOfDocument.setProperty("--youai-height-button", height);
     }
   }
-  const widget = configuration?.section?.widget;
-  if (widget) {
-    styleOfDocument.setProperty("-rw-widget-container-width", widget?.width);
-  }
 }
 
 function createAutocomplete() {
@@ -193,7 +189,7 @@ function createAutocomplete() {
 
     if (configuration?.section?.attachments?.show) {
       const attachments = `
-      <button id="youai-btn-attachments">
+      <button id="youai-btn-attachments" type="button">
         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#808080"><path d="M0 0h24v24H0z" fill="none"/><path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"/></svg>
       </button>`;
       containerForm.insertAdjacentHTML("afterbegin", attachments);
@@ -457,8 +453,19 @@ function webChatOperation() {
         if (containerAutoComplete) containerAutoComplete.style.height = "3rem";
         setHeightOfIframe("30rem");
         setSizeOfImage("30rem", "20rem");
+        styleOfDocument.setProperty(
+          "--youai-rw-widget-container-width",
+          "100%"
+        );
         break;
       case statusWebChat.CLOSE:
+        const widget = configuration?.section?.widget;
+        if (widget) {
+          styleOfDocument.setProperty(
+            "--youai-rw-widget-container-width",
+            widget?.width
+          );
+        }
         if (
           localStorage.getItem("interaction") &&
           configuration?.section?.feedback?.enable
