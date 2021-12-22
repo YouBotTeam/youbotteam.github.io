@@ -10,6 +10,7 @@ var inputChat = "";
 var lastSearch = "";
 var containerCustom;
 var showPopup = true;
+var project_id = null;
 var storageType = "";
 var typingTimer = null;
 var autocompleteElement;
@@ -73,6 +74,7 @@ YouaiWebChat.configuration = (config) => {
     params: { storage },
   });
   configuration = config.custom;
+  project_id = configuration.project_id || null;
   getStorage();
 };
 
@@ -173,10 +175,7 @@ function setCustomStyleOfPage() {
   }
   const widget = configuration?.section?.widget;
   if (widget) {
-    styleOfDocument.setProperty(
-      "--youai-rw-widget-container-width",
-      widget?.width
-    );
+    styleOfDocument.setProperty("-rw-widget-container-width", widget?.width);
   }
 }
 
@@ -402,7 +401,6 @@ function webChatOperation() {
         const buttonMenu = section?.buttonMenu.enable;
         if (
           configuration?.baseUrl &&
-          configuration?.project_name &&
           buttonMenu &&
           (section?.pillole?.enable || section?.resetChat?.enable)
         ) {
@@ -978,7 +976,7 @@ function autocomplete() {
   if (configuration?.autoFocusOnInput) {
     autocompleteElement.focus();
   }
-  if (configuration?.baseUrl && configuration?.project_name) {
+  if (configuration?.baseUrl) {
     autocompleteElement.addEventListener("input", function (e) {
       let input = e.target.value;
       input = input.trimStart();
@@ -1090,26 +1088,28 @@ async function getHintComplete(text) {
     JSON.stringify({
       text,
     }),
-    { repo_name: configuration?.project_name }
+    { ...(project_id && { project_id }) }
   );
 }
 
 async function getRecommender() {
   return this.optionSharedCall("nlu/recommender", null, {
-    repo_name: configuration?.project_name,
+    ...(project_id && { project_id }),
   });
 }
 
 async function submitFeedback(message, rating) {
   return this.optionSharedCall(
     "feedback",
-    JSON.stringify({
-      message,
-      rating,
-      channel: "webchat",
-      channel_session_id: getSessionId(),
-    }),
-    { project_id: configuration?.project_id }
+    JSON.stringify(
+      {
+        message,
+        rating,
+        channel: "webchat",
+        channel_session_id: getSessionId(),
+      },
+      { ...(project_id && { project_id }) }
+    )
   );
 }
 
@@ -1122,7 +1122,7 @@ function getSessionId() {
 async function getPillole() {
   return this.optionSharedCall("load/file", null, {
     filename: configuration?.section?.pillole?.filename,
-    repo_name: configuration?.project_name,
+    ...(project_id && { project_id }),
   });
 }
 
@@ -1131,17 +1131,16 @@ async function uploadMedia(formData) {
     "upload/media",
     formData,
     {
-      project_id: configuration?.project_id,
       conversation_id: getSessionId(),
+      ...(project_id && { project_id }),
     },
     false
   );
 }
 
 async function optionSharedCall(endpoint, body, parameters, jsonType = true) {
-  const baseUrl = configuration?.baseUrl;
-  const project_name = configuration?.project_name;
-  if (project_name && baseUrl && token) {
+  var baseUrl = `${configuration?.baseUrl}${endpoint}`;
+  if (baseUrl && token) {
     const headers = new Headers();
     headers.append("token", token);
     if (jsonType) {
@@ -1154,12 +1153,11 @@ async function optionSharedCall(endpoint, body, parameters, jsonType = true) {
       ...(body && { body, redirect: "follow" }),
     };
 
-    const call = await fetch(
-      `${baseUrl}${endpoint}?${new URLSearchParams({
-        ...(parameters && { ...parameters }),
-      })}`,
-      requestOptions
-    );
+    if (JSON.stringify(parameters) !== JSON.stringify({})) {
+      baseUrl = `${baseUrl}?${new URLSearchParams({ ...parameters })}`;
+    }
+
+    const call = await fetch(baseUrl, requestOptions);
     const response = await call.json();
     return response.value || response.matches;
   }
