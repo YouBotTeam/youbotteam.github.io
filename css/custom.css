@@ -3,6 +3,8 @@
   --youai-msg-user-bg-color: #135afe;
   --youai-color-wave-dot: #000;
   --youai-msg-bot-bg-color: #f4f7f9;
+  --youai-color-title: #ffffff;
+  --youai-color-subtitle: #ffffff;
   --youai-button-send-color: #135afe;
   --youai-width-button: 60px;
   --youai-height-button: 60px;
@@ -57,8 +59,14 @@
   left: 50px;
 }
 
-h4.rw-title.rw-with-avatar {
+.rw-header.rw-with-subtitle > h4.rw-title {
+  color: var(--youai-color-title) !important;
   margin-left: 0.6rem;
+}
+
+.rw-header.rw-with-subtitle > .rw-with-avatar {
+  color: var(--youai-color-subtitle) !important;
+  margin: 0;
 }
 
 .rw-dot {
@@ -99,7 +107,7 @@ h4.rw-title.rw-with-avatar {
 }
 
 .rw-conversation-container .rw-sender {
-  flex-direction: column-reverse;
+  flex-direction: row;
 }
 
 .rw-new-message {
@@ -115,8 +123,8 @@ h4.rw-title.rw-with-avatar {
 }
 
 .youai-icon-button-menu {
-  width: 1.8rem;
-  height: 1.8rem;
+  width: 2rem;
+  height: 2rem;
 }
 
 .youai-disabled-link {
@@ -248,6 +256,7 @@ h4.rw-title.rw-with-avatar {
 }
 
 #youai-close-icon {
+  width: 1.5rem;
   margin-top: auto;
   margin-right: 1rem;
   margin-bottom: auto;
@@ -304,16 +313,19 @@ h4.rw-title.rw-with-avatar {
 /* Dropdown */
 
 .youai-dropdown {
-  position: relative;
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 #youai-dropdown-content {
-  z-index: 1;
   right: 0;
+  top: 2.5rem;
+  z-index: 1;
   display: none;
-  position: absolute;
   min-width: 160px;
+  position: absolute;
   border-radius: 0.5rem;
   background-color: var(--youai-content-color);
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
@@ -332,11 +344,11 @@ h4.rw-title.rw-with-avatar {
   background-color: var(--youai-white-dark-color);
 }
 
-.youai-dropdown:hover #youai-dropdown-content {
-  display: block;
-}
-
 /* Dropdown */
+
+.custom-header > h4 {
+  color: var(--youai-color-title) !important;
+}
 
 /* Popup custom */
 
@@ -459,10 +471,8 @@ h4.rw-title.rw-with-avatar {
   align-items: center;
   background: #ffffff;
   justify-content: space-evenly;
-  box-shadow: 0 1px 1.5px -1px rgb(0 0 0 / 5%),
-    0 2.5px 3.7px -1px rgb(0 0 0 / 7%), 0 5px 7px -1px rgb(0 0 0 / 9%),
-    0 9.7px 12.5px -1px rgb(0 0 0 / 10%), 0 19.7px 23.4px -1px rgb(0 0 0 / 12%),
-    0 54px 56px -1px rgb(0 0 0 / 17%);
+  box-shadow: 0 1px 1.5px -1px rgb(0 0 0 / 5%), 0 2.5px 3.7px -1px rgb(0 0 0 / 7%), 0 5px 7px -1px rgb(0 0 0 / 9%),
+    0 9.7px 12.5px -1px rgb(0 0 0 / 10%), 0 19.7px 23.4px -1px rgb(0 0 0 / 12%), 0 54px 56px -1px rgb(0 0 0 / 17%);
 }
 
 .youai-input-file-container {
@@ -538,8 +548,8 @@ li.youai-file-selected > svg {
 
 .rw-conversation-container .rw-reply {
   text-align: center;
-  border: 1px solid var(--youai-primary-color);
-  background-color: var(--youai-primary-color);
+  border: 1px solid var(--youai-primary-color) !important;
+  background-color: var(--youai-primary-color) !important;
 }
 
 #youai-cancel-attachments {

@@ -128,9 +128,21 @@ function setCustomStyleOfPage() {
 
     const messageBot = message?.bot;
     const messageUser = message?.user;
+
+    const titleColor = color?.title?.color;
+    if (titleColor) {
+      styleOfDocument.setProperty("--youai-color-title", titleColor);
+    }
+
+    const subTitleColor = color?.subTitle?.color;
+    if (subTitleColor) {
+      styleOfDocument.setProperty("--youai-color-subtitle", subTitleColor);
+    }
+
     if (primary) {
       styleOfDocument.setProperty("--youai-primary-color", primary);
     }
+
     if (messageUser) {
       const backgroundColor = messageUser?.backgroundColor;
       const color = messageUser?.color;
@@ -389,10 +401,8 @@ function webChatOperation() {
     switch (statusChat()) {
       case statusWebChat.OPEN:
         form = document.getElementsByClassName("rw-sender")[0];
-        if (configuration?.section?.autocomplete?.enable) {
-          createAutocomplete();
-          autocomplete();
-        }
+        createAutocomplete();
+        autocomplete();
         const section = configuration?.section;
         const buttonMenu = section?.buttonMenu.enable;
         if (
@@ -620,6 +630,14 @@ function buttonMenuToggle() {
           </div>
         </div>`
     );
+
+    document
+      .getElementsByClassName("youai-button-menu")[0]
+      .addEventListener("click", function (e) {
+        document.getElementById("youai-dropdown-content").style.display =
+          "block";
+        e.stopPropagation();
+      });
 
     if (showPilloleSection) {
       document.getElementById("pillole").addEventListener("click", () => {
@@ -979,49 +997,51 @@ function removeConversationContainer() {
 }
 
 function autocomplete() {
-  autocompleteElement = document.getElementById("autocomplete");
-  if (configuration?.autoFocusOnInput) {
-    autocompleteElement.focus();
-  }
-  if (configuration?.baseUrl) {
-    autocompleteElement.addEventListener("input", function (e) {
-      let input = e.target.value;
-      input = input.trimStart();
-      clearTimeout(typingTimer);
-      if (commanderResponse && lastSearch !== input) {
+  if (configuration?.section?.autocomplete?.enable) {
+    autocompleteElement = document.getElementById("autocomplete");
+    if (configuration?.autoFocusOnInput) {
+      autocompleteElement.focus();
+    }
+    if (configuration?.baseUrl) {
+      autocompleteElement.addEventListener("input", function (e) {
+        let input = e.target.value;
+        input = input.trimStart();
+        clearTimeout(typingTimer);
+        if (commanderResponse && lastSearch !== input) {
+          closeAllLists();
+          localStorage.setItem("hint", false);
+        }
+        typingTimer = setTimeout(() => {
+          if (input.length > 5 && [...input].find((char) => char === " ")) {
+            lastSearch = input;
+            localStorage.setItem("hint", true);
+            getHintComplete(input)
+              .then((response) => {
+                commanderResponse = response;
+                if (commanderResponse.length) {
+                  createListToComplete(this, commanderResponse);
+                }
+              })
+              .catch((error) => console.log(`Error: ${error}`));
+          }
+        }, 1000);
+      });
+    }
+
+    autocompleteElement.addEventListener("keyup", (event) => {
+      if (event.code === "Enter") {
         closeAllLists();
         localStorage.setItem("hint", false);
       }
-      typingTimer = setTimeout(() => {
-        if (input.length > 5 && [...input].find((char) => char === " ")) {
-          lastSearch = input;
-          localStorage.setItem("hint", true);
-          getHintComplete(input)
-            .then((response) => {
-              commanderResponse = response;
-              if (commanderResponse.length) {
-                createListToComplete(this, commanderResponse);
-              }
-            })
-            .catch((error) => console.log(`Error: ${error}`));
-        }
-      }, 1000);
     });
+
+    document
+      .getElementsByClassName("rw-messages-container")[0]
+      .addEventListener("click", (e) => {
+        localStorage.setItem("hint", false);
+        closeAllLists(e.target);
+      });
   }
-
-  autocompleteElement.addEventListener("keyup", (event) => {
-    if (event.code === "Enter") {
-      closeAllLists();
-      localStorage.setItem("hint", false);
-    }
-  });
-
-  document
-    .getElementsByClassName("rw-messages-container")[0]
-    .addEventListener("click", (e) => {
-      localStorage.setItem("hint", false);
-      closeAllLists(e.target);
-    });
 }
 
 function closeAllLists(element) {
@@ -1170,6 +1190,19 @@ async function optionSharedCall(endpoint, body, parameters, jsonType = true) {
   }
   return null;
 }
+
+document.addEventListener(
+  "click",
+  function () {
+    const youaiDropdownContent = document.getElementById(
+      "youai-dropdown-content"
+    );
+    if (youaiDropdownContent) {
+      youaiDropdownContent.style.display = "none";
+    }
+  },
+  false
+);
 
 function chatContainerScrollBottom() {
   chatContainer.scrollTop = chatContainer.scrollHeight;
