@@ -36,6 +36,13 @@
   }
 }
 
+.rw-header-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
 .rw-launcher .rw-tooltip-body {
   margin-right: -1rem;
 }
