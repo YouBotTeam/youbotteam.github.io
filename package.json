@@ -1,0 +1,37 @@
+{
+  "name": "youaiwebchat",
+  "version": "0.0.27",
+  "description": "Youai web chat",
+  "author": "Youtility Center S.r.L",
+  "main": "dist/youaiwebchat.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "webpack": "webpack",
+    "build:dev": "webpack --config webpack.dev.js",
+    "build:prod": "webpack --config webpack.prod.js",
+    "push:tag": "git push origin v$env${npm_package_version}",
+    "version:patch": "npm version patch --force",
+    "version:minor": "npm version minor --force",
+    "version:major": "npm version major --force",
+    "build:patch": "npm run version:patch && npm run build:prod && npm run push:tag && git push",
+    "build:minor": "npm run version:minor && npm run build:prod && npm run push:tag && git push",
+    "build:major": "npm run version:major && npm run build:prod && npm run push:tag && git push"
+  },
+  "keywords": [],
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.17.5",
+    "@babel/preset-env": "^7.16.11",
+    "babel-loader": "^8.2.3",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.69.1",
+    "webpack-cli": "^4.9.2"
+  },
+  "dependencies": {
+    "clean-webpack-plugin": "^4.0.0",
+    "css-loader": "^6.6.0",
+    "string-replace-loader": "^3.1.0",
+    "terser-webpack-plugin": "^5.3.1",
+    "webpack-merge": "^5.8.0"
+  }
+}

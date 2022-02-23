@@ -1,101 +1,83 @@
-<!-- https://github.com/botfront/rasa-webchat -->
 <!DOCTYPE html>
-<html class="ltr" dir="ltr" lang="it-IT">
+<html lang="en">
   <head>
-    <title>Home - Comune di Milano</title>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo</title>
   </head>
-
   <body>
-    <div style="width: 100%; height: 100%">
-      <img
-        src="homepage_screenshot.png"
-        style="max-width: 100%; max-height: 100%"
-      />
-    </div>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/rasa-webchat@1.0.1/lib/index.min.js"></script> -->
+    <script src="dist/youaiwebchat.js"></script>
 
-    <!-- <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://demo.weai.it/static/css/widget/custom.css"
-    />
-    <script src="https://demo.weai.it/static/js/widget/index.js"></script>
-    <script src="https://demo.weai.it/static/js/widget/main.js"></script> -->
-
-    <script src="./js/index.js"></script>
-
-    <link rel="stylesheet" type="text/css" href="./css/custom.css" />
-    <!-- <script src="./js/main.js"></script> -->
-    <script src="./js/youaiwebchat.js"></script>
-
+    <script>
+      const configurationYouAiWebChat = {
+        custom: {
+          autoFocusOnInput: true,
+          baseUrl: "https://weai.it/service/",
+          clearCacheOnRefresh: true,
+          color: {
+            message: {
+              bot: { backgroundColor: "#5556d3", color: "#fff" },
+              user: { backgroundColor: "#101f42", color: "#ffffff" },
+            },
+            primary: "#7617e6",
+            sendButton: "#5c1aad",
+            title: {
+              color: "#fff",
+            },
+            subTitle: {
+              color: "#fff",
+            },
+          },
+          enableClickOnImage: true,
+          mainButtonDimension: { height: "5rem", width: "5rem" },
+          project_id: null,
+          section: {
+            attachments: { accept: "image/png, image/jpeg", show: true },
+            autocomplete: { enable: false },
+            buttonMenu: { enable: true },
+            feedback: { enable: true, title: "Lascia un feedback" },
+            pillole: {
+              disableButton: false,
+              enable: false,
+              enableFullScreen: false,
+              filename: "config-pillole.json",
+            },
+            popup: {
+              show: true,
+              text: "Clicca sul bottone per inziare la chat",
+            },
+            resetChat: { enable: true },
+            widget: { width: "80%" },
+          },
+        },
+        webchat: {
+          customData: { language: "it" },
+          docViewer: false,
+          elementTriggerResetChat: {
+            elementRef: "reset-chat",
+            typeOfEvent: "click",
+          },
+          hideWhenNotConnected: true,
+          initPayload: "/welcome",
+          inputTextFieldHint: "Scrivi la tua richiesta...",
+          openAutomatically: false,
+          profileAvatar:
+            "https://firebasestorage.googleapis.com/v0/b/youaistudio.appspot.com/o/YouAI_onlyicon.svg?alt=media&token=789f9be9-5fe7-4e56-96cc-2af5ac9fa295",
+          selector: "#webchat",
+          showBadge: true,
+          showFullScreenButton: true,
+          socketPath: "/socket.io/",
+          socketUrl: "https://demo.weai.it",
+          storage: "session",
+          subtitle: "YouAi",
+          title: "Assistente Virtuale",
+        },
+      };
+      Object.assign(configurationYouAiWebChat, {
+        token:
+          "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3ZWFpX3VzZXIiOnsidXNlcm5hbWUiOiJhZG1pbiIsInVzZXJfYWNjb3VudCI6W3siY2xpZW50Ijp7ImlkIjoxLCJuYW1lIjoidGVzdF9jb21wYW55In0sInByb2plY3QiOnsiaWQiOjIsIm5hbWUiOiJUSU0iLCJyZXBvIjp7InVybCI6Imh0dHBzOi8vZ2l0aHViLmNvbS9Zb3VCb3RUZWFtL1RJTWJvdF8yLnguZ2l0IiwiYWNjb3VudF9uYW1lIjoiWW91Qm90VGVhbSIsImJyYW5jaCI6WyJkYXRhc2V0X3YxMiJdfX0sImdyb3VwIjp7ImlkIjoyLCJuYW1lIjoiYWRtaW4ifSwicm9sZSI6WyJhZG1pbiJdLCJzZXJ2aWNlX2FjY291bnQiOmZhbHNlLCJzdXBlcnVzZXIiOnRydWUsInVzZXJuYW1lIjoiYWRtaW4iLCJzdGF0dXMiOiJUQkQifSx7ImNsaWVudCI6eyJpZCI6MSwibmFtZSI6InRlc3RfY29tcGFueSJ9LCJwcm9qZWN0Ijp7ImlkIjoxLCJuYW1lIjoidGVzdF9wcm9qZWN0IiwicmVwbyI6eyJ1cmwiOiJodHRwczovL2dpdGh1Yi5jb20vWW91Qm90VGVhbS9DYXR0b2xpY2FfYm90LmdpdCIsImFjY291bnRfbmFtZSI6IllvdUJvdFRlYW0iLCJicmFuY2giOlsibWFzdGVyIiwiZGV2ZWxvcCJdfX0sImdyb3VwIjp7ImlkIjoyLCJuYW1lIjoiYWRtaW4ifSwicm9sZSI6WyJhZG1pbiJdLCJzZXJ2aWNlX2FjY291bnQiOmZhbHNlLCJzdXBlcnVzZXIiOnRydWUsInVzZXJuYW1lIjoiYWRtaW4iLCJzdGF0dXMiOiJUQkQifSx7ImNsaWVudCI6eyJpZCI6MiwibmFtZSI6IkludGVybmFsIFByb2plY3RzIn0sInByb2plY3QiOnsiaWQiOjMsIm5hbWUiOiJZb3VCb3RfR0QiLCJyZXBvIjp7InVybCI6Imh0dHBzOi8vZ2l0aHViLmNvbS9Zb3VCb3RUZWFtL2RlbW8uZ2l0IiwiYWNjb3VudF9uYW1lIjoiWW91Qm90VGVhbSIsImJyYW5jaCI6WyJZb3VCb3RfR0QiXX19LCJncm91cCI6eyJpZCI6MiwibmFtZSI6ImFkbWluIn0sInJvbGUiOlsiYWRtaW4iXSwic2VydmljZV9hY2NvdW50IjpmYWxzZSwic3VwZXJ1c2VyIjp0cnVlLCJ1c2VybmFtZSI6ImFkbWluIiwic3RhdHVzIjoiVEJEIn1dLCJzZXJ2aWNlX2FjY291bnQiOmZhbHNlfSwiZGF0YSI6e30sImlhdCI6MTY0Mzk4MDU5My41NTIxODk2fQ.0iv1DTfxuod0OKWD3lRgJJ1qgxpaqSBustmonJM_gLA",
+      });
+      YouaiWebChat.configuration(configurationYouAiWebChat);
+    </script>
   </body>
-  <script>
-    const configurationYouAiWebChat = {
-      custom: {
-        autoFocusOnInput: true,
-        baseUrl: "https://weai.it/service/",
-        clearCacheOnRefresh: true,
-        color: {
-          message: {
-            bot: { backgroundColor: "#5556d3", color: "#fff" },
-            user: { backgroundColor: "#101f42", color: "#ffffff" },
-          },
-          primary: "#7617e6",
-          sendButton: "#5c1aad",
-          title: {
-            color: "#fff",
-          },
-          subTitle: {
-            color: "#fff",
-          },
-        },
-        enableClickOnImage: true,
-        mainButtonDimension: { height: "5rem", width: "5rem" },
-        project_id: null,
-        section: {
-          attachments: { accept: "image/png, image/jpeg", show: true },
-          autocomplete: { enable: false },
-          buttonMenu: { enable: true },
-          feedback: { enable: true, title: "Lascia un feedback" },
-          pillole: {
-            disableButton: false,
-            enable: false,
-            enableFullScreen: false,
-            filename: "config-pillole.json",
-          },
-          popup: { show: true, text: "Clicca sul bottone per inziare la chat" },
-          resetChat: { enable: true },
-          widget: { width: "80%" },
-        },
-      },
-      webchat: {
-        customData: { language: "it" },
-        docViewer: false,
-        elementTriggerResetChat: {
-          elementRef: "reset-chat",
-          typeOfEvent: "click",
-        },
-        hideWhenNotConnected: true,
-        initPayload: "/welcome",
-        inputTextFieldHint: "Scrivi la tua richiesta...",
-        openAutomatically: false,
-        profileAvatar:
-          "https://firebasestorage.googleapis.com/v0/b/youaistudio.appspot.com/o/YouAI_onlyicon.svg?alt=media&token=789f9be9-5fe7-4e56-96cc-2af5ac9fa295",
-        selector: "#webchat",
-        showBadge: true,
-        showFullScreenButton: true,
-        socketPath: "/socket.io/",
-        socketUrl: "https://demo.weai.it",
-        storage: "session",
-        subtitle: "YouAi",
-        title: "Assistente Virtuale",
-      },
-    };
-    Object.assign(configurationYouAiWebChat, {
-      token:
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3ZWFpX3VzZXIiOnsidXNlcm5hbWUiOiJhZG1pbiIsInVzZXJfYWNjb3VudCI6W3siY2xpZW50Ijp7ImlkIjoxLCJuYW1lIjoidGVzdF9jb21wYW55In0sInByb2plY3QiOnsiaWQiOjIsIm5hbWUiOiJUSU0iLCJyZXBvIjp7InVybCI6Imh0dHBzOi8vZ2l0aHViLmNvbS9Zb3VCb3RUZWFtL1RJTWJvdF8yLnguZ2l0IiwiYWNjb3VudF9uYW1lIjoiWW91Qm90VGVhbSIsImJyYW5jaCI6WyJkYXRhc2V0X3YxMiJdfX0sImdyb3VwIjp7ImlkIjoyLCJuYW1lIjoiYWRtaW4ifSwicm9sZSI6WyJhZG1pbiJdLCJzZXJ2aWNlX2FjY291bnQiOmZhbHNlLCJzdXBlcnVzZXIiOnRydWUsInVzZXJuYW1lIjoiYWRtaW4iLCJzdGF0dXMiOiJUQkQifSx7ImNsaWVudCI6eyJpZCI6MSwibmFtZSI6InRlc3RfY29tcGFueSJ9LCJwcm9qZWN0Ijp7ImlkIjoxLCJuYW1lIjoidGVzdF9wcm9qZWN0IiwicmVwbyI6eyJ1cmwiOiJodHRwczovL2dpdGh1Yi5jb20vWW91Qm90VGVhbS9DYXR0b2xpY2FfYm90LmdpdCIsImFjY291bnRfbmFtZSI6IllvdUJvdFRlYW0iLCJicmFuY2giOlsibWFzdGVyIiwiZGV2ZWxvcCJdfX0sImdyb3VwIjp7ImlkIjoyLCJuYW1lIjoiYWRtaW4ifSwicm9sZSI6WyJhZG1pbiJdLCJzZXJ2aWNlX2FjY291bnQiOmZhbHNlLCJzdXBlcnVzZXIiOnRydWUsInVzZXJuYW1lIjoiYWRtaW4iLCJzdGF0dXMiOiJUQkQifSx7ImNsaWVudCI6eyJpZCI6MiwibmFtZSI6IkludGVybmFsIFByb2plY3RzIn0sInByb2plY3QiOnsiaWQiOjMsIm5hbWUiOiJZb3VCb3RfR0QiLCJyZXBvIjp7InVybCI6Imh0dHBzOi8vZ2l0aHViLmNvbS9Zb3VCb3RUZWFtL2RlbW8uZ2l0IiwiYWNjb3VudF9uYW1lIjoiWW91Qm90VGVhbSIsImJyYW5jaCI6WyJZb3VCb3RfR0QiXX19LCJncm91cCI6eyJpZCI6MiwibmFtZSI6ImFkbWluIn0sInJvbGUiOlsiYWRtaW4iXSwic2VydmljZV9hY2NvdW50IjpmYWxzZSwic3VwZXJ1c2VyIjp0cnVlLCJ1c2VybmFtZSI6ImFkbWluIiwic3RhdHVzIjoiVEJEIn1dLCJzZXJ2aWNlX2FjY291bnQiOmZhbHNlfSwiZGF0YSI6e30sImlhdCI6MTY0Mzk4MDU5My41NTIxODk2fQ.0iv1DTfxuod0OKWD3lRgJJ1qgxpaqSBustmonJM_gLA",
-    });
-    YouaiWebChat.configuration(configurationYouAiWebChat);
-  </script>
 </html>

@@ -1,0 +1,597 @@
+:root {
+    --youai-primary-color: #135afe;
+    --youai-msg-user-bg-color: #135afe;
+    --youai-color-wave-dot: #000;
+    --youai-msg-bot-bg-color: #f4f7f9;
+    --youai-color-title: #ffffff;
+    --youai-color-subtitle: #ffffff;
+    --youai-button-send-color: #135afe;
+    --youai-width-button: 60px;
+    --youai-height-button: 60px;
+    --youai-white-color: #ffffff;
+    --youai-content-color: #f1f1f1;
+    --youai-white-dark-color: #dddddd;
+    --youai-error-color: #ff0000;
+    --youai-star-checked-color: #ffa500;
+    --youai-rw-widget-container-width: 50%;
+}
+
+.rw-widget-container {
+    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    font-family: sans-serif;
+    z-index: 100 !important;
+    justify-content: center !important;
+    width: var(--youai-rw-widget-container-width) !important;
+}
+
+.rw-launcher .rw-tooltip-body {
+    right: calc(var(--youai-width-button) + 30px);
+}
+
+@media screen and (max-width: 800px) {
+    .rw-launcher .rw-tooltip-body {
+        width: 20rem;
+    }
+}
+
+.rw-header-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.rw-launcher .rw-tooltip-body {
+    margin-right: -1rem;
+}
+
+.rw-conversation-container .rw-header {
+    background-color: var(--youai-primary-color) !important;
+}
+
+@media screen and (max-width: 800px) {
+    .rw-conversation-container .rw-header {
+        border-top-left-radius: 0.6rem;
+        border-top-right-radius: 0.6rem;
+    }
+}
+
+.rw-conversation-container .rw-header {
+    background-color: var(--youai-primary-color) !important;
+}
+
+.rw-conversation-container .rw-title.rw-with-avatar {
+    left: 50px;
+}
+
+.rw-header.rw-with-subtitle > h4.rw-title {
+    color: var(--youai-color-title) !important;
+    margin-left: 0.6rem;
+}
+
+.rw-header.rw-with-subtitle > .rw-with-avatar {
+    color: var(--youai-color-subtitle) !important;
+    margin: 0;
+}
+
+.rw-dot {
+    background: var(--youai-color-wave-dot) !important;
+}
+
+.rw-conversation-container .rw-response {
+    color: var(--youai-msg-bot-text-color) !important;
+    background-color: var(--youai-msg-bot-bg-color) !important;
+}
+
+/* .rw-group-message.rw-from-response
+    .rw-message:not(:first-child):not(:only-child).rw-with-avatar {
+    margin-left: 33px;
+  } */
+
+.rw-conversation-container .rw-client {
+    color: var(--youai-msg-user-text-color) !important;
+    background-color: var(--youai-msg-user-bg-color) !important;
+}
+
+.rw-conversation-container .rw-send .rw-send-icon-ready {
+    fill: var(--youai-button-send-color) !important;
+}
+
+.rw-launcher {
+    width: var(--youai-width-button) !important;
+    height: var(--youai-height-button) !important;
+    background-color: var(--youai-primary-color) !important;
+}
+
+.rw-send {
+    padding-right: 0.5rem;
+}
+
+.rw-sender {
+    padding: 0 !important;
+}
+
+.rw-conversation-container .rw-sender {
+    flex-direction: row;
+}
+
+.rw-new-message {
+    height: 2rem !important;
+}
+
+.rw-widget-container .rw-full-screen .rw-chat-open {
+    width: 100%;
+}
+
+.youai-pillole-icon {
+    width: 3rem;
+}
+
+.youai-icon-button-menu {
+    width: 2rem;
+    height: 2rem;
+}
+
+.youai-disabled-link {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.youai-button-menu {
+    border: 0;
+    background: none;
+    box-shadow: none;
+    margin-top: 0.2rem;
+}
+
+.youai-display-none {
+    display: none !important;
+}
+
+#youAiSendFeedback {
+    font-size: 1.2rem;
+    cursor: pointer;
+    border: 0;
+    width: 50%;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    color: var(--youai-white-color);
+    background-color: var(--youai-primary-color) !important;
+}
+
+#youai-container-custom {
+    /* overflow-y: auto; */
+    height: 100%;
+}
+
+.youai-container-custom {
+    border-bottom-left-radius: 0.6rem;
+    border-bottom-right-radius: 0.6rem;
+}
+
+.youai-container-custom ul {
+    list-style: none;
+}
+
+.youai-ul {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+/* collapsible */
+
+.youai-container-collapse {
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.youai-pillole-title {
+    padding: 0.1rem;
+    font-weight: normal;
+}
+
+.youai-rotate-arrow {
+    transform: rotate(180deg);
+}
+
+.youai-yt {
+    width: 100%;
+    height: 100%;
+}
+
+.youai-collapsible {
+    width: 100%;
+    padding: 1rem;
+    display: flex;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 1rem;
+    background: none;
+    text-align: left;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 0.5rem;
+    justify-content: space-between;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.image-custom {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.youai-collapsibile-icon-img {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: start;
+}
+
+.youai-content {
+    display: none;
+    padding: 0.5rem;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.youai-content > div > ul > li {
+    margin-left: 1rem;
+    list-style: disc !important;
+}
+
+/* collapsible */
+
+/* Feedback section */
+
+.youai-container-close {
+    display: flex;
+    cursor: pointer;
+    flex-direction: row-reverse;
+}
+
+.youai-container-textarea {
+    height: 50%;
+    display: block;
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
+}
+
+#youai-close-icon {
+    width: 1.5rem;
+    margin-top: auto;
+    margin-right: 1rem;
+    margin-bottom: auto;
+}
+
+#youai-error-feedback {
+    margin-left: 1rem;
+}
+
+#autocomplete {
+    padding: 0.4rem;
+}
+
+#youai-textareabox {
+    width: 100%;
+    height: 100%;
+    resize: none;
+    outline: none;
+    padding: 0.4rem;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+/* Star rating */
+
+.youai-checked {
+    color: var(--youai-star-checked-color);
+}
+
+.youai-class-rating {
+    display: flex;
+    padding: 1rem 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.youai-class-rating > svg {
+    width: 2rem;
+    height: 2rem;
+}
+
+.youai-container-button {
+    padding: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+/* Star rating */
+
+/* Feedback section */
+
+/* Dropdown */
+
+.youai-dropdown {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#youai-dropdown-content {
+    right: 0;
+    top: 2.5rem;
+    z-index: 1;
+    display: none;
+    min-width: 160px;
+    position: absolute;
+    border-radius: 0.5rem;
+    background-color: var(--youai-content-color);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+}
+
+#youai-dropdown-content a {
+    color: black;
+    display: block;
+    cursor: pointer;
+    padding: 12px 16px;
+    text-decoration: none;
+}
+
+#youai-dropdown-content a:hover {
+    border-radius: 0.5rem;
+    background-color: var(--youai-white-dark-color);
+}
+
+/* Dropdown */
+
+.custom-header > h4 {
+    color: var(--youai-color-title) !important;
+}
+
+/* Popup custom */
+
+.youai-popup-custom {
+    float: right;
+    width: 70%;
+    z-index: 999;
+    height: 60px;
+    display: flex;
+    position: absolute;
+    text-align: center;
+    border-radius: 1rem;
+    align-items: center;
+    flex-direction: column;
+    font-family: sans-serif;
+    justify-content: center;
+    color: var(--youai-white-color);
+    right: calc(var(--youai-width-button) + 30px);
+    background: var(--youai-primary-color) !important;
+}
+
+.youai-popup-custom:before {
+    top: 36%;
+    width: 0px;
+    content: "";
+    height: 0px;
+    right: -19px;
+    position: absolute;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-top: 10px solid var(--youai-primary-color) !important;
+    border-left: 10px solid var(--youai-primary-color) !important;
+}
+
+/* Popup custom */
+
+.youai-fade-in {
+    opacity: 8;
+    animation-duration: 0.5s;
+    animation-name: youAifadeInOpacity;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in;
+}
+
+@keyframes youAifadeInOpacity {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* autocomplete */
+
+.youai-container-input {
+    width: 100%;
+    display: flex;
+    padding: 1rem;
+    position: relative;
+    /* align-items: center; */
+    flex-direction: row;
+}
+
+/* the container must be positioned relative: */
+
+.youai-autocomplete-items {
+    width: 100%;
+    z-index: 99;
+    position: absolute;
+    overflow-y: scroll;
+    box-shadow: 0px -0.5rem 0.4rem rgb(0 0 0 / 5%);
+}
+
+.youai-autocomplete-items div {
+    padding: 10px;
+    cursor: pointer;
+    background: #f4f7f9;
+}
+
+/* when hovering an item: */
+
+.youai-autocomplete-items div:hover {
+    background-color: #e9e9e9;
+}
+
+/* when navigating through the items using the arrow keys: */
+
+/* autocomplete */
+
+/* attachments */
+
+#youai-btn-attachments {
+    border: none;
+    padding: 0.3rem;
+    background: none;
+    margin-left: 0.4rem;
+    border-radius: 0.2rem;
+}
+
+.youai-container-modal-attachments {
+    top: 0;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    position: fixed;
+    background: #80808059;
+    flex-direction: column-reverse;
+}
+
+.youai-modal-attachments {
+    height: 50%;
+    margin: 1rem;
+    margin-bottom: 4rem !important;
+    display: flex;
+    /* color: white; */
+    padding: 0.5rem;
+    border-radius: 1rem;
+    flex-direction: column;
+    align-items: center;
+    background: #ffffff;
+    justify-content: space-evenly;
+    box-shadow: 0 1px 1.5px -1px rgb(0 0 0 / 5%), 0 2.5px 3.7px -1px rgb(0 0 0 / 7%), 0 5px 7px -1px rgb(0 0 0 / 9%),
+        0 9.7px 12.5px -1px rgb(0 0 0 / 10%), 0 19.7px 23.4px -1px rgb(0 0 0 / 12%), 0 54px 56px -1px rgb(0 0 0 / 17%);
+}
+
+.youai-input-file-container {
+    width: 80%;
+    height: 50%;
+    display: flex;
+    color: #7e7d7d;
+    border-radius: 1rem;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #f4f7f9;
+    outline: 2px dashed #bbbbbb;
+}
+
+.youai-icon-upload {
+    width: 5rem;
+    height: 5rem;
+    fill: #676666;
+}
+
+#youai-input-file-attachments {
+    width: 85%;
+    opacity: 0;
+    z-index: 99;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-left: 20px;
+    padding-top: 30px;
+    margin-right: 20px;
+    position: absolute;
+    padding-bottom: 67px;
+    display: inline-block;
+}
+
+.youai-btn-footer-attachments {
+    width: 100%;
+    display: flex;
+    padding: 0.5rem;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.youai-ul-file-selected {
+    list-style: none !important;
+}
+
+li.youai-file-selected {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: start;
+}
+
+li.youai-file-selected > svg {
+    min-width: 24px;
+    margin-right: 0.2rem;
+}
+
+.youai-delete-file {
+    fill: red;
+    cursor: pointer;
+}
+
+.youai-file-selected-container {
+    height: 100%;
+    overflow: auto;
+}
+
+.youai-name-file {
+    word-break: break-all;
+}
+
+.rw-conversation-container .rw-reply {
+    text-align: center;
+    border: 1px solid var(--youai-primary-color) !important;
+    background-color: var(--youai-primary-color) !important;
+}
+
+#youai-cancel-attachments {
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+#youai-confirm-attachments {
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* attachments */
+
+.youai-list-file-uploaded {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.youai-item-file-uploaded {
+    display: flex;
+    margin: 0.2rem 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+}
+
+.youai-item-file-uploaded-status {
+    margin-right: 0.2rem;
+}
+
+.youai-item-file-upload-name {
+    word-break: break-all !important;
+}

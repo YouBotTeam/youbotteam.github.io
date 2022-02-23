@@ -1,7 +1,5 @@
 // TODO: quando la chiamata del socket va in errore (net::ERR_TIMED_OUT) far ripartire lo script
 
-var webchat = window.WebChat;
-
 var form;
 var token = "";
 var mainContainer;
@@ -28,66 +26,67 @@ const iconDone = `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox=
 const iconError = `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#ff0000"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8 0-1.85.63-3.55 1.69-4.9L16.9 18.31C15.55 19.37 13.85 20 12 20zm6.31-3.1L7.1 5.69C8.45 4.63 10.15 4 12 4c4.42 0 8 3.58 8 8 0 1.85-.63 3.55-1.69 4.9z"/></svg>`;
 const iconDoubleDone = `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#ffffff"><path d="M0 0h24v24H0z" fill="none"/><path d="M18 7l-1.41-1.41-6.34 6.34 1.41 1.41L18 7zm4.24-1.41L11.66 16.17 7.48 12l-1.41 1.41L11.66 19l12-12-1.42-1.41zM.41 13.41L6 19l1.41-1.41L1.83 12 .41 13.41z"/></svg>`;
 
-function YouaiWebChat() {}
+const { statusWebChat, envStyle } = require("./constants");
 
-YouaiWebChat.configuration = (config) => {
-  const {
-    title,
-    subtitle,
-    inputTextFieldHint,
-    profileAvatar,
-    customData,
-    socketUrl,
-    socketPath,
-    showFullScreenButton,
-    showBadge,
-    docViewer,
-    hideWhenNotConnected,
-    openAutomatically,
-    initPayload,
-    selector,
-    storage,
-    elementTriggerResetChat,
-    elementTriggerOpenChat,
-  } = config.webchat;
-  storageType = storage;
-  token = config.token;
-  webchat.default({
-    customData: {
-      ...customData,
-      token: config.token,
-    },
-    socketUrl,
-    socketPath,
-    showBadge,
-    selector,
-    docViewer,
-    initPayload,
-    showFullScreenButton,
-    hideWhenNotConnected,
-    openAutomatically,
-    title,
-    subtitle,
-    inputTextFieldHint,
-    profileAvatar,
-    elementTriggerOpenChat,
-    elementTriggerResetChat,
-    params: { storage },
+configuration = (config) => {
+  import("./webchat").then((module) => {
+    const {
+      title,
+      subtitle,
+      inputTextFieldHint,
+      profileAvatar,
+      customData,
+      socketUrl,
+      socketPath,
+      showFullScreenButton,
+      showBadge,
+      docViewer,
+      hideWhenNotConnected,
+      openAutomatically,
+      initPayload,
+      selector,
+      storage,
+      elementTriggerResetChat,
+      elementTriggerOpenChat,
+    } = config.webchat;
+    storageType = storage;
+    token = config.token;
+    module.default({
+      customData: {
+        ...customData,
+        token: config.token,
+      },
+      socketUrl,
+      socketPath,
+      showBadge,
+      selector,
+      docViewer,
+      initPayload,
+      showFullScreenButton,
+      hideWhenNotConnected,
+      openAutomatically,
+      title,
+      subtitle,
+      inputTextFieldHint,
+      profileAvatar,
+      elementTriggerOpenChat,
+      elementTriggerResetChat,
+      params: { storage },
+    });
+    configuration = config.custom;
+    project_id = configuration.project_id || null;
+    getStorage();
+    setCustomStyleOfPage();
   });
-  configuration = config.custom;
-  project_id = configuration.project_id || null;
-  getStorage();
 };
 
 document.addEventListener("readystatechange", () => {
-  // console.log(YouaiWebChatFratomo());
   if (document.readyState === "interactive") {
-    setCustomStyleOfPage();
     if (configuration.clearCacheOnRefresh) {
       getStorage().clear();
     }
 
-    checkElement("#rasaWebchatPro").then(() => {
+    checkElement(getId("rasaWebchatPro")).then(() => {
       const mutationObserverParent = new MutationObserver((mutations) => {
         const addedNodes = mutations[0].addedNodes;
         if (addedNodes.length) {
@@ -105,7 +104,7 @@ document.addEventListener("readystatechange", () => {
         childList: true,
       });
 
-      checkElement(".rw-widget-container").then(() => {
+      checkElement(getClass("rw-widget-container")).then(() => {
         const mutationObserver = new MutationObserver(() => {
           webChatOperation();
         });
@@ -135,47 +134,41 @@ function setCustomStyleOfPage() {
 
     const titleColor = color?.title?.color;
     if (titleColor) {
-      styleOfDocument.setProperty("--youai-color-title", titleColor);
+      styleOfDocument.setProperty(envStyle.colorTitle, titleColor);
     }
 
     const subTitleColor = color?.subTitle?.color;
     if (subTitleColor) {
-      styleOfDocument.setProperty("--youai-color-subtitle", subTitleColor);
+      styleOfDocument.setProperty(envStyle.colorSubTitle, subTitleColor);
     }
 
     if (primary) {
-      styleOfDocument.setProperty("--youai-primary-color", primary);
+      styleOfDocument.setProperty(envStyle.primaryColor, primary);
     }
 
     if (messageUser) {
       const backgroundColor = messageUser?.backgroundColor;
       const color = messageUser?.color;
       if (backgroundColor) {
-        styleOfDocument.setProperty(
-          "--youai-msg-user-bg-color",
-          backgroundColor
-        );
+        styleOfDocument.setProperty(envStyle.msg.user.bgColor, backgroundColor);
       }
       if (color) {
-        styleOfDocument.setProperty("--youai-msg-user-text-color", color);
+        styleOfDocument.setProperty(envStyle.msg.user.textColor, color);
       }
     }
     if (messageBot) {
       const backgroundColor = messageBot?.backgroundColor;
       const color = messageBot?.color;
       if (backgroundColor) {
-        styleOfDocument.setProperty(
-          "--youai-msg-bot-bg-color",
-          backgroundColor
-        );
+        styleOfDocument.setProperty(envStyle.msg.bot.bgColor, backgroundColor);
       }
       if (color) {
-        styleOfDocument.setProperty("--youai-msg-bot-text-color", color);
-        styleOfDocument.setProperty("--youai-color-wave-dot", color);
+        styleOfDocument.setProperty(envStyle.msg.bot.textColor, color);
+        styleOfDocument.setProperty(envStyle.msg.bot.wave, color);
       }
     }
     if (sendButton) {
-      styleOfDocument.setProperty("--youai-button-send-color", sendButton);
+      styleOfDocument.setProperty(envStyle.buttonSendColor, sendButton);
     }
   }
   const mainButtonDimension = configuration?.mainButtonDimension;
@@ -183,10 +176,10 @@ function setCustomStyleOfPage() {
     const width = mainButtonDimension?.width;
     const height = mainButtonDimension?.height;
     if (width) {
-      styleOfDocument.setProperty("--youai-width-button", width);
+      styleOfDocument.setProperty(envStyle.width, width);
     }
     if (height) {
-      styleOfDocument.setProperty("--youai-height-button", height);
+      styleOfDocument.setProperty(envStyle.height, height);
     }
   }
 }
@@ -359,7 +352,7 @@ function generateUIListFileSelected(confirmAttachmetsEl) {
     const formData = new FormData();
     var li = "";
     listOfFileSelected.forEach((file, index) => {
-      const cancelButton = `<svg xmlns="http://www.w3.org/2000/svg" onclick="fileSelezionato('${file.name}##${index}')" class="youai-delete-file" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg>`;
+      const cancelButton = `<svg xmlns="http://www.w3.org/2000/svg" id="'${file.name}##${index}'"  class="youai-delete-file" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg>`;
       formData.append(`file-${index}`, file);
       li += `
         <li class="youai-file-selected" id="${file.name}##${index}">
@@ -378,6 +371,13 @@ function generateUIListFileSelected(confirmAttachmetsEl) {
     confirmAttachmetsEl.removeAttribute("disabled");
     inputFileContainerEl.style.display = "none";
     fileSelectedContainerEl.style.display = "";
+    listOfFileSelected.forEach((file, index) => {
+      document
+        .getElementById(`${file.name}##${index}`)
+        .addEventListener("click", () => {
+          fileSelezionato(`${file.name}##${index}`);
+        });
+    });
   } else {
     inputFileContainerEl.style.display = "";
     fileSelectedContainerEl.style.display = "none";
@@ -389,12 +389,15 @@ function fileSelezionato(indentifier) {
   listOfFileSelected = listOfFileSelected.filter(
     (item) => item.name !== indentifierSplitted[0]
   );
-  document
-    .getElementsByClassName("youai-ul-file-selected")[0]
-    .removeChild(document.getElementById(indentifier));
-  generateUIListFileSelected(
-    document.getElementById("youai-confirm-attachments")
-  );
+  const youaiUlFileSelected = document.getElementsByClassName(
+    "youai-ul-file-selected"
+  )[0];
+  if (youaiUlFileSelected) {
+    youaiUlFileSelected.removeChild(document.getElementById(indentifier));
+    generateUIListFileSelected(
+      document.getElementById("youai-confirm-attachments")
+    );
+  }
 }
 
 function webChatOperation() {
@@ -1113,8 +1116,11 @@ const checkElement = async (selector) => {
   return document.querySelector(selector);
 };
 
+const getId = (idEl) => `#${idEl}`;
+const getClass = (classEl) => `.${classEl}`;
+
 async function getHintComplete(text) {
-  return this.optionSharedCall(
+  return optionSharedCall(
     "recommend",
     JSON.stringify({
       text,
@@ -1124,13 +1130,13 @@ async function getHintComplete(text) {
 }
 
 async function getRecommender() {
-  return this.optionSharedCall("nlu/recommender", null, {
+  return optionSharedCall("nlu/recommender", null, {
     ...(project_id && { project_id }),
   });
 }
 
 async function submitFeedback(message, rating) {
-  return this.optionSharedCall(
+  return optionSharedCall(
     "feedback",
     JSON.stringify(
       {
@@ -1151,14 +1157,14 @@ function getSessionId() {
 }
 
 async function getPillole() {
-  return this.optionSharedCall("load/file", null, {
+  return optionSharedCall("load/file", null, {
     filename: configuration?.section?.pillole?.filename,
     ...(project_id && { project_id }),
   });
 }
 
 async function uploadMedia(formData) {
-  return this.optionSharedCall(
+  return optionSharedCall(
     "upload/media",
     formData,
     {
@@ -1216,8 +1222,4 @@ window.onbeforeunload = () => {
   localStorage.removeItem("interaction");
 };
 
-const statusWebChat = {
-  OPEN: "OPEN",
-  CLOSE: "CLOSE",
-  FULLSCREEN: "FULLSCREEN",
-};
+export default configuration;
