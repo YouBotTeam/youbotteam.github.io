@@ -10,11 +10,11 @@ var inputChat = "";
 var lastSearch = "";
 var containerCustom;
 var showPopup = true;
-var project_id = null;
 var storageType = "";
+var project_id = null;
 var typingTimer = null;
-var autocompleteElement;
 var configuration = {};
+var autocompleteElement;
 var customPopupClassList;
 var conversationContainer;
 var listOfFileSelected = [];
@@ -80,6 +80,7 @@ YouaiWebChat.configuration = (config) => {
 };
 
 document.addEventListener("readystatechange", () => {
+  // console.log(YouaiWebChatFratomo());
   if (document.readyState === "interactive") {
     setCustomStyleOfPage();
     if (configuration.clearCacheOnRefresh) {
@@ -87,15 +88,18 @@ document.addEventListener("readystatechange", () => {
     }
 
     checkElement("#rasaWebchatPro").then(() => {
-      const mutationObserverParent = new MutationObserver(() => {
-        mainContainer = document.getElementsByClassName(
-          "rw-widget-container"
-        )[0];
-        webChatOperation();
+      const mutationObserverParent = new MutationObserver((mutations) => {
+        const addedNodes = mutations[0].addedNodes;
+        if (addedNodes.length) {
+          mainContainer = document.getElementsByClassName(
+            "rw-widget-container"
+          )[0];
+          webChatOperation();
+        }
       });
 
       const parentContainer =
-        document.getElementById("rasaWebchatPro")?.children[0];
+        document.getElementById("rasaWebchatPro").children[0];
 
       mutationObserverParent.observe(parentContainer, {
         childList: true,
@@ -113,8 +117,8 @@ document.addEventListener("readystatechange", () => {
 });
 
 var statusChat = () =>
-  mainContainer?.classList.contains("rw-chat-open")
-    ? mainContainer?.classList.contains("rw-full-screen")
+  mainContainer.classList.contains("rw-chat-open")
+    ? mainContainer.classList.contains("rw-full-screen")
       ? statusWebChat.FULLSCREEN
       : statusWebChat.OPEN
     : statusWebChat.CLOSE;
@@ -214,8 +218,8 @@ function createAutocomplete() {
 }
 
 function handleInputFileModal() {
-  const iconFileUpload = `<svg xmlns="http://www.w3.org/2000/svg" class="youai-icon-upload" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>`;
-  setTimeout(() => {
+  checkElement("#youai-btn-attachments").then(() => {
+    const iconFileUpload = `<svg xmlns="http://www.w3.org/2000/svg" class="youai-icon-upload" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>`;
     document
       .getElementById("youai-btn-attachments")
       .addEventListener("click", () => {
@@ -281,7 +285,7 @@ function handleInputFileModal() {
           });
         }
       });
-  }, 500);
+  });
 }
 
 function generateMessage(nameOfFileSelected, error) {
