@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo</title>
+  </head>
+  <body>
+    <script src="dist/youaiwebchat.js"></script>
+    <!-- <script src="https://demo.weai.it/static/js/widget/youaiwebchat.js"></script> -->
+    <script>
+      const configurationYouAiWebChat = {
+        custom: {
+          autoFocusOnInput: true,
+          baseUrl: "https://weai.it/service/",
+          clearCacheOnRefresh: true,
+          color: {
+            message: {
+              bot: { backgroundColor: "#5556d3", color: "#fff" },
+              user: { backgroundColor: "#101f42", color: "#ffffff" },
+            },
+            primary: "#7617e6",
+            sendButton: "#5c1aad",
+            title: {
+              color: "#fff",
+            },
+            subTitle: {
+              color: "#fff",
+            },
+          },
+          enableClickOnImage: true,
+          mainButtonDimension: { height: "5rem", width: "5rem" },
+          project_id: null,
+          section: {
+            attachments: {
+              accept: "image/png, image/jpeg",
+              show: true,
+              intentTrigger: "/welcome",
+            },
+            autocomplete: { enable: false },
+            buttonMenu: { enable: true },
+            feedback: { enable: true, title: "Lascia un feedback" },
+            pillole: {
+              disableButton: false,
+              enable: false,
+              enableFullScreen: false,
+              filename: "config-pillole.json",
+            },
+            popup: {
+              show: true,
+              text: "Clicca sul bottone per inziare la chat",
+            },
+            resetChat: { enable: true },
+            widget: { width: "80%" },
+          },
+        },
+        webchat: {
+          customData: { language: "it" },
+          docViewer: false,
+          elementTriggerResetChat: {
+            elementRef: "reset-chat",
+            typeOfEvent: "click",
+          },
+          hideWhenNotConnected: true,
+          initPayload: "/welcome",
+          inputTextFieldHint: "Scrivi la tua richiesta...",
+          openAutomatically: false,
+          profileAvatar:
+            "https://firebasestorage.googleapis.com/v0/b/youaistudio.appspot.com/o/YouAI_onlyicon.svg?alt=media&token=789f9be9-5fe7-4e56-96cc-2af5ac9fa295",
+          selector: "#webchat",
+          showBadge: true,
+          showFullScreenButton: true,
+          socketPath: "/socket.io/",
+          socketUrl: "https://demo.weai.it",
+          storage: "session",
+          subtitle: "YouAi",
+          title: "Assistente Virtuale",
+        },
+      };
+      Object.assign(configurationYouAiWebChat, {
+        token:
+          "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3ZWFpX3VzZXIiOnsidXNlcm5hbWUiOiJ5b3Vib3RfZ2QiLCJ1c2VyX2FjY291bnQiOlt7ImNsaWVudCI6eyJpZCI6MiwibmFtZSI6IkludGVybmFsIFByb2plY3RzIn0sInByb2plY3QiOnsiaWQiOjMsIm5hbWUiOiJZb3VCb3RfR0QiLCJyZXBvIjp7InVybCI6Imh0dHBzOi8vZ2l0aHViLmNvbS9Zb3VCb3RUZWFtL2RlbW8uZ2l0IiwiYWNjb3VudF9uYW1lIjoiWW91Qm90VGVhbSIsImJyYW5jaCI6WyJZb3VCb3RfR0QiXX19LCJncm91cCI6eyJpZCI6MTIsIm5hbWUiOiJ3ZWJjaGF0X3dpZGdldCJ9LCJyb2xlIjpbIndlYmNoYXRfd2lkZ2V0Il0sInNlcnZpY2VfYWNjb3VudCI6dHJ1ZSwic3VwZXJ1c2VyIjpmYWxzZSwidXNlcm5hbWUiOiJ5b3Vib3RfZ2QiLCJzdGF0dXMiOiJUQkQifV0sInNlcnZpY2VfYWNjb3VudCI6dHJ1ZX0sImRhdGEiOnsidXNlcm5hbWUiOiJhbnRvbmlvLnNhbnRhbmdlbG8iLCJydW9sbyI6IlRlY25pY28iLCJidXNpbmVzc19kZXBhcnRtZW50IjoidGVjbmljbyIsImZpc2NhbF9jb2RlIjoiU05UTlROOTlSMTlFNzkxTiIsIm5hbWUiOiJBTlRPTklPIiwic3VybmFtZSI6IlNBTlRBTkdFTE8iLCJlbWFpbCI6ImFudG9uaW8uc2FudGFuZ2Vsb0B5b3V0aWxpdHljZW50ZXIuaXQifSwiaWF0IjoxNjQ1NjMwMDY5LjM1MjEyMTR9.CWhGrFYCqGPWLjahMJcMuuG_fI7kAqf3FPuaTj3VGzs",
+      });
+      YouaiWebChat.configuration(configurationYouAiWebChat);
+    </script>
+  </body>
+</html>
