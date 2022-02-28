@@ -8,8 +8,6 @@ module.exports = merge(commonConfig, {
     minimizer: [
       new TerserPlugin({
         parallel: true,
-        // cache: true,
-        // sourceMap: true,
       }),
     ],
   },

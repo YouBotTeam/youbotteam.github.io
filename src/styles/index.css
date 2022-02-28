@@ -85,10 +85,9 @@
     background-color: var(--youai-msg-bot-bg-color) !important;
 }
 
-/* .rw-group-message.rw-from-response
-    .rw-message:not(:first-child):not(:only-child).rw-with-avatar {
-    margin-left: 33px;
-  } */
+.rw-group-message a {
+    color: var(--youai-msg-bot-text-color) !important;
+}
 
 .rw-conversation-container .rw-client {
     color: var(--youai-msg-user-text-color) !important;
@@ -339,7 +338,7 @@
 }
 
 #youai-dropdown-content a {
-    color: black;
+    color: black !important;
     display: block;
     cursor: pointer;
     padding: 12px 16px;
@@ -494,6 +493,7 @@
     justify-content: center;
     background-color: #f4f7f9;
     outline: 2px dashed #bbbbbb;
+    font-family: Inter, sans-serif !important;
 }
 
 .youai-icon-upload {
@@ -533,9 +533,11 @@ li.youai-file-selected {
     align-items: center;
     flex-direction: row;
     justify-content: start;
+    font-family: Inter, sans-serif !important;
 }
 
 li.youai-file-selected > svg {
+    width: 2rem;
     min-width: 24px;
     margin-right: 0.2rem;
 }

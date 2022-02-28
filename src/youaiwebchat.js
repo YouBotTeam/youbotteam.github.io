@@ -268,12 +268,9 @@ function handleInputFileModal() {
             listOfFileSelected.forEach((file, index) =>
               formData.append(`file##${index}`, file, file.name)
             );
-            uploadMedia(formData).then(
-              (res) => {
-                generateMessage(res, false);
-              },
-              (err) => generateMessage(null, true)
-            );
+            uploadMedia(formData)
+              .then((res) => generateMessage(res, false))
+              .catch((err) => generateMessage(null, true));
             removeAttachmentsSection();
           });
         }
@@ -307,6 +304,11 @@ function generateMessage(nameOfFileSelected, error) {
     </div>`
   );
   chatContainerScrollBottom();
+
+  const intentTrigger = configuration?.section?.attachments?.intentTrigger;
+  if (intentTrigger !== "") {
+    sendCustomMessage(intentTrigger);
+  }
 }
 
 function generateListOfNameFileUploaded(nameOfFileSelected) {
@@ -1213,6 +1215,10 @@ document.addEventListener(
   },
   false
 );
+
+function sendCustomMessage(message) {
+  window.scm(message);
+}
 
 function chatContainerScrollBottom() {
   chatContainer.scrollTop = chatContainer.scrollHeight;

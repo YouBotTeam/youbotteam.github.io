@@ -7,7 +7,7 @@
   </head>
   <body>
     <script src="dist/youaiwebchat.js"></script>
-
+    <!-- <script src="https://demo.weai.it/static/js/widget/youaiwebchat.js"></script> -->
     <script>
       const configurationYouAiWebChat = {
         custom: {
@@ -32,7 +32,11 @@
           mainButtonDimension: { height: "5rem", width: "5rem" },
           project_id: null,
           section: {
-            attachments: { accept: "image/png, image/jpeg", show: true },
+            attachments: {
+              accept: "image/png, image/jpeg",
+              show: true,
+              intentTrigger: "/welcome",
+            },
             autocomplete: { enable: false },
             buttonMenu: { enable: true },
             feedback: { enable: true, title: "Lascia un feedback" },
@@ -75,7 +79,7 @@
       };
       Object.assign(configurationYouAiWebChat, {
         token:
-          "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3ZWFpX3VzZXIiOnsidXNlcm5hbWUiOiJhZG1pbiIsInVzZXJfYWNjb3VudCI6W3siY2xpZW50Ijp7ImlkIjoxLCJuYW1lIjoidGVzdF9jb21wYW55In0sInByb2plY3QiOnsiaWQiOjIsIm5hbWUiOiJUSU0iLCJyZXBvIjp7InVybCI6Imh0dHBzOi8vZ2l0aHViLmNvbS9Zb3VCb3RUZWFtL1RJTWJvdF8yLnguZ2l0IiwiYWNjb3VudF9uYW1lIjoiWW91Qm90VGVhbSIsImJyYW5jaCI6WyJkYXRhc2V0X3YxMiJdfX0sImdyb3VwIjp7ImlkIjoyLCJuYW1lIjoiYWRtaW4ifSwicm9sZSI6WyJhZG1pbiJdLCJzZXJ2aWNlX2FjY291bnQiOmZhbHNlLCJzdXBlcnVzZXIiOnRydWUsInVzZXJuYW1lIjoiYWRtaW4iLCJzdGF0dXMiOiJUQkQifSx7ImNsaWVudCI6eyJpZCI6MSwibmFtZSI6InRlc3RfY29tcGFueSJ9LCJwcm9qZWN0Ijp7ImlkIjoxLCJuYW1lIjoidGVzdF9wcm9qZWN0IiwicmVwbyI6eyJ1cmwiOiJodHRwczovL2dpdGh1Yi5jb20vWW91Qm90VGVhbS9DYXR0b2xpY2FfYm90LmdpdCIsImFjY291bnRfbmFtZSI6IllvdUJvdFRlYW0iLCJicmFuY2giOlsibWFzdGVyIiwiZGV2ZWxvcCJdfX0sImdyb3VwIjp7ImlkIjoyLCJuYW1lIjoiYWRtaW4ifSwicm9sZSI6WyJhZG1pbiJdLCJzZXJ2aWNlX2FjY291bnQiOmZhbHNlLCJzdXBlcnVzZXIiOnRydWUsInVzZXJuYW1lIjoiYWRtaW4iLCJzdGF0dXMiOiJUQkQifSx7ImNsaWVudCI6eyJpZCI6MiwibmFtZSI6IkludGVybmFsIFByb2plY3RzIn0sInByb2plY3QiOnsiaWQiOjMsIm5hbWUiOiJZb3VCb3RfR0QiLCJyZXBvIjp7InVybCI6Imh0dHBzOi8vZ2l0aHViLmNvbS9Zb3VCb3RUZWFtL2RlbW8uZ2l0IiwiYWNjb3VudF9uYW1lIjoiWW91Qm90VGVhbSIsImJyYW5jaCI6WyJZb3VCb3RfR0QiXX19LCJncm91cCI6eyJpZCI6MiwibmFtZSI6ImFkbWluIn0sInJvbGUiOlsiYWRtaW4iXSwic2VydmljZV9hY2NvdW50IjpmYWxzZSwic3VwZXJ1c2VyIjp0cnVlLCJ1c2VybmFtZSI6ImFkbWluIiwic3RhdHVzIjoiVEJEIn1dLCJzZXJ2aWNlX2FjY291bnQiOmZhbHNlfSwiZGF0YSI6e30sImlhdCI6MTY0Mzk4MDU5My41NTIxODk2fQ.0iv1DTfxuod0OKWD3lRgJJ1qgxpaqSBustmonJM_gLA",
+          "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3ZWFpX3VzZXIiOnsidXNlcm5hbWUiOiJ5b3Vib3RfZ2QiLCJ1c2VyX2FjY291bnQiOlt7ImNsaWVudCI6eyJpZCI6MiwibmFtZSI6IkludGVybmFsIFByb2plY3RzIn0sInByb2plY3QiOnsiaWQiOjMsIm5hbWUiOiJZb3VCb3RfR0QiLCJyZXBvIjp7InVybCI6Imh0dHBzOi8vZ2l0aHViLmNvbS9Zb3VCb3RUZWFtL2RlbW8uZ2l0IiwiYWNjb3VudF9uYW1lIjoiWW91Qm90VGVhbSIsImJyYW5jaCI6WyJZb3VCb3RfR0QiXX19LCJncm91cCI6eyJpZCI6MTIsIm5hbWUiOiJ3ZWJjaGF0X3dpZGdldCJ9LCJyb2xlIjpbIndlYmNoYXRfd2lkZ2V0Il0sInNlcnZpY2VfYWNjb3VudCI6dHJ1ZSwic3VwZXJ1c2VyIjpmYWxzZSwidXNlcm5hbWUiOiJ5b3Vib3RfZ2QiLCJzdGF0dXMiOiJUQkQifV0sInNlcnZpY2VfYWNjb3VudCI6dHJ1ZX0sImRhdGEiOnsidXNlcm5hbWUiOiJhbnRvbmlvLnNhbnRhbmdlbG8iLCJydW9sbyI6IlRlY25pY28iLCJidXNpbmVzc19kZXBhcnRtZW50IjoidGVjbmljbyIsImZpc2NhbF9jb2RlIjoiU05UTlROOTlSMTlFNzkxTiIsIm5hbWUiOiJBTlRPTklPIiwic3VybmFtZSI6IlNBTlRBTkdFTE8iLCJlbWFpbCI6ImFudG9uaW8uc2FudGFuZ2Vsb0B5b3V0aWxpdHljZW50ZXIuaXQifSwiaWF0IjoxNjQ1NjMwMDY5LjM1MjEyMTR9.CWhGrFYCqGPWLjahMJcMuuG_fI7kAqf3FPuaTj3VGzs",
       });
       YouaiWebChat.configuration(configurationYouAiWebChat);
     </script>
