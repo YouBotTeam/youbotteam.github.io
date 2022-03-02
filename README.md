@@ -1,7 +1,5 @@
 # youbotteam.github.io
 
-# youbotteam.github.io
-
 Configuration web-chat:
 
 ```

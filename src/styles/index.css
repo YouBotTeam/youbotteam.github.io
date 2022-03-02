@@ -597,3 +597,8 @@ li.youai-file-selected > svg {
 .youai-item-file-upload-name {
     word-break: break-all !important;
 }
+
+.youai-upload-title {
+    color: var(--youai-msg-user-text-color) !important;
+    margin-top: 0px;
+}

@@ -294,7 +294,7 @@ function generateMessage(nameOfFileSelected, error) {
             ${
               error
                 ? `Errore nell'invio dei file`
-                : `<h1> File caricati: </h1> ${generateListOfNameFileUploaded(
+                : `<h1 class="youai-upload-title"> File caricati: </h1> ${generateListOfNameFileUploaded(
                     nameOfFileSelected
                   )} `
             }
