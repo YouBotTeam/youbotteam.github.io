@@ -1,5 +1,3 @@
-// TODO: quando la chiamata del socket va in errore (net::ERR_TIMED_OUT) far ripartire lo script
-
 var form;
 var token = "";
 var mainContainer;
